@@ -9,10 +9,10 @@
         <div>
            <img src="static/img/bg_shujutu.png">
           <div>
-            <p>当前资产</p>
+            <p>{{$t("lang.index.estimatedValue")}}</p>
             <p>2.324 BTC</p>
             <p>~123456.78 CNY</p>
-            <p>今日盈亏</p>
+            <p>{{$t("lang.index.todayProfit")}}</p>
             <p>+1.28 BTC <span class="triangle-up">+52.1%</span></p>
           </div>
         </div>
@@ -25,7 +25,7 @@
            </p>
            <p>{{item["symbol"]}}</p>
            <p>${{item.quotes.USD["price"]}}/￥{{item.quotes.CNY["price"]}}</p>
-           <p>成交额:{{item["circulating_supply"]}} {{item["symbol"]}}</p>
+           <p>{{$t("lang.index.turnover")}}:{{item["circulating_supply"]}} {{item["symbol"]}}</p>
            <i></i>
          </li>
        </ul>
@@ -33,7 +33,7 @@
 
     <section>
       <div class="header">
-         <span :class="currBaseCoin==='usdt'?'selected':''" v-on:click="toChange('usdt')">所有</span>
+         <span :class="currBaseCoin==='usdt'?'selected':''" v-on:click="toChange('usdt')">{{$t("lang.index.all")}}</span>
 <!--
          <span>自选</span>
 -->
@@ -43,12 +43,12 @@
          <table class="coin_list" border="0" cellpadding="0" cellspacing="0">
             <thead>
                <tr>
-                 <td width="15%">名称</td>
-                 <td width="16%">流通市值 <div class="triangle"><span></span><span></span></div></td>
-                 <td width="16%">流通数量 <div class="triangle"><span></span><span></span></div></td>
-                 <td width="16%">成交量(24) <div class="triangle"><span></span><span></span></div></td>
-                 <td width="12%">涨幅    <div class="triangle"><span></span><span></span></div></td>
-                 <td colspan="3" align="center">价格</td>
+                 <td width="15%">{{$t("lang.index.coin")}}</td>
+                 <td width="16%">{{$t("lang.index.totalValue")}} <div class="triangle"><span></span><span></span></div></td>
+                 <td width="16%">{{$t("lang.index.totalAmount")}} <div class="triangle"><span></span><span></span></div></td>
+                 <td width="16%">{{$t("lang.index.vol")}}(24) <div class="triangle"><span></span><span></span></div></td>
+                 <td width="12%">{{$t("lang.index.change")}} <div class="triangle"><span></span><span></span></div></td>
+                 <td colspan="3" align="center">{{$t("lang.index.price")}} </td>
                </tr>
             </thead>
             <tbody>

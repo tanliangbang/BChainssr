@@ -8,7 +8,7 @@
 <script>
 import {datafeed} from 'static/charting_library/datafeeds/myudf/datafeed'
 let  TradingView = null
-if (window) {
+if (typeof window !== 'undefined') {
   TradingView = require('static/charting_library/charting_library/charting_library.min.js')
 }
 export default {
@@ -28,7 +28,6 @@ export default {
     let arr =this.coin.split("/");
     let symbol = (arr[0]+arr[1]).toLowerCase()
     let _this = this
-    console.log(symbol)
     let widget = this.widget = new TradingView.widget({
       fullscreen: true,
       symbol: symbol,

@@ -9,11 +9,21 @@ import Prompt from './plugins/prompt/index'
 import Mask from './plugins/mask/index'
 import Tool from './utils/Tool'
 import { sync } from 'vuex-router-sync'
+import VueI18n from 'vue-i18n'
 
+Vue.use(VueI18n)
 Vue.config.productionTip = false
 Vue.use(VueLoading)
 Vue.use(Prompt)
 Vue.use(Mask)
+
+const i18n = new VueI18n({
+  locale: 'cn',    // 语言标识
+  messages: {
+    'cn': require('static/lang/cn'),   // 中文语言包
+    'en': require('static/lang/en')    // 英文语言包
+  }
+})
 
 router.beforeEach((to, from, next) => {
   if (to.name === 'login') {
@@ -29,6 +39,7 @@ export function createApp () {
   sync(store, router)
   // 创建应用程序实例，将 router 和 store 注入
   const app = new Vue({
+    i18n,
     router,
     store,
     render: h => h(App)
@@ -37,13 +48,12 @@ export function createApp () {
   return {app, router, store}
 }
 
-Vue.prototype.$lang = {
+/* Vue.prototype.$lang = {
   changeLang: function (str) {
     let lang = {
       en: require('./../static/lang/en'),
       cn: require('./../static/lang/cn')
     }
-    console.log(lang)
     return lang[str]
   }
-}
+} */

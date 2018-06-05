@@ -3,29 +3,29 @@
      <table>
         <thead>
           <tr>
-            <td>工具</td>
-            <td>关于</td>
-            <td>条款说明 </td>
+            <td>{{$t("lang.bottom.tools")}}</td>
+            <td>{{$t("lang.bottom.aboutUs")}}</td>
+            <td>{{$t("lang.bottom.clauseInstruct")}} </td>
           </tr>
         </thead>
        <tbody>
          <tr>
-           <td>数字资产介绍</td>
-           <td>关于比链  </td>
-           <td>用户协议 </td>
+           <td>{{$t("lang.bottom.digital")}}</td>
+           <td>{{$t("lang.bottom.aboutBilian")}}  </td>
+           <td>{{$t("lang.bottom.termsOfUser")}} </td>
          </tr>
          <tr>
-           <td>客户端下载</td>
-           <td>联系我们  </td>
-           <td>隐私条款 </td>
+           <td>{{$t("lang.bottom.clientDown")}}</td>
+           <td>{{$t("lang.bottom.contactUs")}}  </td>
+           <td>{{$t("lang.bottom.privacyPolicy")}} </td>
          </tr>
          <tr>
-           <td>API文档</td>
-           <td>加入我们  </td>
-           <td>法律声明 </td>
+           <td>{{$t("lang.bottom.doc")}}</td>
+           <td>{{$t("lang.bottom.join")}}  </td>
+           <td>{{$t("lang.bottom.legalStatement")}}  </td>
          </tr>
          <tr>
-           <td>帮助中心</td>
+           <td>{{$t("lang.bottom.help")}}</td>
          </tr>
 
        </tbody>

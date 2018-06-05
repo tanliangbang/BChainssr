@@ -5,33 +5,33 @@
         <img src="../../../static/img/logo.png"/>
       </dl>
       <dl>
-        <router-link to="home">{{currLang.lang.header.hq}}</router-link>
+        <router-link to="home">{{$t("lang.header.market")}}</router-link>
       </dl>
       <dl>
-        <router-link to="coinToCoin">币币交易</router-link>
+        <router-link to="coinToCoin">{{$t("lang.header.exchange")}}</router-link>
       </dl>
       <dl>
-        <router-link to="legalTender">法币交易</router-link>
+        <router-link to="legalTender">{{$t("lang.header.otc")}}</router-link>
       </dl>
     </div>
 
     <div :class="isShowLangList?'showLang lang':'closeLang lang'">
         <a v-on:click="toggerLang()">
-          {{currLang==='EN'?'EN':'中文'}}
+          {{currStr==='en'?'EN':'中文'}}
         </a>
         <div>
            <a v-on:click="changeLang('cn')">中文</a>
-           <a class="gray" v-on:click="changeLang('en')">English</a>
+           <a v-on:click="changeLang('en')">English</a>
         </div>
     </div>
      <ul v-if="this.$store.state.user.userInfo !== null">
-       <li><router-link to="entrustManage">委托管理</router-link></li>
-       <li><router-link to="assetManage">资产管理</router-link></li>
+       <li><router-link to="entrustManage">{{$t("lang.header.contractManage")}}</router-link></li>
+       <li><router-link to="assetManage">{{$t("lang.header.assetsManage")}}</router-link></li>
        <li><router-link to="userCenter">{{this.$store.state.user.userInfo.mobile}}</router-link></li>
      </ul>
     <ul v-if="this.$store.state.user.userInfo === null">
-      <li> <router-link to="login">{{currLang.lang.header.dr}}</router-link></li>
-      <li><router-link to="regist">{{currLang.lang.header.zc }}</router-link></li>
+      <li> <router-link to="login">{{$t("lang.header.login")}}</router-link></li>
+      <li><router-link to="regist">{{$t("lang.header.regist")}}</router-link></li>
     </ul>
   </header>
 
@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       isShowLangList: false,
-      currLang: this.$lang.changeLang('en')
+      currStr: 'cn'
     }
   },
   mounted () {
@@ -54,7 +54,8 @@ export default {
     },
     changeLang (str) {
       this.isShowLangList = false
-      this.currLang = this.$lang.changeLang(str)
+      this.currStr = str
+      this.$i18n.locale = str
     }
   }
 }

@@ -1,14 +1,14 @@
 <template>
   <div class="entrust">
         <div>
-          <a class="selected">限价交易</a>
+          <a class="selected">{{$t("lang.exchange.limitOrder")}}</a>
           <div>
             <div class="praceInput">
-              <span>价格(BTC)</span><input />
+              <span>{{$t("lang.exchange.price")}}(BTC)</span><input />
               <p>~54254.355</p>
             </div>
             <div class="praceInput">
-              <span>数量(BTC)</span><input />
+              <span>{{$t("lang.exchange.amount")}}(BTC)</span><input />
               <div class="process">
                 <i></i><span></span><i></i><span></span><i></i><span></span><i></i><span></span><i></i>
               </div>
@@ -16,18 +16,18 @@
             <div class="totalPrice">
               交易金额: 0.255455844USDT
             </div>
-            <a class="buyBtn">买入BTC</a>
+            <a class="buyBtn">{{$t("lang.exchange.mbuy")}} BTC</a>
           </div>
         </div>
         <div>
-          <a>市价交易</a>
+          <a>{{$t("lang.exchange.marketOrder")}}</a>
           <div>
             <div class="praceInput">
-              <span>价格(BTC)</span><input />
+              <span>{{$t("lang.exchange.price")}}(BTC)</span><input />
               <p>~54254.355</p>
             </div>
             <div class="praceInput">
-              <span>数量(BTC)</span><input />
+              <span>{{$t("lang.exchange.amount")}}(BTC)</span><input />
               <div class="process">
                 <i></i><span></span><i></i><span></span><i></i><span></span><i></i><span></span><i></i>
               </div>
@@ -35,7 +35,7 @@
             <div class="totalPrice">
               交易金额: 0.255455844USDT
             </div>
-            <a class="buyBtn">买入BTC</a>
+            <a class="buyBtn">{{$t("lang.exchange.msell")}} BTC</a>
           </div>
         </div>
       </div>

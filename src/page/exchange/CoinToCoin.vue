@@ -3,7 +3,7 @@
     <section>
 
        <div class="coin-nav">
-         <span v-on:click="changeBase('zx')" :class="currSelect==='zx'?'selected':''">自选</span>
+         <span v-on:click="changeBase('zx')" :class="currSelect==='zx'?'selected':''">{{$t("lang.exchange.optional")}}</span>
          <span v-on:click="changeBase('btc')" :class="currSelect==='btc'?'selected':''">BTC</span>
          <span v-on:click="changeBase('eth')" :class="currSelect==='eth'?'selected':''">ETH</span>
          <span v-on:click="changeBase('usdt')" :class="currSelect==='usdt'?'selected':''">USDT</span>
@@ -13,8 +13,8 @@
 
          <div class="coin-list">
            <div class="search">
-             <input type="text" placeholder="搜索币种">
-             <button>搜索</button>
+             <input type="text" :placeholder='$t("lang.exchange.searchPromit")'>
+             <button>{{$t("lang.exchange.search")}}</button>
            </div>
            <ul>
              <li v-on:click="changeCoin(item)" v-for="(item, index) in data[currSelect]" :class="currItem.name===item.name?'selected':''" :key="index">
@@ -30,7 +30,7 @@
              <span>{{currItem.name}}</span>
              <span :class= "currItem.exchangeList[0].isUp?'raise':'fail'">{{currItem.exchangeList[0].upAndowm}}</span>
              <div>{{currItem.price}}
-               <span v-on:click="changeSort()">价格</span><div v-on:click="changeSort()" :class="sort==='up'?'triangle up':'triangle down'"><span></span><span></span></div>
+               <span v-on:click="changeSort()">{{$t("lang.exchange.price")}}</span><div v-on:click="changeSort()" :class="sort==='up'?'triangle up':'triangle down'"><span></span><span></span></div>
              </div>
            </div>
           <div class="exchange-list">
@@ -51,16 +51,16 @@
              <div>
                 <div class="my-info">
                    <div>
-                      <p>货币资产</p>
-                      <p>总计:1234.565BTC</p>
+                      <p>{{$t("lang.exchange.coinAsset")}}</p>
+                      <p>{{$t("lang.exchange.total")}}:1234.565BTC</p>
                    </div>
                    <div>
-                     <p>BTC 可用15.8</p>
-                     <p>USDT 可用80.28</p>
+                     <p>BTC {{$t("lang.exchange.available")}}15.8</p>
+                     <p>USDT {{$t("lang.exchange.available")}}80.28</p>
                    </div>
                    <div>
-                     <p><router-link to="legalTender">充值BTC</router-link></p>
-                     <p><router-link to="legalTender">充值USDT</router-link></p>
+                     <p><router-link to="legalTender">{{$t("lang.exchange.rechange")}}BTC</router-link></p>
+                     <p><router-link to="legalTender">{{$t("lang.exchange.rechange")}}USDT</router-link></p>
                    </div>
                 </div>
 
@@ -117,7 +117,6 @@ export default {
     this.priceSort(this.data, this.sort)
   },
   mounted () {
-    window.scrollTo(0, 0)
   },
   methods: {
     containerClick () {

@@ -5,7 +5,7 @@
      <section>
        <header>
           <div>
-             <div>买</div>
+             <div>{{$t("lang.otc.buy")}}</div>
              <div>
                 <a v-on:click="changeType('sellbtc')" :class="currType==='sellbtc'?'selected':''">BTC</a>
                 <a v-on:click="changeType('selleth')" :class="currType==='selleth'?'selected':''">ETH</a>
@@ -13,7 +13,7 @@
              </div>
           </div>
            <div>
-             <div>卖</div>
+             <div>{{$t("lang.otc.sell")}}</div>
              <div>
                <a v-on:click="changeType('buybtc')" :class="currType==='buybtc'?'selected':''">BTC</a>
                <a v-on:click="changeType('buyeth')" :class="currType==='buyeth'?'selected':''">ETH</a>
@@ -38,13 +38,13 @@
        <div class="exList">
          <table border="0" cellpadding="0" cellspacing="0">
            <tr>
-             <th width="20%">商家</th>
-             <th width="15%">数量</th>
-             <th width="15%">限额</th>
-             <th width="15%" >单价</th>
-             <th width="15%">支付方式</th>
-             <th width="10%">交易所</th>
-             <th width="10%">操作</th>
+             <th width="20%">{{$t("lang.otc.merchant")}}</th>
+             <th width="15%">{{$t("lang.otc.volume")}}</th>
+             <th width="15%">{{$t("lang.otc.limits")}}</th>
+             <th width="15%" >{{$t("lang.otc.limits")}}</th>
+             <th width="15%">{{$t("lang.otc.paymenthod")}}</th>
+             <th width="10%">{{$t("lang.otc.exchange")}}</th>
+             <th width="10%">{{$t("lang.otc.control")}}</th>
            </tr>
            <tr v-for="(item, index) in data[currType]" :key="index">
              <td>{{item.userName}}</td>
@@ -57,35 +57,35 @@
                <img v-if="item.payMethod.split(',')[2]" src="../../../static/img/wx.png">
              </td>
              <td>{{item.exchange}}</td>
-             <td><a class="showExchagne" v-on:click="makeOrder">去交易</a></td>
+             <td><a class="showExchagne" v-on:click="makeOrder">{{$t("lang.otc.goTrade")}}</a></td>
            </tr>
          </table>
          <div>
-            <span>上一页</span>
+            <span>{{$t("lang.otc.prePage")}}</span>
             <span>06/10</span>
-            <span>下一页</span>
+            <span>{{$t("lang.otc.nextPage")}}</span>
          </div>
        </div>
 
        <div class="myOrder">
          <header>
-           <span>我的订单</span>
+           <span>{{$t("lang.otc.myOrder")}}</span>
            <div class="search">
              <input type="text" placeholder="订单号/日期/状态/对手方">
-             <button>搜索</button>
+             <button>{{$t("lang.otc.search")}}</button>
            </div>
          </header>
 
          <table border="0" cellpadding="0" cellspacing="0">
            <tr>
-             <th width="12.5%">订单号</th>
-             <th width="12.5%">方向</th>
-             <th width="12.5%">币种</th>
-             <th width="12.5%">交易数量</th>
-             <th width="12.5%">总价</th>
-             <th width="12.5%">时间</th>
-             <th width="12.5%">状态</th>
-             <th width="12.5%">对手方</th>
+             <th width="12.5%">{{$t("lang.otc.orderNum")}}</th>
+             <th width="12.5%">{{$t("lang.otc.direction")}}</th>
+             <th width="12.5%">{{$t("lang.otc.coin")}}</th>
+             <th width="12.5%">{{$t("lang.otc.amount")}}</th>
+             <th width="12.5%">{{$t("lang.otc.totaolPrice")}}</th>
+             <th width="12.5%">{{$t("lang.otc.time")}}</th>
+             <th width="12.5%">{{$t("lang.otc.state")}}</th>
+             <th width="12.5%">{{$t("lang.otc.counterparty")}}</th>
            </tr>
            <tr v-on:click="showOrderInfo">
              <td>HB20214</td>
