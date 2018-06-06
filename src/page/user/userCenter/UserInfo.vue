@@ -1,27 +1,28 @@
 <template>
   <div class="auther">
     <div class="nomal">
-      <span>邮箱验证:<i>648103576@qq.com</i></span>
-      <span>设置</span>
+      <span>{{$t("lang.userCenter.email")}}:<i>648103576@qq.com</i></span>
+      <span>{{$t("lang.userCenter.setUp")}}</span>
     </div>
     <div class="nomal">
-      <span>手机号码:<i>18721675880</i></span>
-      <span><i class="grayColor">暂时无法修改</i></span>
+      <span>{{$t("lang.userCenter.phoneNumber")}}:<i>18721675880</i></span>
+      <span><i class="grayColor">{{$t("lang.userCenter.unChange")}}</i></span>
     </div>
     <div class="nomal">
-      <span>登入密码:<i>********</i></span>
-      <span>修改</span>
+      <span>{{$t("lang.userCenter.password")}}:<i>********</i></span>
+      <span>{{$t("lang.userCenter.change")}}</span>
     </div>
 
     <div class="nomal">
-      <span>退出登入</span>
-      <span v-on:click="loginOut">退出</span>
+      <span>{{$t("lang.userCenter.loginexist")}}</span>
+      <span v-on:click="loginOut">{{$t("lang.userCenter.logout")}}</span>
     </div>
 
     <div class="login-history">
-      <div class="title">登入历史</div>
+      <div class="title">{{$t("lang.userCenter.loginHistory")}}</div>
       <table>
-        <tr><td width="25%">时间</td><td width="25%">登入方式</td><td width="25%">IP</td><td width="25%">状态</td></tr>
+        <tr><td width="25%">{{$t("lang.userCenter.time")}}</td><td width="25%">{{$t("lang.userCenter.loginWay")}}</td>
+          <td width="25%">{{$t("lang.userCenter.ip")}}</td><td width="25%">{{$t("lang.userCenter.state")}}</td></tr>
         <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
         <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
         <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>

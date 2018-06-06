@@ -2,9 +2,9 @@
   <div class="userCenter" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
       <section>
         <div class="nav">
-          <a v-on:click="change('userInfo')" :class="nav==='userInfo'?'selected':'unselect'">账号安全</a>
-          <a v-on:click="change('auther')" :class="nav==='auther'?'selected':'unselect'">身份认证</a>
-          <a v-on:click="change('payWay')" :class="nav==='payWay'?'selected':'unselect'">收款方式</a>
+          <a v-on:click="change('userInfo')" :class="nav==='userInfo'?'selected':'unselect'">{{$t("lang.userCenter.accountSecurity")}}</a>
+          <a v-on:click="change('auther')" :class="nav==='auther'?'selected':'unselect'">{{$t("lang.userCenter.verification")}}</a>
+          <a v-on:click="change('payWay')" :class="nav==='payWay'?'selected':'unselect'">{{$t("lang.userCenter.paymentMethod")}}</a>
         </div>
         <div v-if="nav==='userInfo'">
            <UserInfo/>

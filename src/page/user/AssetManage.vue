@@ -3,12 +3,12 @@
     <RechargeAndEnchashment ref="reEn"/>
     <div class="asset-header">
       <div>
-        <div>今日</div>
+        <div>{{$t("lang.assertManage.today")}}</div>
         <div>
           <span class="raise">+9.12%</span>
           <span>0.0122566BTC</span>
         </div>
-        <div>总计</div>
+        <div>{{$t("lang.assertManage.sumProfit")}}</div>
         <div>
           <span class="raise">+15.56%</span>
           <span>0.0122566BTC</span>
@@ -18,14 +18,14 @@
       <div>
          <span>1234.2454BTC</span>
          <span>~254665585.23 CNY</span>
-         <span>总资产</span>
+         <span>{{$t("lang.assertManage.totalAccount")}}</span>
       </div>
     </div>
 
     <div class="asset-coin-list">
       <div>
         <ul>
-          <li>交易账户</li>
+          <li>{{$t("lang.assertManage.tradeAccount")}}</li>
           <li class="selected">火币网</li>
           <li>OKex</li>
           <li>Bit-Z</li>
@@ -36,13 +36,13 @@
       <div>
           <div>
             <span>火币网</span>
-            <span><i>今日</i>934.254BTC</span>
-            <span><i>资产</i>934.254BTC</span>
-            <span><router-link to="financeRecord">财务记录</router-link></span>
+            <span><i>{{$t("lang.assertManage.today")}}</i>934.254BTC</span>
+            <span><i>{{$t("lang.assertManage.assets")}}</i>934.254BTC</span>
+            <span><router-link to="financeRecord">{{$t("lang.assertManage.financialRecord")}}</router-link></span>
           </div>
           <table cellspacing="0">
-            <tr><th></th><th>币种</th><th>可用</th><th>冻结</th><th colspan="2">操作</th><th></th></tr>
-            <tr v-for="item in [1,2,3,4,5,6,7]" :key="item"><td></td><td>BTC</td><td>930.23</td><td>236.556</td><td><a v-on:click="recharge">充币</a></td><td><a v-on:click="enchashment">提币</a></td><td></td></tr>
+            <tr><th></th><th>{{$t("lang.assertManage.coinName")}}</th><th>{{$t("lang.assertManage.available")}}</th><th>{{$t("lang.assertManage.frozen")}}</th><th colspan="2">{{$t("lang.assertManage.control")}}</th><th></th></tr>
+            <tr v-for="item in [1,2,3,4,5,6,7]" :key="item"><td></td><td>BTC</td><td>930.23</td><td>236.556</td><td><a v-on:click="recharge">{{$t("lang.assertManage.deposit")}}</a></td><td><a v-on:click="enchashment">{{$t("lang.assertManage.withdraw")}}</a></td><td></td></tr>
           </table>
       </div>
     </div>

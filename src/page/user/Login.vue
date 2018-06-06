@@ -2,28 +2,28 @@
   <section class="login">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
            <form class="login_form" v-on:keyup="onPageDown">
-             <p>登入一账通</p>
+             <p>{{$t("lang.login.loginTitle")}}</p>
              <div class="nomalInput">
-               <input v-model="loginForm.phone" placeholder="输入手机号码" v-on:focus="showDel('phone')" v-on:blur="checkPhone()"/>
+               <input v-model="loginForm.phone" autoComplete="off" :placeholder="$t('lang.login.phonePlacehold')" v-on:focus="showDel('phone')" v-on:blur="checkPhone()"/>
                <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
              </div>
              <div class="nomalInput password">
-               <input v-model="loginForm.password" placeholder="输入密码" v-on:focus="showDel('password')" v-on:blur="checkPassword()" :type="isShowpass?'text':'password'"/>
+               <input v-model="loginForm.password" autoComplete="off" :placeholder="$t('lang.login.passwordPlacehold')" v-on:focus="showDel('password')" v-on:blur="checkPassword()" :type="isShowpass?'text':'password'"/>
                <i :class="rules.password.class"  v-on:click="delContent('password')">{{rules.password.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
              <p :class="error?'error':'visiable'">{{errorMessage}}</p>
              <div v-if="!ispass" class="login_button">
-               <a class="no_button" v-on:click="showError">登入</a>
+               <a class="no_button" v-on:click="showError">{{$t("lang.login.loginSubmit")}}</a>
              </div>
              <div v-if="ispass" class="login_button">
-               <a class="ok_button" v-on:click="login">登入</a>
+               <a class="ok_button" v-on:click="login">{{$t("lang.login.loginSubmit")}}</a>
              </div>
              <div class="forgetPassword">
-               <router-link to="foundPassword">忘记密码</router-link>
+               <router-link to="foundPassword">{{$t("lang.login.forgot")}}</router-link>
              </div>
              <div class="registLink">
-               <a>注册一帐通</a>
+               <a>{{$t("lang.login.regist")}}</a>
              </div>
            </form>
       </div>
@@ -31,9 +31,11 @@
 </template>
 
 <script>
-import '../../../static/greetest/gt'
 import * as api from '../../service/getData'
 import Tool from '../../utils/Tool'
+if (typeof window !== 'undefined') {
+  require('../../../static/greetest/gt')
+}
 export default {
   name: 'Login',
   components: {
@@ -43,7 +45,7 @@ export default {
       isShowpass: false,
       ispass: false,
       error: false,
-      errorMessage: '请输入登入信息',
+      errorMessage: this.$t('lang.form.pleaseLoginInfo'),
       loginForm: {
         phone: '',
         password: ''
@@ -61,16 +63,15 @@ export default {
     }
   },
   created () {
-    this.initDate()
+
   },
   mounted () {
-    window.scrollTo(0, 0)
+    this.initDate()
   },
   methods: {
     async initDate () {
       let data = await api.getGreetest()
       let that = this
-      console.log(data)
       window.initGeetest({
         // 以下配置参数来自服务端 SDK
         gt: data.gt,
@@ -92,7 +93,7 @@ export default {
               that.$router.push('/')
             } else {
               that.error = true
-              that.errorMessage = '用户名或密码错误'
+              that.errorMessage = that.$t('lang.login.nameOrPassError')
               that.ispass = true
             }
           })
@@ -101,6 +102,9 @@ export default {
     },
     showpass () {
       this.isShowpass = !this.isShowpass
+    },
+    delContent (field) {
+      this.loginForm[field] = ''
     },
     showDel (field) {
       this.error = false
@@ -111,7 +115,7 @@ export default {
       if (this.loginForm.phone === '') {
         if (!bool) {
           this.rules.phone.class = 'del'
-          this.rules.phone.message = '请输入手机号码'
+          this.rules.phone.message = this.$t('lang.form.pleasePhone')
         }
         return false
       } else {
@@ -123,7 +127,7 @@ export default {
       if (this.loginForm.password === '') {
         if (!bool) {
           this.rules.password.class = 'del'
-          this.rules.password.message = '请输入手机号码'
+          this.rules.password.message = this.$t('lang.form.pleasePassword')
         }
         return false
       } else {
@@ -151,7 +155,7 @@ export default {
     },
     showError () {
       this.error = true
-      this.errorMessage = '请输入登入信息'
+      this.errorMessage = this.$t('lang.login.pleaseLoginInfo')
     }
   }
 }

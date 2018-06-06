@@ -44,4 +44,4 @@ export const getEmailCode = (params) => http.post(base + '/emails/code', params)
 /**
  * 退出登入
  */
-export const loginOut = (params) => http.delete(base + '/tokens/current', params)
+export const loginOut = (params) => http.post(base + '/tokens/current', params, 'delete')

@@ -41,12 +41,12 @@ export function createAPI({ client }) {
         })
       })
     },
-    post(url, params = {}) {
+    post(url, params = {}, method = 'post') {
       return new Promise((resolve, reject) => {
         axios({
           url,
           data: qs.stringify(params),
-          method: 'post',
+          method: method,
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded'

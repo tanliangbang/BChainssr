@@ -2,28 +2,28 @@
   <div class="entrustManage" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
       <div class="header">
          <div>
-             <a v-on:click="changeStatus(1)" :class="status===1?'selected':''">当前委托</a>
-             <a v-on:click="changeStatus(2)" :class="status===2?'selected':''">历史委托</a>
+             <a v-on:click="changeStatus(1)" :class="status===1?'selected':''">{{$t("lang.entrustManage.processContracts")}}</a>
+             <a v-on:click="changeStatus(2)" :class="status===2?'selected':''">{{$t("lang.entrustManage.historyContracts")}}</a>
          </div>
         <div class="opera">
-           <input type="checkbox">仅显示成交
+           <input type="checkbox">{{$t("lang.entrustManage.onlyShowFinished")}}
            <input type="text">
-           <button>搜索</button>
+           <button>{{$t("lang.entrustManage.search")}}</button>
         </div>
       </div>
 
       <table cellspacing="0">
          <tr>
-           <th>时间</th>
-           <th>交易类型</th>
-           <th>交易对</th>
-           <th>方向</th>
-           <th>价格</th>
-           <th>数量</th>
-           <th>委托金额</th>
-           <th>成交状态</th>
-           <th>交易所</th>
-           <th>操作</th>
+           <th>{{$t("lang.entrustManage.time")}}</th>
+           <th>{{$t("lang.entrustManage.tradeType")}}</th>
+           <th>{{$t("lang.entrustManage.coinType")}}</th>
+           <th>{{$t("lang.entrustManage.direction")}}</th>
+           <th>{{$t("lang.entrustManage.price")}}</th>
+           <th>{{$t("lang.entrustManage.volume")}}</th>
+           <th>{{$t("lang.entrustManage.contractValue")}}</th>
+           <th>{{$t("lang.entrustManage.contractState")}}</th>
+           <th>{{$t("lang.entrustManage.exchange")}}</th>
+           <th>{{$t("lang.entrustManage.control")}}</th>
          </tr>
 
         <tr>

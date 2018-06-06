@@ -1,42 +1,46 @@
 <template>
   <div class="addPayWay" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
      <div>
-        <div class="nav"><router-link to="userCenter?type=payWay">收款方式</router-link> > <span>添加支付方式</span></div>
+        <div class="nav"><router-link to="userCenter?type=payWay">{{$t("lang.userCenter.paymentMethod")}}</router-link> >
+          <span>{{$t("lang.userCenter.addCollection")}}</span></div>
         <form>
-           <p>添加支付方式</p>
+           <p>{{$t("lang.userCenter.addPayWay")}}</p>
            <div class="nomalInput">
-             <span>真实姓名:</span><span>胡恒</span>
+             <span>{{$t("lang.userCenter.realName")}}:</span><span>胡恒</span>
            </div>
            <div class="nomalInput">
-             <span>身份证号码:</span><span>43055455667****2212</span>
+             <span>{{$t("lang.userCenter.idNumber")}}:</span><span>43055455667****2212</span>
            </div>
           <div class="nomalInput">
-            <span>支付方式:</span>
-            <select v-model="payForm.payWay" v-on:change="changePayWay"><option value="bankCard">银行卡</option><option value="alipay">支付宝</option><option value="weChat">微信</option></select>
+            <span>{{$t("lang.userCenter.paymentMethod")}}:</span>
+            <select v-model="payForm.payWay" v-on:change="changePayWay">
+              <option value="bankCard">{{$t("lang.userCenter.pay3")}}</option>
+              <option value="alipay">{{$t("lang.userCenter.pay2")}}</option>
+              <option value="weChat">{{$t("lang.userCenter.pay1")}}</option></select>
           </div>
 
          <div v-if="payForm.payWay==='bankCard'">
            <div class="nomalInput">
-             <span>开户银行:</span><input type="text" placeholder="开户银行">
+             <span>{{$t("lang.userCenter.bankName")}}:</span><input type="text" :placeholder="$t('lang.userCenter.bankName')">
            </div>
            <div class="nomalInput">
-             <span>开户支行:</span><input type="text" placeholder="开户支行">
+             <span>{{$t("lang.userCenter.accountBranch")}}:</span><input type="text" :placeholder="$t('lang.userCenter.accountBranch')">
            </div>
            <div class="nomalInput">
-             <span>银行卡账号:</span><input type="text" placeholder="银行卡账号">
+             <span>{{$t("lang.userCenter.bankNum")}}:</span><input type="text" :placeholder="$t('lang.userCenter.bankNum')">
            </div>
          </div>
 
           <div v-if="payForm.payWay==='alipay'">
             <div class="nomalInput">
-              <span>支付宝账号:</span><input type="text" placeholder="支付宝账号">
+              <span>{{$t("lang.userCenter.pay2")}}:</span><input type="text" :placeholder="$t('lang.userCenter.pay2')">
             </div>
             <div class="nomalInput">
-              <span>收款二维码:</span>
+              <span>{{$t("lang.userCenter.payCode")}}:</span>
               <div class="upload">
                 <div class="addImg">
                   <img src="../../../../static/img/add.png">
-                  <p>请上传您的支付宝收款二维码图片</p>
+                  <p>{{$t("lang.userCenter.addPrompt1")}}{{$t("lang.userCenter.pay2")}}{{$t("lang.userCenter.addPrompt2")}}</p>
                 </div>
               </div>
             </div>
@@ -44,21 +48,21 @@
 
           <div v-if="payForm.payWay==='weChat'">
             <div class="nomalInput">
-              <span>微信账号:</span><input type="text" placeholder="微信账号">
+              <span>{{$t("lang.userCenter.pay1")}}:</span><input type="text" :placeholder="$t('lang.userCenter.pay1')">
             </div>
             <div class="nomalInput">
-              <span>微信账号:</span>
+              <span>{{$t("lang.userCenter.payCode")}}:</span>
               <div class="upload">
                 <div class="addImg">
                   <img src="../../../../static/img/add.png">
-                  <p>请上传您的微信收款二维码图片</p>
+                  <p>{{$t("lang.userCenter.addPrompt1")}}{{$t("lang.userCenter.pay1")}}{{$t("lang.userCenter.addPrompt2")}}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div>
-            <a class="commit">提交</a>
+            <a class="commit">{{$t("lang.userCenter.commit")}}</a>
           </div>
         </form>
      </div>

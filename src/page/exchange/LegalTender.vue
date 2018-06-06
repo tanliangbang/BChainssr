@@ -82,7 +82,7 @@
              <th width="12.5%">{{$t("lang.otc.direction")}}</th>
              <th width="12.5%">{{$t("lang.otc.coin")}}</th>
              <th width="12.5%">{{$t("lang.otc.amount")}}</th>
-             <th width="12.5%">{{$t("lang.otc.totaolPrice")}}</th>
+             <th width="12.5%">{{$t("lang.otc.totalPrice")}}</th>
              <th width="12.5%">{{$t("lang.otc.time")}}</th>
              <th width="12.5%">{{$t("lang.otc.state")}}</th>
              <th width="12.5%">{{$t("lang.otc.counterparty")}}</th>

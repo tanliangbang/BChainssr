@@ -19,38 +19,38 @@
 
             <div class="orderInfo">
                <div>
-                  <p>商品信息</p>
-                   <p><span>商家:</span><span>老吴</span></p>
-                   <p><span>价格:</span><span>501252BTC </span></p>
-                   <p><span>数量:</span><span>2.435456BTC</span></p>
-                   <p><span>卖家:</span><span>lotus</span></p>
-                   <p><span>付款方式:</span><span>支付宝</span></p>
-                   <p><span>每笔交易限额:</span><span>5000-20000</span></p>
-                   <p><span>交易所:</span><span>火币网</span></p>
-                   <p><span>所在地:</span><span>香港</span></p>
-                   <p><span>交易期限:</span><span>60分钟</span></p>
+                  <p>{{$t("lang.otc.productInfo")}}</p>
+                   <p><span>{{$t("lang.otc.merchant")}}:</span><span>老吴</span></p>
+                   <p><span>{{$t("lang.otc.price")}}:</span><span>501252BTC </span></p>
+                   <p><span>{{$t("lang.otc.volume")}}:</span><span>2.435456BTC</span></p>
+                   <p><span>{{$t("lang.otc.seller")}}:</span><span>lotus</span></p>
+                   <p><span>{{$t("lang.otc.oPaymenthod")}}:</span><span>支付宝</span></p>
+                   <p><span>{{$t("lang.otc.oLimits")}}:</span><span>5000-20000</span></p>
+                   <p><span>{{$t("lang.otc.exchange")}}:</span><span>火币网</span></p>
+                   <p><span>{{$t("lang.otc.address")}}:</span><span>香港</span></p>
+                   <p><span>{{$t("lang.otc.timeLimit")}}:</span><span>60分钟</span></p>
                </div>
 
                <div>
                   <div>
-                    <p>购买信息</p>
+                    <p>{{$t("lang.otc.buyInfo")}}</p>
                     <div>
-                      <span>购买数量</span>
+                      <span>{{$t("lang.otc.buyAmount")}}</span>
                       <input />
                       <span>BTC</span>
                     </div>
                     <div>
-                      <span>购买金额</span>
+                      <span>{{$t("lang.otc.buyPrice")}}</span>
                       <input />
                       <span>CNY</span>
                     </div>
                     <div>
-                      <span>留言</span>
+                      <span>{{$t("lang.otc.leaveWord")}}</span>
                       <textarea />
                       <span></span>
                     </div>
                     <div>
-                      <a class="btn" v-on:click="submit">下单</a>
+                      <a class="btn" v-on:click="submit">{{$t("lang.otc.placeOrder")}}</a>
                     </div>
                   </div>
                </div>

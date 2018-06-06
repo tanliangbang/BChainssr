@@ -19,23 +19,23 @@
 
             <div class="orderInfo">
                <div>
-                  <p>商品信息</p>
-                   <p><span>订单编号:</span><span>HBAC80299912</span></p>
-                   <p><span>购买:</span><span>501252BTC </span></p>
-                   <p><span>单价:</span><span>51000 BTC</span></p>
-                   <p><span>总金额:</span><span>800000 CNY</span></p>
-                   <p><span>交易所:</span><span>火币网</span></p>
+                  <p>{{$t("lang.otc.buyInfo")}}</p>
+                   <p><span>{{$t("lang.otc.orderNum")}}:</span><span>HBAC80299912</span></p>
+                   <p><span>{{$t("lang.otc.buy")}}:</span><span>501252BTC </span></p>
+                   <p><span>{{$t("lang.otc.price")}}:</span><span>51000 BTC</span></p>
+                   <p><span>{{$t("lang.otc.totalPrice")}}:</span><span>800000 CNY</span></p>
+                   <p><span>{{$t("lang.otc.exchange")}}:</span><span>火币网</span></p>
                </div>
 
                <div>
                    <div>
-                       <p>支付信息</p>
+                       <p>{{$t("lang.otc.payInfo")}}</p>
                        <div>
-                         <span>银行卡:</span>
+                         <span>{{$t("lang.otc.bankCard")}}:</span>
                          <span>吴城 432421345844565225 中国银行 浦东大道支行</span>
                        </div>
                        <div>
-                         <span>支付宝:</span>
+                         <span>{{$t("lang.otc.alipay")}}:</span>
                          <span>吴城 laowu@163.com</span>
                        </div>
                      <div v-if="status === 0">
@@ -43,7 +43,7 @@
                        <span>已取消</span>
                      </div>
                        <div v-if="status === 1">
-                         <span>需支付:</span>
+                         <span>{{$t("lang.otc.needPay")}}:</span>
                          <span>80000元,请在<i>59分36</i>秒完成支付</span>
                        </div>
                        <div v-if="status === 2">
@@ -74,14 +74,14 @@
                          <span>未完成支付请勿点击确认,否则将影响你的记录</span>
                        </div>
                        <p class="careful">
-                         <span>注意事项</span>
-                         <span>1.请再设定的时间内完成支付,并点击确认,卖方取人收款后,数字货币将直接打入您的法比账户</span>
-                         <span>交易中,交易所将托管卖方的数字火币,买方钱款打入卖方账户</span>
-                         <span>如果当日取消订单数达3次,将限制当日交易</span>
+                         <span>{{$t("lang.otc.prompt1")}}</span>
+                         <span>{{$t("lang.otc.prompt2")}}</span>
+                         <span>{{$t("lang.otc.prompt3")}}</span>
+                         <span>{{$t("lang.otc.prompt4")}}</span>
                        </p>
                      </div>
 
-                     <a v-if="status ===1" v-on:click="cancelOrder" class="cancelOrder opera-btn">取消订单</a>
+                     <a v-if="status ===1" v-on:click="cancelOrder" class="cancelOrder opera-btn">{{$t("lang.otc.cancelOrder")}}</a>
                      <a v-if="status ===2" class="apply-btn opera-btn">申诉</a>
                </div>
             </div>

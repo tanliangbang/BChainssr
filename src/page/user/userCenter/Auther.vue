@@ -1,60 +1,60 @@
 <template>
   <div class="auther">
     <div class="auther-nav">
-      <span v-on:click="changeStep(1)" :class="step===1?'selected':''">一级认证</span>
-      <span v-on:click="changeStep(2)" :class="step===2?'selected':''">二级认证</span>
+      <span v-on:click="changeStep(1)" :class="step===1?'selected':''">{{$t("lang.userCenter.level1")}}</span>
+      <span v-on:click="changeStep(2)" :class="step===2?'selected':''">{{$t("lang.userCenter.level2")}}</span>
     </div>
     <div v-if="step===1" class="nomal-auther">
       <div>
-        <span>国籍</span>
+        <span>{{$t("lang.userCenter.nationality")}}</span>
         <span>中国</span>
       </div>
       <div>
-        <span>姓名</span>
+        <span>{{$t("lang.userCenter.name")}}</span>
         <span>刘德</span>
       </div>
       <div>
-        <span>省份中号码</span>
+        <span>{{$t("lang.userCenter.idNumber")}}</span>
         <span>456556589969852235</span>
       </div>
 
-      <a class="button">下 一 步</a>
+      <a class="button">{{$t("lang.userCenter.next")}}</a>
     </div>
 
     <div v-if="step===2" class="second-auther">
       <div class="upload-div">
-        <div>上传身份证正面</div>
+        <div>{{$t("lang.userCenter.uploadId1")}}</div>
         <div>
           <div></div>
         </div>
         <div>
           <img src="../../../../static/img/sfz.png">
-          <p>示例</p>
-          <p>支持jpg,png格式,单位文件不超过3M</p>
+          <p>{{$t("lang.userCenter.forExample")}}</p>
+          <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
       </div>
 
       <div class="upload-div">
-        <div>上传身份证正面</div>
+        <div>{{$t("lang.userCenter.uploadId2")}}</div>
         <div>
           <div></div>
         </div>
         <div>
           <img src="../../../../static/img/sfz.png">
-          <p>示例</p>
-          <p>支持jpg,png格式,单位文件不超过3M</p>
+          <p>{{$t("lang.userCenter.forExample")}}</p>
+          <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
       </div>
 
       <div class="upload-div">
-        <div>上传身份证正面</div>
+        <div>{{$t("lang.userCenter.uploadId3")}}</div>
         <div>
           <div></div>
         </div>
         <div>
           <img src="../../../../static/img/sfz.png">
-          <p>示例</p>
-          <p>支持jpg,png格式,单位文件不超过3M</p>
+          <p>{{$t("lang.userCenter.forExample")}}</p>
+          <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
       </div>
     </div>

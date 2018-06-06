@@ -18,7 +18,7 @@
 
        <div class="add" v-on:click="toAdd">
          <img src="../../../../static/img/add.png">
-         <p>添加收款账号</p>
+         <p>{{$t("lang.userCenter.addPayWay")}}</p>
        </div>
      </div>
   </div>

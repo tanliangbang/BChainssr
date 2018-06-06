@@ -2,38 +2,38 @@
   <section class="regist">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
           <form class="step1" v-if="step === 1" v-on:keyup="onPageDown">
-             <p>注册一账通</p>
+             <p>{{$t("lang.regist.registTitle")}}</p>
              <div class="nomalInput">
-               <input placeholder="输入手机号码"  v-model="registForm.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
+               <input :placeholder="$t('lang.regist.phonePlacehold')"  v-model="registForm.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
                <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
                <div class="userExist" v-if="userExist">
                  <i>用户已存在</i><router-link to="login">去登入</router-link>
                </div>
              </div>
              <div class="code">
-               <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="registForm.code" placeholder="输入验证码"/>
+               <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="registForm.code" :placeholder="$t('lang.regist.codePlacehold')"/>
                <i :class="rules.code.class"  v-on:click="delContent('code')">{{rules.code.message}}</i>
-               <span v-on:click="getCode()" ref="send">获取验证码</span>
+               <span v-on:click="getCode()" ref="send">{{$t('lang.regist.getCode')}}</span>
              </div>
              <div class="nomalInput password">
-               <input placeholder="输入密码" v-model="registForm.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
+               <input :placeholder="$t('lang.regist.passwordPlacehold')" v-model="registForm.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
                <i :class="rules.password.class"  v-on:click="delContent('password')">{{rules.password.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
              <div class="nomalInput password">
-               <input placeholder="确认密码" v-model="registForm.repassword" v-on:blur="checkRePass()" :type="isShowpass?'text':'password'"/>
+               <input :placeholder="$t('lang.regist.codePlacehold')" v-model="registForm.repassword" v-on:blur="checkRePass()" :type="isShowpass?'text':'password'"/>
                <i :class="rules.repassword.class"  v-on:click="delContent('repassword')">{{rules.repassword.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
              <div class="nomalInput">
-               <input placeholder="推荐人" type="text"/>
+               <input :placeholder="$t('lang.regist.referrer')" type="text"/>
              </div>
             <p :class="error?'registFial':'visiable'">{{errorMessage}}</p>
              <div v-if="!ispass" class="rbutton">
-               <a class="no_button">下一步</a>
+               <a class="no_button">{{$t('lang.regist.next')}}</a>
              </div>
             <div v-if="ispass" class="rbutton">
-              <a v-on:click="submit"  class="ok_button">下一步</a>
+              <a v-on:click="submit"  class="ok_button">{{$t('lang.regist.next')}}</a>
             </div>
           </form>
           <form class="step2" v-if="step === 2" >
@@ -71,9 +71,10 @@
 
 <script>
 import Tool from '../../utils/Tool'
-import '../../../static/greetest/gt'
 import * as api from '../../service/getData'
-
+if (typeof window !== 'undefined') {
+  require('../../../static/greetest/gt')
+}
 export default {
   name: 'Regist',
   components: {
@@ -82,7 +83,7 @@ export default {
     return {
       isShowpass: false,
       ispass: false,
-      step: 2,
+      step: 1,
       emailpass: false,
       email: '',
       isSendCode: false,
@@ -189,14 +190,14 @@ export default {
       if (this.registForm.phone === '') {
         if (!bool) {
           this.rules.phone.class = 'del'
-          this.rules.phone.message = '请输入手机号码'
+          this.rules.phone.message = this.$t('lang.form.pleasePhone')
         }
         return false
       }
       if (!Tool.isPoneAvailable(this.registForm.phone)) {
         if (!bool) {
           this.rules.phone.class = 'del'
-          this.rules.phone.message = '手机号码错误'
+          this.rules.phone.message = this.$t('lang.form.phoneError')
         }
         return false
       } else {
@@ -209,14 +210,14 @@ export default {
       if (!this.isSendCode) {
         if (!bool) {
           this.rules.code.class = 'del'
-          this.rules.code.message = '请获取验证码'
+          this.rules.code.message = this.$t('lang.form.pleaseGetCode')
         }
         return false
       }
       if (this.registForm.code === '') {
         if (!bool) {
           this.rules.code.class = 'del'
-          this.rules.code.message = '请输入验证码'
+          this.rules.code.message = this.$t('lang.form.pleaseEnterCode')
         }
         return false
       } else {
@@ -230,19 +231,19 @@ export default {
       if (this.registForm.password === '') {
         if (!bool) {
           this.rules.password.class = 'del'
-          this.rules.password.message = '请输入密码'
+          this.rules.password.message = this.$t('lang.form.pleasePassword')
         }
         return false
       } else if (this.registForm.password.length < 6) {
         if (!bool) {
           this.rules.password.class = 'del'
-          this.rules.password.message = '密码至少6位'
+          this.rules.password.message = this.$t('lang.form.passLast6')
         }
         return false
       } else if (!reg.test(this.registForm.password)) {
         if (!bool) {
           this.rules.password.class = 'del'
-          this.rules.password.message = '数字和字母组合'
+          this.rules.password.message = this.$t('lang.form.numberAndLetter')
         }
         return false
       } else {
@@ -255,13 +256,13 @@ export default {
       if (this.registForm.repassword === '') {
         if (!bool) {
           this.rules.repassword.class = 'del'
-          this.rules.repassword.message = '请输入确认密码'
+          this.rules.repassword.message = this.$t('lang.form.pleaseEnterRepass')
         }
         return false
       } else if (this.registForm.password !== this.registForm.repassword) {
         if (!bool) {
           this.rules.repassword.class = 'del'
-          this.rules.repassword.message = '两次密码不一致'
+          this.rules.repassword.message = this.$t('lang.form.passInconsistent')
         }
         return false
       } else {
@@ -274,13 +275,13 @@ export default {
       if (this.email === '') {
         if (!bool) {
           this.rules.email.class = 'del'
-          this.rules.email.message = '请输入邮箱'
+          this.rules.email.message = this.$t('lang.form.pleaseEnterEmail')
         }
         return false
       } else if (!Tool.isEmail(this.email)) {
         if (!bool) {
           this.rules.email.class = 'del'
-          this.rules.email.message = '邮箱格式错误'
+          this.rules.email.message = this.$t('lang.form.emailFormatError')
           return false
         }
       } else {
@@ -327,10 +328,10 @@ export default {
         } else {
           if (res.data.code === 10002) {
             that.error = true
-            that.errorMessage = '验证码错误'
+            that.errorMessage = this.$t('lang.form.codeError')
           } else {
             that.error = true
-            that.errorMessage = '注册失败'
+            that.errorMessage = this.$t('lang.form.registFail')
           }
 
           that.ispass = true

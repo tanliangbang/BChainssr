@@ -2,7 +2,8 @@
   <div class="financeRecord">
       <RechEnchDetail ref="rechEnchDetail"/>
       <div class="fin-nav">
-        <router-link to="assetManage">交易记录</router-link> > <i>财务记录</i>
+        <router-link to="assetManage">{{$t("lang.financeRecord.financeRecord")}}</router-link> >
+        <i>{{$t("lang.financeRecord.exchangeRecord")}}</i>
       </div>
       <div :class="showSelect?'select show-select':'select hide-select'" v-on:click="changeSelect">
          全部
@@ -15,12 +16,12 @@
     <table cellspacing="0">
       <tr>
         <th></th>
-        <th>时间</th>
-        <th>币种</th>
-        <th>类型</th>
-        <th>数量</th>
-        <th>状态</th>
-        <th>详情</th>
+        <th>{{$t("lang.financeRecord.time")}}</th>
+        <th>{{$t("lang.financeRecord.coinType")}}</th>
+        <th>{{$t("lang.financeRecord.movement")}}</th>
+        <th>{{$t("lang.financeRecord.volume")}}</th>
+        <th>{{$t("lang.financeRecord.state")}}</th>
+        <th>{{$t("lang.financeRecord.details")}}</th>
         <th></th>
       </tr>
       <tr v-for="item in [1,2,3,4,5,6,7,8,9]" :key="item">

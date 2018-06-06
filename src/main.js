@@ -7,7 +7,7 @@ import store from './store'
 import VueLoading from './plugins/loading/index'
 import Prompt from './plugins/prompt/index'
 import Mask from './plugins/mask/index'
-import Tool from './utils/Tool'
+// import Tool from './utils/Tool'
 import { sync } from 'vuex-router-sync'
 import VueI18n from 'vue-i18n'
 
@@ -25,15 +25,15 @@ const i18n = new VueI18n({
   }
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.name === 'login') {
+/* router.beforeEach((to, from, next) => {
+   if (to.name === 'login') {
     if (Tool.isLogin()) {
       next({path: '/'})
       return true
     }
   }
   next()
-})
+}) */
 export function createApp () {
   // 同步路由状态(route state)到 store
   sync(store, router)

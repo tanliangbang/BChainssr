@@ -5,21 +5,22 @@
          <img v-on:click="closeEnRe" class="close-btn" src="../../../../static/img/close.png"/>
          <div v-if="type ===1" class="recharge">
            <div class="mask-header">
-             向 火币网冲入BTC
+             {{$t("lang.assertManage.title1")}} 火币网{{$t("lang.assertManage.title2")}}BTC
            </div>
-           <p>充值地址</p>
-           <p>1DNNSDSDJK7ssdjfkDdasdASDAiasiaAS复制<i>二维码</i>查看<router-link to="financeRecord">充值记录</router-link></p>
+           <p>{{$t("lang.assertManage.withdrawAdress")}}</p>
+           <p>1DNNSDSDJK7ssdjfkDdasdASDAiasiaAS{{$t("lang.assertManage.content1")}}<i>{{$t("lang.assertManage.content2")}}</i>
+             {{$t("lang.assertManage.content3")}}<router-link to="financeRecord">{{$t("lang.assertManage.content4")}}</router-link></p>
            <div><img src="../../../../static/img/code.png"></div>
            <div class="promit">
-             <p>温馨提示</p>
-             <p>1.请勿向上述地址充值任何非BTC资产，否则资产将不可找回。</p>
-             <p>2.您充值至上述地址后，需要整个网络节点的取人，1次网络确认后到账，6次网络确认后可提币。</p>
-             <p>3.最小充值金额：0.01BTC,小于最小金额的充值将不会上帐。</p>
-             <p>4.您的充值地址不会经常改变，可以重复充值；如有改变，我们会尽量通过网站公告或邮件通知您。</p>
-             <p>5.请务必确认电脑及浏览器安全，防止信息被篡改或泄露。</p>
+             <p>{{$t("lang.assertManage.tips")}}</p>
+             <p>{{$t("lang.assertManage.promit1")}}</p>
+             <p>{{$t("lang.assertManage.promit2")}}</p>
+             <p>{{$t("lang.assertManage.promit3")}}</p>
+             <p>{{$t("lang.assertManage.promit4")}}</p>
+             <p>{{$t("lang.assertManage.promit5")}}</p>
            </div>
            <div class="close">
-              <button v-on:click="closeEnRe">关闭</button>
+              <button v-on:click="closeEnRe">{{$t("lang.assertManage.close")}}</button>
            </div>
          </div>
 
