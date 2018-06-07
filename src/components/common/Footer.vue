@@ -1,35 +1,27 @@
 <template>
   <div class="footer">
-     <table>
-        <thead>
-          <tr>
-            <td>{{$t("lang.bottom.tools")}}</td>
-            <td>{{$t("lang.bottom.aboutUs")}}</td>
-            <td>{{$t("lang.bottom.clauseInstruct")}} </td>
-          </tr>
-        </thead>
-       <tbody>
-         <tr>
-           <td>{{$t("lang.bottom.digital")}}</td>
-           <td>{{$t("lang.bottom.aboutBilian")}}  </td>
-           <td>{{$t("lang.bottom.termsOfUser")}} </td>
-         </tr>
-         <tr>
-           <td>{{$t("lang.bottom.clientDown")}}</td>
-           <td>{{$t("lang.bottom.contactUs")}}  </td>
-           <td>{{$t("lang.bottom.privacyPolicy")}} </td>
-         </tr>
-         <tr>
-           <td>{{$t("lang.bottom.doc")}}</td>
-           <td>{{$t("lang.bottom.join")}}  </td>
-           <td>{{$t("lang.bottom.legalStatement")}}  </td>
-         </tr>
-         <tr>
-           <td>{{$t("lang.bottom.help")}}</td>
-         </tr>
+     <div>
+       <ul>
+         <li>{{$t("lang.bottom.tools")}}</li>
+         <li>{{$t("lang.bottom.digital")}}</li>
+         <li>{{$t("lang.bottom.clientDown")}}</li>
+         <li>{{$t("lang.bottom.doc")}}</li>
+         <li>{{$t("lang.bottom.help")}}</li>
 
-       </tbody>
-     </table>
+       </ul>
+       <ul>
+         <li>{{$t("lang.bottom.aboutUs")}}</li>
+         <li>{{$t("lang.bottom.aboutBilian")}}  </li>
+         <li>{{$t("lang.bottom.contactUs")}}  </li>
+         <li>{{$t("lang.bottom.join")}}  </li>
+       </ul>
+       <ul>
+         <li>{{$t("lang.bottom.clauseInstruct")}} </li>
+         <li>{{$t("lang.bottom.legalStatement")}}  </li>
+         <li>{{$t("lang.bottom.privacyPolicy")}} </li>
+         <li>{{$t("lang.bottom.termsOfUser")}} </li>
+       </ul>
+     </div>
      <div>©2018 BILIAN</div>
   </div>
 </template>
@@ -54,24 +46,23 @@ export default {
     background:@mainColor;
     text-align: center;
     clear:both;
-    table{
-       width:800px;
-       padding:50px 0px;
-       color:#fff;
-       margin:0px auto;
-       text-align: center;
-
-      thead{
-         font-size:14px;
-       }
-       tbody{
-         font-size:12px;
-         tr{
-           line-height: 20px;
-         }
-       }
-     }
-    >div{
+    >div:nth-child(1) {
+      width:800px;
+      padding:50px 0px;
+      color:#fff;
+      margin:0px auto;
+      text-align: center;
+      display:flex;
+      flex-wrap: wrap-reverse;
+      >ul{
+        flex:1;
+        li{
+          font-size:12px;
+          line-height: 20px;
+        }
+      }
+    }
+    >div:nth-child(2){
       color:#fff;
       padding-bottom:20px;
     }

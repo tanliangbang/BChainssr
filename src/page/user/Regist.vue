@@ -2,98 +2,73 @@
   <section class="regist">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
           <form class="step1" v-if="step === 1" v-on:keyup="onPageDown">
-             <p>{{$t("lang.regist.registTitle")}}</p>
+             <p>{{$t("lang.form.registTitle")}}</p>
              <div class="nomalInput">
-               <input :placeholder="$t('lang.regist.phonePlacehold')"  v-model="registForm.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
+               <input :placeholder="$t('lang.form.phonePrompt')"  v-model="form.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
                <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
                <div class="userExist" v-if="userExist">
-                 <i>用户已存在</i><router-link to="login">去登入</router-link>
+                 <i>{{$t('lang.form.userExsit')}}</i><router-link to="login">{{$t('lang.form.goLogin')}}</router-link>
                </div>
              </div>
              <div class="code">
-               <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="registForm.code" :placeholder="$t('lang.regist.codePlacehold')"/>
+               <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="form.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
                <i :class="rules.code.class"  v-on:click="delContent('code')">{{rules.code.message}}</i>
-               <span v-on:click="getCode()" ref="send">{{$t('lang.regist.getCode')}}</span>
+               <span v-on:click="getCode()" ref="send">{{$t('lang.form.getCode')}}</span>
              </div>
              <div class="nomalInput password">
-               <input :placeholder="$t('lang.regist.passwordPlacehold')" v-model="registForm.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
+               <input :placeholder="$t('lang.form.passPrompt')" v-model="form.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
                <i :class="rules.password.class"  v-on:click="delContent('password')">{{rules.password.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
              <div class="nomalInput password">
-               <input :placeholder="$t('lang.regist.codePlacehold')" v-model="registForm.repassword" v-on:blur="checkRePass()" :type="isShowpass?'text':'password'"/>
+               <input :placeholder="$t('lang.form.repassPrompt')" v-model="form.repassword" v-on:blur="checkRePass()" :type="isShowpass?'text':'password'"/>
                <i :class="rules.repassword.class"  v-on:click="delContent('repassword')">{{rules.repassword.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
              <div class="nomalInput">
-               <input :placeholder="$t('lang.regist.referrer')" type="text"/>
+               <input :placeholder="$t('lang.form.referrer')" type="text"/>
              </div>
             <p :class="error?'registFial':'visiable'">{{errorMessage}}</p>
              <div v-if="!ispass" class="rbutton">
-               <a class="no_button">{{$t('lang.regist.next')}}</a>
+               <a class="no_button">{{$t('lang.form.next')}}</a>
              </div>
             <div v-if="ispass" class="rbutton">
-              <a v-on:click="submit"  class="ok_button">{{$t('lang.regist.next')}}</a>
+              <a v-on:click="submit"  class="ok_button">{{$t('lang.form.next')}}</a>
             </div>
           </form>
-          <form class="step2" v-if="step === 2" >
-             <p>
-               恭喜,注册成功~ <br/>
-               恭交易操作需要完成邮箱验证,请完成邮箱验证
-             </p>
-            <div class="code">
-              <input type="text" v-on:focus="showDel('email')" v-on:blur="checkEmail()" v-model="email" placeholder="请输入邮箱"/>
-              <i :class="rules.email.class"  v-on:click="delEmail('email')">{{rules.email.message}}</i>
-              <span v-on:click="getEmailCode()" ref="sendEmail">获取验证码</span>
-            </div>
-            <div class="codeInput">
-              <input v-on:keyup="codeKeyup()" v-on:focus="clearVal" placeholder="请"  type="text"/>
-              <input v-on:keyup="codeKeyup()" v-on:focus="clearVal" placeholder="输" type="text"/>
-              <input v-on:keyup="codeKeyup()" v-on:focus="clearVal" placeholder="入" type="text"/>
-              <input v-on:keyup="codeKeyup()" v-on:focus="clearVal" placeholder="验" type="text"/>
-              <input v-on:keyup="codeKeyup()" v-on:focus="clearVal" placeholder="证" type="text"/>
-              <input v-on:keyup="codeKeyup()" v-on:focus="clearVal" placeholder="码"  type="text"/>
-            </div>
-
-            <div v-if="!emailpass" class="sbutton">
-               <a class="no_button">发送邮箱</a>
-            </div>
-            <div v-if="emailpass" class="sbutton">
-              <a class="ok_button" >发送邮箱</a>
-            </div>
-            <div class="login_button">
-              <router-link class="border_button" to="login">返回首页</router-link>
-            </div>
-          </form>
+          <div class="step2" v-if="step === 2" >
+              <BindEmail/>
+          </div>
       </div>
   </section>
 </template>
 
 <script>
 import Tool from '../../utils/Tool'
+import FormFun from '../../utils/FormFun'
 import * as api from '../../service/getData'
+import BindEmail from './userCenter/BindEmail'
 if (typeof window !== 'undefined') {
   require('../../../static/greetest/gt')
 }
 export default {
   name: 'Regist',
   components: {
+    BindEmail
   },
   data () {
     return {
       isShowpass: false,
       ispass: false,
       step: 1,
-      emailpass: false,
-      email: '',
       isSendCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
       error: false,
-      errorMessage: '注册失败',
+      errorMessage: this.$t('lang.form.registFail'),
       userExist: false,
-      registForm: {
+      form: {
         phone: '',
         code: '',
         password: '',
@@ -116,10 +91,6 @@ export default {
         repassword: {
           message: '',
           class: ''
-        },
-        email: {
-          message: '',
-          class: ''
         }
       }
     }
@@ -133,7 +104,7 @@ export default {
   methods: {
     async initDate () {
       let data = await api.getGreetest()
-      let that = this
+      let _this = this
       window.initGeetest({
         // 以下配置参数来自服务端 SDK
         gt: data.gt,
@@ -142,154 +113,47 @@ export default {
         new_captcha: data.new_captcha,
         product: 'bind'
       }, function (captchaObj) {
-        that.captchaObj = captchaObj
+        _this.captchaObj = captchaObj
         captchaObj.onSuccess(function () {
           let result = captchaObj.getValidate()
-          result.mobile = that.registForm.phone
-          that.phone = that.registForm.phone
+          result.mobile = _this.form.phone
+          _this.phone = _this.form.phone
           result.gee_token = data.gee_token
           api.sendSMS(result).then(function (res) {
             if (res.data.code === 10001) {
-              that.userExist = true
+              _this.userExist = true
               return
             }
             if (!res.tokenId) {
-              that.$prompt.error('发送失败')
+              _this.$prompt.error(_this.$t('lang.form.sendFail'))
               return
             }
-            that.tokenId = res.tokenId
-            that.isSendCode = true
-            let currNode = that.$refs.send
-            let number = 60
-            currNode.innerHTML = '发送(' + number + 's)'
-            let cuntDown = setInterval(function () {
-              if (number <= 0) {
-                currNode.innerHTML = '获取验证码'
-                clearInterval(cuntDown)
-              } else {
-                number = --number
-                currNode.innerHTML = '已发送(' + number + 's)'
-              }
-            }, 1000)
+            _this.tokenId = res.tokenId
+            _this.isSendCode = true
+            let currNode = _this.$refs.send
+            FormFun.sendCodeed(_this, currNode)
           })
         })
       })
     },
     showDel (field) {
-      this.rules[field].class = 'del'
-      this.rules[field].message = ''
+      FormFun.showDel(this, field)
     },
     delContent (field) {
-      this.registForm[field] = ''
-    },
-    delEmail () {
-      this.email = ''
+      this.form[field] = ''
     },
     checkPhone (bool) {
       this.userExist = false
-      if (this.registForm.phone === '') {
-        if (!bool) {
-          this.rules.phone.class = 'del'
-          this.rules.phone.message = this.$t('lang.form.pleasePhone')
-        }
-        return false
-      }
-      if (!Tool.isPoneAvailable(this.registForm.phone)) {
-        if (!bool) {
-          this.rules.phone.class = 'del'
-          this.rules.phone.message = this.$t('lang.form.phoneError')
-        }
-        return false
-      } else {
-        this.rules.phone.class = 'pass'
-        this.rules.phone.message = ''
-        return true
-      }
+      return FormFun.checkPhone(this, bool)
     },
     checkCode (bool) {
-      if (!this.isSendCode) {
-        if (!bool) {
-          this.rules.code.class = 'del'
-          this.rules.code.message = this.$t('lang.form.pleaseGetCode')
-        }
-        return false
-      }
-      if (this.registForm.code === '') {
-        if (!bool) {
-          this.rules.code.class = 'del'
-          this.rules.code.message = this.$t('lang.form.pleaseEnterCode')
-        }
-        return false
-      } else {
-        this.rules.code.class = 'pass'
-        this.rules.code.message = ''
-        return true
-      }
+      return FormFun.checkPhoneCode(this, bool)
     },
     checkPass (bool) {
-      let reg = new RegExp(/^(?![^a-zA-Z]+$)(?!\D+$)/)
-      if (this.registForm.password === '') {
-        if (!bool) {
-          this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.pleasePassword')
-        }
-        return false
-      } else if (this.registForm.password.length < 6) {
-        if (!bool) {
-          this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.passLast6')
-        }
-        return false
-      } else if (!reg.test(this.registForm.password)) {
-        if (!bool) {
-          this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.numberAndLetter')
-        }
-        return false
-      } else {
-        this.rules.password.class = 'pass'
-        this.rules.password.message = ''
-        return true
-      }
+      return FormFun.checkPass(this, bool)
     },
     checkRePass (bool) {
-      if (this.registForm.repassword === '') {
-        if (!bool) {
-          this.rules.repassword.class = 'del'
-          this.rules.repassword.message = this.$t('lang.form.pleaseEnterRepass')
-        }
-        return false
-      } else if (this.registForm.password !== this.registForm.repassword) {
-        if (!bool) {
-          this.rules.repassword.class = 'del'
-          this.rules.repassword.message = this.$t('lang.form.passInconsistent')
-        }
-        return false
-      } else {
-        this.rules.repassword.class = 'pass'
-        this.rules.repassword.message = ''
-        return true
-      }
-    },
-    checkEmail (bool) {
-      if (this.email === '') {
-        if (!bool) {
-          this.rules.email.class = 'del'
-          this.rules.email.message = this.$t('lang.form.pleaseEnterEmail')
-        }
-        return false
-      } else if (!Tool.isEmail(this.email)) {
-        if (!bool) {
-          this.rules.email.class = 'del'
-          this.rules.email.message = this.$t('lang.form.emailFormatError')
-          return false
-        }
-      } else {
-        this.emailpass = true
-        this.rules.email.class = 'pass'
-        this.rules.email.message = ''
-        return true
-      }
+      return FormFun.checkRePass(this, bool)
     },
     showpass () {
       this.isShowpass = !this.isShowpass
@@ -302,112 +166,42 @@ export default {
         this.ispass = false
       }
     },
-    emailPassDown () {
-      if (this.checkEmail(true)) {
-        this.emailpass = true
-      } else {
-        this.emailpass = false
-      }
-    },
     submit () {
       let params = {
         mobile: this.phone,
         tokenId: this.tokenId,
-        code: this.registForm.code,
-        pass: Tool.md5(this.registForm.password),
-        referee: this.registForm.recommed
+        code: this.form.code,
+        pass: Tool.md5(this.form.password),
+        referee: this.form.recommed
       }
-      let that = this
+      let _this = this
       this.ispass = false
       api.regist(params).then(function (res) {
         if (res.data.code === 10000 && res.ngtoken) {
           Tool.setCookie('ngtoken', res.ngtoken)
-          that.$store.dispatch('setUserInfo', res.userinfo)
-          that.$router.push('/')
-          that.step = 2
+          _this.$store.dispatch('setUserInfo', res.userinfo)
+          _this.$router.push('/')
+          _this.step = 2
         } else {
           if (res.data.code === 10002) {
-            that.error = true
-            that.errorMessage = this.$t('lang.form.codeError')
+            _this.error = true
+            _this.errorMessage = _this.$t('lang.form.codeError')
           } else {
-            that.error = true
-            that.errorMessage = this.$t('lang.form.registFail')
+            _this.error = true
+            _this.errorMessage = _this.$t('lang.form.registFail')
           }
 
-          that.ispass = true
+          _this.ispass = true
         }
-      })
-    },
-    getEmailCode () {
-      let _this = this
-      this.emailpass = false
-      if (!this.checkEmail(true)) {
-        return
-      }
-      api.getEmailCode({email: this.email}).then(function (res) {
-        let currNode = _this.$refs.sendEmail
-        let number = 60
-        currNode.innerHTML = '发送(' + number + 's)'
-        let cuntDown = setInterval(function () {
-          if (number <= 0) {
-            currNode.innerHTML = '获取验证码'
-            clearInterval(cuntDown)
-          } else {
-            number = --number
-            currNode.innerHTML = '已发送(' + number + 's)'
-          }
-        }, 1000)
       })
     },
     getCode () {
-      if (this.checkPhone() && this.$refs.send.innerHTML === '获取验证码') {
+      if (this.checkPhone() && this.$refs.send.innerHTML === this.$t('lang.form.getCode')) {
         this.captchaObj.verify()
-      }
-    },
-    codeKeyup (event) {
-      let val = event.target.value
-      let regPos = /^\d+(\.\d+)?$/
-      if (regPos.test(val)) {
-        if (event.target.nextElementSibling) {
-          event.target.nextElementSibling.focus()
-        } else {
-          event.target.blur()
-        }
-      } else {
-        event.target.value = ''
       }
     },
     clearVal (event) {
       event.target.value = ''
-    },
-    loginEmail () {
-      let email = this.email
-      let pre = email.split('@')[1]
-      let hash = {
-        'qq.com': 'http://mail.qq.com',
-        'gmail.com': 'http://mail.google.com',
-        'sina.com': 'http://mail.sina.com.cn',
-        '163.com': 'http://mail.163.com',
-        '126.com': 'http://mail.126.com',
-        'yeah.net': 'http://www.yeah.net/',
-        'sohu.com': 'http://mail.sohu.com/',
-        'tom.com': 'http://mail.tom.com/',
-        'sogou.com': 'http://mail.sogou.com/',
-        '139.com': 'http://mail.10086.cn/',
-        'hotmail.com': 'http://www.hotmail.com',
-        'live.com': 'http://login.live.com/',
-        'live.cn': 'http://login.live.cn/',
-        'live.com.cn': 'http://login.live.com.cn',
-        '189.com': 'http://webmail16.189.cn/webmail/',
-        'yahoo.com.cn': 'http://mail.cn.yahoo.com/',
-        'yahoo.cn': 'http://mail.cn.yahoo.com/',
-        'eyou.com': 'http://www.eyou.com/',
-        '21cn.com': 'http://mail.21cn.com/',
-        '188.com': 'http://www.188.com/',
-        'foxmail.com': 'http://www.foxmail.com',
-        'outlook.com': 'http://www.outlook.com'
-      }
-      window.open(hash[pre])
     }
   }
 }
@@ -415,78 +209,49 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-  @import '../../style/common';
-  @import './index';
-  @import './../../style/form.less';
-  .step1{
-      padding-top:110px;
-      p{
-        text-align: center;
-        font-size: 20px;
-        color: #ffffff;
-        margin:0 0 38px 0;
-    }
-    .registFial{
-      margin-top:28px;
-      margin-bottom:10px;
-      font-size:14px;
-      color: #39f1ff;
-    }
-    .rbutton{
-      text-align: center;
-      margin-bottom:30px;
-    }
-  }
-  .password{
-    i:nth-child(2){
-      right:40px;
-    }
-    i:nth-child(3){
-      top:22px;
-    }
-  }
-  .step2, .step3{
-    padding-top:100px;
-    >p:nth-child(1){
+@import '../../style/common';
+@import './index';
+@import './../../style/form.less';
+.step1{
+    padding-top:110px;
+    p{
       text-align: center;
       font-size: 20px;
-      color:#fff;
-      letter-spacing: 0px;
-      margin:0 0 50px 0;
-    }
-    >p:nth-child(2) {
-      margin-top:75px;
-      text-align: center;
-      font-size: 16px;
-      color:#fff;
-      letter-spacing: 0px;
-    }
-    .to_button{
-      margin-top:15px;
-      text-align: center;
-    }
-    .sbutton{
-      margin-top:50px;
-      text-align: center;
-    }
-    .login_button{
-      margin-top:18px;
-      text-align: center;
-    }
+      color: #ffffff;
+      margin:0 0 38px 0;
   }
-  .visiable{
-    visibility: hidden;
+  .registFial{
+    margin-top:28px;
+    margin-bottom:10px;
+    font-size:14px;
+    color: #39f1ff;
   }
-  .userExist{
-    position:absolute;
-    right:30px;
-    top:15px;
-    >i{
-      font-size:12px;
-      margin-right:5px;
-    }
-    >a{
-      color: #39f1ff;
-    }
+  .rbutton{
+    text-align: center;
+    margin-bottom:30px;
   }
+}
+.password{
+  i:nth-child(2){
+    right:40px;
+  }
+  i:nth-child(3){
+    top:22px;
+  }
+}
+.visiable{
+  visibility: hidden;
+}
+.userExist{
+  position:absolute;
+  right:30px;
+  top: 17px;
+  >i{
+    font-size:12px;
+    margin-right:5px;
+  }
+  >a{
+    color: #39f1ff;
+  }
+}
 </style>

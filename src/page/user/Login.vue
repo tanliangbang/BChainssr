@@ -2,28 +2,28 @@
   <section class="login">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
            <form class="login_form" v-on:keyup="onPageDown">
-             <p>{{$t("lang.login.loginTitle")}}</p>
+             <p>{{$t("lang.form.loginTitle")}}</p>
              <div class="nomalInput">
-               <input v-model="loginForm.phone" autoComplete="off" :placeholder="$t('lang.login.phonePlacehold')" v-on:focus="showDel('phone')" v-on:blur="checkPhone()"/>
+               <input v-model="loginForm.phone" autoComplete="off" :placeholder="$t('lang.form.phonePrompt')" v-on:focus="showDel('phone')" v-on:blur="checkPhone()"/>
                <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
              </div>
              <div class="nomalInput password">
-               <input v-model="loginForm.password" autoComplete="off" :placeholder="$t('lang.login.passwordPlacehold')" v-on:focus="showDel('password')" v-on:blur="checkPassword()" :type="isShowpass?'text':'password'"/>
+               <input v-model="loginForm.password" autoComplete="off" :placeholder="$t('lang.form.passPrompt')" v-on:focus="showDel('password')" v-on:blur="checkPassword()" :type="isShowpass?'text':'password'"/>
                <i :class="rules.password.class"  v-on:click="delContent('password')">{{rules.password.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
              <p :class="error?'error':'visiable'">{{errorMessage}}</p>
              <div v-if="!ispass" class="login_button">
-               <a class="no_button" v-on:click="showError">{{$t("lang.login.loginSubmit")}}</a>
+               <a class="no_button" v-on:click="showError">{{$t("lang.form.loginSubmit")}}</a>
              </div>
              <div v-if="ispass" class="login_button">
-               <a class="ok_button" v-on:click="login">{{$t("lang.login.loginSubmit")}}</a>
+               <a class="ok_button" v-on:click="login">{{$t("lang.form.loginSubmit")}}</a>
              </div>
              <div class="forgetPassword">
-               <router-link to="foundPassword">{{$t("lang.login.forgot")}}</router-link>
+               <router-link to="foundPassword">{{$t("lang.form.forgot")}}</router-link>
              </div>
              <div class="registLink">
-               <a>{{$t("lang.login.regist")}}</a>
+               <a>{{$t("lang.form.registTitle")}}</a>
              </div>
            </form>
       </div>
@@ -93,7 +93,7 @@ export default {
               that.$router.push('/')
             } else {
               that.error = true
-              that.errorMessage = that.$t('lang.login.nameOrPassError')
+              that.errorMessage = that.$t('lang.form.nameOrPassError')
               that.ispass = true
             }
           })
@@ -115,7 +115,7 @@ export default {
       if (this.loginForm.phone === '') {
         if (!bool) {
           this.rules.phone.class = 'del'
-          this.rules.phone.message = this.$t('lang.form.pleasePhone')
+          this.rules.phone.message = this.$t('lang.from.phonePrompt')
         }
         return false
       } else {
@@ -127,7 +127,7 @@ export default {
       if (this.loginForm.password === '') {
         if (!bool) {
           this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.pleasePassword')
+          this.rules.password.message = this.$t('lang.form.passPrompt')
         }
         return false
       } else {
@@ -155,7 +155,7 @@ export default {
     },
     showError () {
       this.error = true
-      this.errorMessage = this.$t('lang.login.pleaseLoginInfo')
+      this.errorMessage = this.$t('lang.form.pleaseLoginInfo')
     }
   }
 }

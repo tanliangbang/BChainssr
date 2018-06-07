@@ -37,9 +37,13 @@ export const accounts = (params) => http.post(base + '/tokens/accounts', params)
 export const getUserInfo = (params) => http.get(base + '/user/current', params)
 
 /**
- * 绑定邮箱
+ * 发送邮箱验证码
  */
 export const getEmailCode = (params) => http.post(base + '/emails/code', params)
+/**
+ * 绑定邮箱
+ */
+export const bindEmail = (params) => http.post(base + '/tokens/email/verify', params)
 
 /**
  * 退出登入
