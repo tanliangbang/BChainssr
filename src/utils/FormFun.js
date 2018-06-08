@@ -113,4 +113,58 @@ FormFun.checkRePass = function (_this, bool) {
   }
 }
 
+FormFun.checkEmail = function (_this, bool) {
+  if (_this.form.email === '') {
+    if (!bool) {
+      _this.rules.email.class = 'del'
+      _this.rules.email.message = _this.$t('lang.form.emailPrompt')
+    }
+    return false
+  } else if (!Tool.isEmail(_this.form.email)) {
+    if (!bool) {
+      _this.rules.email.class = 'del'
+      _this.rules.email.message = _this.$t('lang.form.emailFormatError')
+      return false
+    }
+  } else {
+    _this.rules.email.class = 'pass'
+    _this.rules.email.message = ''
+    return true
+  }
+}
+
+FormFun.checkPhoneCode = function (_this, bool) {
+  if (!_this.sendEmailCode) {
+    if (!bool) {
+      _this.rules.emailCode.class = 'del'
+      _this.rules.emailCode.message = _this.$t('lang.form.codePrompt')
+    }
+    return false
+  }
+  if (_this.form.emailCode === '') {
+    if (!bool) {
+      _this.rules.emailCode.class = 'del'
+      _this.rules.emailCode.message = _this.$t('lang.form.codePrompt')
+    }
+    return false
+  } else {
+    _this.rules.emailCode.class = 'pass'
+    _this.rules.emailCode.message = ''
+    return true
+  }
+}
+
+FormFun.initGreetest = function (_this, data, callback) {
+  window.initGeetest({
+    // 以下配置参数来自服务端 SDK
+    gt: data.gt,
+    challenge: data.challenge,
+    offline: !data.success,
+    new_captcha: data.new_captcha,
+    product: 'bind'
+  }, function (captchaObj) {
+    callback(captchaObj)
+  })
+}
+
 export default FormFun

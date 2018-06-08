@@ -26,11 +26,11 @@ export default {
   mounted () {
     let currheight = 0
     this.$store.dispatch('getUserInfo')
-    currheight = document.documentElement.clientHeight - 350
+    currheight = document.documentElement.clientHeight - 336
     currheight = currheight > 500 ? (currheight + 'px') : '500px'
     this.$store.dispatch('setMinHeight', currheight)
     window.onresize = () => {
-      currheight = document.documentElement.clientHeight - 350
+      currheight = document.documentElement.clientHeight - 336
       currheight = currheight > 500 ? (currheight + 'px') : '500px'
       this.$store.dispatch('setMinHeight', currheight)
     }

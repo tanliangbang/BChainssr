@@ -12,7 +12,6 @@ axios.interceptors.response.use((res) => {
   }
   return Promise.reject(res)
 }, (error) => {
-  // 网络异常
   return Promise.reject(error)
 })
 
@@ -37,7 +36,7 @@ export function createAPI({ client }) {
         }).then(res => {
           resolve(res.data)
         }).catch(error => {
-          reject(error)
+          resolve(error.response.data)
         })
       })
     },
@@ -53,8 +52,8 @@ export function createAPI({ client }) {
           }
         }).then(res => {
           resolve(res.data)
-        }).catch(error => {
-          reject(error)
+        }).catch((error) => {
+          resolve(error.response.data)
         })
       })
     },
@@ -70,7 +69,7 @@ export function createAPI({ client }) {
         }).then(res => {
           resolve(res.data)
         }).catch(error => {
-          reject(error)
+          resolve(error.response.data)
         })
       })
     }

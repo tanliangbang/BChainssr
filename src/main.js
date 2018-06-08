@@ -17,6 +17,9 @@ Vue.use(VueLoading)
 Vue.use(Prompt)
 Vue.use(Mask)
 
+// 引入mockjs
+require('./mock.js')
+
 const i18n = new VueI18n({
   locale: 'cn',    // 语言标识
   messages: {

@@ -92,10 +92,16 @@ export default {
     bindEmail () {
       let params = {
         email: this.email,
-        verify_key: this.codeValue
+        code: this.codeValue
       }
+      let _this = this
       api.bindEmail(params).then(function (res) {
-        console.log(res)
+        if (res.status === 200) {
+          this.$store.dispatch('setUserInfo', res.data.userinfo)
+          _this.$prompt.success(_this.$t('lang.errorPrompt.bindSucess'))
+        } else {
+          _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
+        }
       })
     },
     codeKeyup (event) {
@@ -126,7 +132,12 @@ export default {
       let currNode = _this.$refs.sendEmail
       FormFun.sendCodeed(_this, currNode)
       api.getEmailCode({email: this.email}).then(function (res) {
-        _this.codeSend = true
+        if (res.status === 200) {
+          Tool.setCookie('email_token', res.data.email_token)
+          _this.codeSend = true
+        } else {
+          _this.$prompt.error(_this.$t('lang.form.sendFail'))
+        }
       })
     }
   }

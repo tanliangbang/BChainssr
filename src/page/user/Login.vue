@@ -33,6 +33,7 @@
 <script>
 import * as api from '../../service/getData'
 import Tool from '../../utils/Tool'
+import FormFun from '../../utils/FormFun'
 if (typeof window !== 'undefined') {
   require('../../../static/greetest/gt')
 }
@@ -71,30 +72,24 @@ export default {
   methods: {
     async initDate () {
       let data = await api.getGreetest()
-      let that = this
-      window.initGeetest({
-        // 以下配置参数来自服务端 SDK
-        gt: data.gt,
-        challenge: data.challenge,
-        offline: !data.success,
-        new_captcha: data.new_captcha,
-        product: 'bind'
-      }, function (captchaObj) {
-        that.captchaObj = captchaObj
+      data = data.data
+      let _this = this
+      FormFun.initGreetest(_this, data, function (captchaObj) {
+        _this.captchaObj = captchaObj
         captchaObj.onSuccess(function () {
           let result = captchaObj.getValidate()
           result.gee_token = data.gee_token
-          result.account = that.loginForm.phone
-          result.pass = Tool.md5(that.loginForm.password)
+          result.account = _this.loginForm.phone
+          result.pass = Tool.md5(_this.loginForm.password)
           api.accounts(result).then(function (res) {
-            if (res.data.code === 10000 && res.ngtoken) {
-              Tool.setCookie('ngtoken', res.ngtoken)
-              that.$store.dispatch('setUserInfo', res.userinfo)
-              that.$router.push('/')
+            if (res.status === 200) {
+              Tool.setCookie('ngtoken', res.data.ngtoken)
+              _this.$store.dispatch('setUserInfo', res.data.userinfo)
+              _this.$router.push('/')
             } else {
-              that.error = true
-              that.errorMessage = that.$t('lang.form.nameOrPassError')
-              that.ispass = true
+              _this.error = true
+              _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
+              _this.ispass = true
             }
           })
         })

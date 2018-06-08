@@ -1,5 +1,4 @@
 import * as api from '../../service/getData'
-import Tool from './../../utils/Tool'
 const state = {
   userInfo: null
 }
@@ -16,10 +15,8 @@ const actions = {
   },
   getUserInfo: ({ state, commit }) => {
     api.getUserInfo().then(function (res) {
-      if (res.userinfo) {
-        commit('SET_USERINFO', res.userinfo)
-      } else {
-        Tool.delCookie('ngtoken')
+      if (res.status === 200) {
+        commit('SET_USERINFO', res.data.userinfo)
       }
     })
   }

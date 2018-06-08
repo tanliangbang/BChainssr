@@ -60,7 +60,7 @@ export default {
     return {
       isShowpass: false,
       ispass: false,
-      step: 1,
+      step: 2,
       isSendCode: false,
       captchaObj: null,
       tokenId: null,
@@ -105,14 +105,8 @@ export default {
     async initDate () {
       let data = await api.getGreetest()
       let _this = this
-      window.initGeetest({
-        // 以下配置参数来自服务端 SDK
-        gt: data.gt,
-        challenge: data.challenge,
-        offline: !data.success,
-        new_captcha: data.new_captcha,
-        product: 'bind'
-      }, function (captchaObj) {
+      data = data.data
+      FormFun.initGreetest(_this, data, function (captchaObj) {
         _this.captchaObj = captchaObj
         captchaObj.onSuccess(function () {
           let result = captchaObj.getValidate()
@@ -120,18 +114,16 @@ export default {
           _this.phone = _this.form.phone
           result.gee_token = data.gee_token
           api.sendSMS(result).then(function (res) {
-            if (res.data.code === 10001) {
+            if (res.status === 200) {
+              _this.tokenId = res.data.tokenId
+              _this.isSendCode = true
+              let currNode = _this.$refs.send
+              FormFun.sendCodeed(_this, currNode)
+            } else if (res.status === 409) {
               _this.userExist = true
-              return
-            }
-            if (!res.tokenId) {
+            } else {
               _this.$prompt.error(_this.$t('lang.form.sendFail'))
-              return
             }
-            _this.tokenId = res.tokenId
-            _this.isSendCode = true
-            let currNode = _this.$refs.send
-            FormFun.sendCodeed(_this, currNode)
           })
         })
       })
@@ -177,20 +169,14 @@ export default {
       let _this = this
       this.ispass = false
       api.regist(params).then(function (res) {
-        if (res.data.code === 10000 && res.ngtoken) {
-          Tool.setCookie('ngtoken', res.ngtoken)
+        if (res.status === 200) {
+          Tool.setCookie('ngtoken', res.data.ngtoken)
           _this.$store.dispatch('setUserInfo', res.userinfo)
           _this.$router.push('/')
           _this.step = 2
         } else {
-          if (res.data.code === 10002) {
-            _this.error = true
-            _this.errorMessage = _this.$t('lang.form.codeError')
-          } else {
-            _this.error = true
-            _this.errorMessage = _this.$t('lang.form.registFail')
-          }
-
+          _this.error = true
+          _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
           _this.ispass = true
         }
       })
@@ -213,8 +199,8 @@ export default {
 @import './index';
 @import './../../style/form.less';
 .step1{
-    padding-top:110px;
-    p{
+    padding-top:50px;
+    p:nth-child(1){
       text-align: center;
       font-size: 20px;
       color: #ffffff;

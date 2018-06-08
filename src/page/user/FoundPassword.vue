@@ -8,14 +8,14 @@
         <form class="phone_found"  v-on:keyup="onPageDown">
             <div v-if="foundWay === 'phone'" >
               <div class="nomalInput">
-                <input :placeholder="$t('lang.form.phonePrompt')"  v-model="foundPassForm.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
+                <input :placeholder="$t('lang.form.phonePrompt')"  v-model="form.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
                 <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
                 <div class="userExist" v-if="userExist">
                   <i>{{$t('lang.form.userExsit')}}</i><router-link to="login">{{$t('lang.form.goLogin')}}</router-link>
                 </div>
               </div>
               <div class="code">
-                <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="foundPassForm.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
+                <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="form.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
                 <i :class="rules.code.class"  v-on:click="delContent('code')">{{rules.code.message}}</i>
                 <span v-on:click="getCode()" ref="send">{{$t('lang.form.getCode')}}</span>
               </div>
@@ -23,27 +23,27 @@
 
           <div v-if="foundWay === 'email'" >
             <div class="nomalInput">
-              <input :placeholder="$t('lang.form.emailPrompt')"  v-model="foundPassForm.email" v-on:focus="showDel('email')" v-on:blur="checkEmail()" type="text"/>
+              <input :placeholder="$t('lang.form.emailPrompt')"  v-model="form.email" v-on:focus="showDel('email')" v-on:blur="checkEmail()" type="text"/>
               <i :class="rules.email.class" v-on:click="delContent('email')" >{{rules.email.message}}</i>
             </div>
             <div class="code">
-              <input type="text" v-on:focus="showDel('emailCode')" v-on:blur="checkCode()" v-model="foundPassForm.emailCode" :placeholder="$t('lang.form.pleaseEnterCode')"/>
-              <i :class="rules.code.class"  v-on:click="delContent('code')">{{rules.code.message}}</i>
+              <input type="text" v-on:focus="showDel('emailCode')" v-on:blur="checkEmailCode()" v-model="form.emailCode" :placeholder="$t('lang.form.pleaseEnterCode')"/>
+              <i :class="rules.emailCode.class"  v-on:click="delContent('emailCode')">{{rules.emailCode.message}}</i>
               <span v-on:click="getEmailCode()" ref="sendEmail">{{$t('lang.form.getCode')}}</span>
             </div>
           </div>
 
             <div class="nomalInput password">
-              <input :placeholder="$t('lang.form.passPrompt')" v-model="foundPassForm.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
+              <input :placeholder="$t('lang.form.passPrompt')" v-model="form.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
               <i :class="rules.password.class"  v-on:click="delContent('password')">{{rules.password.message}}</i>
               <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
             </div>
             <div class="nomalInput password">
-              <input :placeholder="$t('lang.form.repassPrompt')" v-model="foundPassForm.repassword" v-on:blur="checkRePass()" :type="isShowpass?'text':'password'"/>
+              <input :placeholder="$t('lang.form.repassPrompt')" v-model="form.repassword" v-on:blur="checkRePass()" :type="isShowpass?'text':'password'"/>
               <i :class="rules.repassword.class"  v-on:click="delContent('repassword')">{{rules.repassword.message}}</i>
               <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
             </div>
-            <p :class="error?'registFial':'visiable'">{{errorMessage}}</p>
+            <p class="errorPrompt">{{errorMessage}}</p>
             <div v-if="!ispass" class="rbutton">
               <a class="no_button">{{$t('lang.form.next')}}</a>
             </div>
@@ -72,14 +72,14 @@ export default {
       ispass: false,
       step: 1,
       isSendCode: false,
+      sendEmailCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
       error: false,
-      errorMessage: this.$t('lang.form.registFail'),
-      userExist: false,
+      errorMessage: '',
       foundWay: 'phone',
-      foundPassForm: {
+      form: {
         phone: '',
         code: '',
         email: '',
@@ -116,8 +116,6 @@ export default {
       }
     }
   },
-  created () {
-  },
   mounted () {
     window.scrollTo(0, 0)
     this.initDate()
@@ -126,33 +124,23 @@ export default {
     async initDate () {
       let data = await api.getGreetest()
       let _this = this
-      window.initGeetest({
-        // 以下配置参数来自服务端 SDK
-        gt: data.gt,
-        challenge: data.challenge,
-        offline: !data.success,
-        new_captcha: data.new_captcha,
-        product: 'bind'
-      }, function (captchaObj) {
+      data = data.data
+      FormFun.initGreetest(_this, data, function (captchaObj) {
         _this.captchaObj = captchaObj
         captchaObj.onSuccess(function () {
           let result = captchaObj.getValidate()
-          result.mobile = _this.foundPassForm.phone
-          _this.phone = _this.foundPassForm.phone
+          result.mobile = _this.form.phone
+          _this.phone = _this.form.phone
           result.gee_token = data.gee_token
-          api.sendSMS(result).then(function (res) {
-            if (res.data.code === 10001) {
-              _this.userExist = true
-              return
+          api.resetSendSMS(result).then(function (res) {
+            if (res.status === 200) {
+              _this.tokenId = res.tokenId
+              _this.isSendCode = true
+              let currNode = _this.$refs.send
+              FormFun.sendCodeed(_this, currNode)
+            } else {
+              _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
             }
-            if (!res.tokenId) {
-              _this.$prompt.error(_this.$t('lang.form.sendFail'))
-              return
-            }
-            _this.tokenId = res.tokenId
-            _this.isSendCode = true
-            let currNode = _this.$refs.send
-            FormFun.sendCodeed(_this, currNode)
           })
         })
       })
@@ -165,112 +153,49 @@ export default {
       this.foundWay = str
     },
     delContent (field) {
-      this.foundPassForm[field] = ''
+      this.form[field] = ''
     },
     checkPhone (bool) {
-      this.userExist = false
-      if (this.foundPassForm.phone === '') {
-        if (!bool) {
-          this.rules.phone.class = 'del'
-          this.rules.phone.message = this.$t('lang.form.phonePrompt')
-        }
-        return false
-      }
-      if (!Tool.isPoneAvailable(this.foundPassForm.phone)) {
-        if (!bool) {
-          this.rules.phone.class = 'del'
-          this.rules.phone.message = this.$t('lang.form.phoneError')
-        }
-        return false
-      } else {
-        this.rules.phone.class = 'pass'
-        this.rules.phone.message = ''
-        return true
-      }
+      return FormFun.checkPhone(this, bool)
     },
     checkCode (bool) {
-      if (!this.isSendCode) {
-        if (!bool) {
-          this.rules.code.class = 'del'
-          this.rules.code.message = this.$t('lang.form.codePrompt')
-        }
-        return false
-      }
-      if (this.foundPassForm.code === '') {
-        if (!bool) {
-          this.rules.code.class = 'del'
-          this.rules.code.message = this.$t('lang.form.codePrompt')
-        }
-        return false
-      } else {
-        this.rules.code.class = 'pass'
-        this.rules.code.message = ''
-        return true
-      }
+      return FormFun.checkPhoneCode(this, bool)
     },
     checkPass (bool) {
-      let reg = new RegExp(/^(?![^a-zA-Z]+$)(?!\D+$)/)
-      if (this.foundPassForm.password === '') {
-        if (!bool) {
-          this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.passPrompt')
-        }
-        return false
-      } else if (this.foundPassForm.password.length < 6) {
-        if (!bool) {
-          this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.passLast6')
-        }
-        return false
-      } else if (!reg.test(this.foundPassForm.password)) {
-        if (!bool) {
-          this.rules.password.class = 'del'
-          this.rules.password.message = this.$t('lang.form.numberAndLetter')
-        }
-        return false
-      } else {
-        this.rules.password.class = 'pass'
-        this.rules.password.message = ''
-        return true
-      }
+      return FormFun.checkPass(this, bool)
     },
     checkRePass (bool) {
-      if (this.foundPassForm.repassword === '') {
-        if (!bool) {
-          this.rules.repassword.class = 'del'
-          this.rules.repassword.message = this.$t('lang.form.repassPrompt')
-        }
-        return false
-      } else if (this.foundPassForm.password !== this.foundPassForm.repassword) {
-        if (!bool) {
-          this.rules.repassword.class = 'del'
-          this.rules.repassword.message = this.$t('lang.form.passInconsistent')
-        }
-        return false
-      } else {
-        this.rules.repassword.class = 'pass'
-        this.rules.repassword.message = ''
-        return true
-      }
+      return FormFun.checkRePass(this, bool)
     },
     showpass () {
       this.isShowpass = !this.isShowpass
     },
+    checkEmailCode (bool) {
+      return FormFun.checkEmailCode(this, bool)
+    },
     onPageDown () {
-      this.error = false
-      if (this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
-        this.ispass = true
+      this.errorMessage = ''
+      if (this.foundWay === 'phone') {
+        if (this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
+          this.ispass = true
+        } else {
+          this.ispass = false
+        }
       } else {
-        this.ispass = false
+        if (this.checkEmail(true) && this.checkEmailCode(true) && this.checkPass(true) && this.checkRePass(true)) {
+          this.ispass = true
+        } else {
+          this.ispass = false
+        }
       }
     },
     submit () {
       let params = {
         mobile: this.phone,
         tokenId: this.tokenId,
-        code: this.foundPassForm.code,
-        pass: Tool.md5(this.foundPassForm.password),
-        referee: this.foundPassForm.recommed
+        code: this.form.code,
+        pass: Tool.md5(this.form.password),
+        referee: this.form.recommed
       }
       let _this = this
       this.ispass = false
@@ -302,27 +227,11 @@ export default {
       event.target.value = ''
     },
     checkEmail (bool) {
-      if (this.foundPassForm.email === '') {
-        if (!bool) {
-          this.rules.email.class = 'del'
-          this.rules.email.message = this.$t('lang.form.emailPrompt')
-        }
-        return false
-      } else if (!Tool.isEmail(this.foundPassForm.email)) {
-        if (!bool) {
-          this.rules.email.class = 'del'
-          this.rules.email.message = this.$t('lang.form.emailFormatError')
-          return false
-        }
-      } else {
-        this.rules.email.class = 'pass'
-        this.rules.email.message = ''
-        return true
-      }
+      return FormFun.checkEmail(this, bool)
     },
     getEmailCode () {
       let _this = this
-      if (!this.checkEmail(true)) {
+      if (!FormFun.checkEmail(this, true)) {
         return
       }
       if (this.$refs.sendEmail.innerHTML !== this.$t('lang.form.getCode')) {
@@ -330,8 +239,12 @@ export default {
       }
       let currNode = _this.$refs.sendEmail
       FormFun.sendCodeed(_this, currNode)
-      api.getEmailCode({email: this.foundPassForm.email}).then(function (res) {
-        _this.codeSend = true
+      api.resetEmailSendSMS({email: this.form.email}).then(function (res) {
+        if (res.status === 200) {
+          _this.codeSend = true
+        } else {
+          _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
+        }
       })
     }
   }
@@ -386,7 +299,6 @@ export default {
   .phone_found{
     .rbutton {
       text-align: center;
-      margin-top:38px;
       margin-bottom:38px;
     }
   }
@@ -398,7 +310,11 @@ export default {
       top:22px;
     }
   }
-  .visiable{
-    visibility: hidden;
+  .errorPrompt{
+    margin-top:38px;
+    margin-bottom:5px;
+    text-align: center;
+    color:#00a7ff;
+    height:16px;
   }
 </style>

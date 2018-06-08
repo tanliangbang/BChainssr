@@ -239,7 +239,30 @@ export const lang = {
     eCodePrompt3: '入',
     eCodePrompt4: '验',
     eCodePrompt5: '证',
-    eCodePrompt6: '码'
+    eCodePrompt6: '码',
+    bindSucess: '邮箱绑定成功',
+    bindFail: '邮箱绑定失败'
+  },
+  errorPrompt: {
+    'MISSING_NGTOKEN': '会话已过期，请重新登录',
+    'INVALID_NGTOKEN': '用户登录信息过期，请重新登录',
+    'GEETEST_INIT_FAILED': '图片拼接初始化失败',
+    'INVALID_GEETOKEN': '图片验证过期，请刷新页面',
+    'MOBILE_ALREADY_EXIST': '手机号已存在，请直接登录',
+    'GEETEST_VERIFY_FAILED': '图片解锁验证失败，请重新验证',
+    'INVALID_MOBILE_CODE': '手机验证码校验失败',
+    'INVALID_USERNAME_OR_PASSWORD': '用户名或密码错误',
+    'INVALID_MOBILE_TOKEN': '验证码信息已过期，请重新发送验证码',
+    'MOBILE_NOT_MATCH': '手机号不匹配',
+    'MOBILE_CODE_NOT_MATCH': '验证码不匹配',
+    'INVALID_EMAIL_BIND_TOKEN': '用户绑定邮箱信息已过期，请重新发送邮件',
+    'GET_USERINFO_FAILED': '获取用户信息失败',
+    'USER_ALREADY_BIND_EMAIL': '用户已绑定邮箱',
+    'EMAIL_SEND_FAILED': '邮箱发送失败',
+    'EMAIL_NOT_MATCH': '邮箱不匹配',
+    'EMAIL_CODE_NOT_MATCH': '邮箱验证码错误',
+    'EMAIL_NOT_BIND': '邮箱未绑定',
+    'INVALID_EMAIL_RESET_TOKEN': '邮箱重置密码已过期，请重新发送邮件'
   }
 }
 
