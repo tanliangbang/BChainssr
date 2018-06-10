@@ -46,7 +46,7 @@ FormFun.checkPhone = function (_this, bool) {
 }
 
 FormFun.checkPhoneCode = function (_this, bool) {
-  if (!_this.isSendCode) {
+  if (!_this.isSendPhoneCode) {
     if (!bool) {
       _this.rules.code.class = 'del'
       _this.rules.code.message = _this.$t('lang.form.codePrompt')
@@ -133,8 +133,8 @@ FormFun.checkEmail = function (_this, bool) {
   }
 }
 
-FormFun.checkPhoneCode = function (_this, bool) {
-  if (!_this.sendEmailCode) {
+FormFun.checkEmailCode = function (_this, bool) {
+  if (!_this.isSendEmailCode) {
     if (!bool) {
       _this.rules.emailCode.class = 'del'
       _this.rules.emailCode.message = _this.$t('lang.form.codePrompt')

@@ -242,7 +242,9 @@ export const lang = {
     eCodePrompt5: 'co',
     eCodePrompt6: 'de',
     bindSucess: 'Email bind Success',
-    bindFail: 'Email bind fail'
+    bindFail: 'Email bind fail',
+    foundSuccess: 'Password Change Success',
+    foundfail: 'Password Change fail'
   },
   errorPrompt: {
     'MISSING_NGTOKEN': 'MISSING_NGTOKEN',

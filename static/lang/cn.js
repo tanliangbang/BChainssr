@@ -241,7 +241,9 @@ export const lang = {
     eCodePrompt5: '证',
     eCodePrompt6: '码',
     bindSucess: '邮箱绑定成功',
-    bindFail: '邮箱绑定失败'
+    bindFail: '邮箱绑定失败',
+    foundSuccess: '密码修改成功',
+    foundfail: '密码修改失败'
   },
   errorPrompt: {
     'MISSING_NGTOKEN': '会话已过期，请重新登录',

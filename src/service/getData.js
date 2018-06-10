@@ -60,3 +60,14 @@ export const resetSendSMS = (params) => http.post(base + '/tokens/sms/reset', pa
  * 找回密码发送邮箱验证码
  */
 export const resetEmailSendSMS = (params) => http.post(base + '/emails/reset/code', params)
+
+/**
+ * 通过手机号码找回密码
+ */
+export const foundByPone = (params) => http.post(base + '/tokens/mobile/password/reset', params)
+
+/**
+ * 通过邮箱找回密码
+ */
+export const foundByEmail = (params) => http.post(base + '/emails/reset/verify', params)
+

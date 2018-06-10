@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       email: '',
-      codeSend: false,
+      isSendEmailCode: false,
       verifyPass: false,
       codeValue: '',
       rules: {
@@ -123,20 +123,21 @@ export default {
     },
     getEmailCode () {
       let _this = this
-      if (!this.checkEmail(true)) {
+      if (!this.checkEmail(true) && _this.isSendEmailCode) {
         return
       }
       if (this.$refs.sendEmail.innerHTML !== this.$t('lang.form.getCode')) {
         return
       }
       let currNode = _this.$refs.sendEmail
-      FormFun.sendCodeed(_this, currNode)
+      _this.isSendEmailCode = true
       api.getEmailCode({email: this.email}).then(function (res) {
         if (res.status === 200) {
+          FormFun.sendCodeed(_this, currNode)
           Tool.setCookie('email_token', res.data.email_token)
-          _this.codeSend = true
         } else {
-          _this.$prompt.error(_this.$t('lang.form.sendFail'))
+          _this.isSendEmailCode = false
+          _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
         }
       })
     }

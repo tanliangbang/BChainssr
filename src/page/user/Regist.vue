@@ -61,7 +61,7 @@ export default {
       isShowpass: false,
       ispass: false,
       step: 2,
-      isSendCode: false,
+      isSendPhoneCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
@@ -116,7 +116,7 @@ export default {
           api.sendSMS(result).then(function (res) {
             if (res.status === 200) {
               _this.tokenId = res.data.tokenId
-              _this.isSendCode = true
+              _this.isSendPhoneCode = true
               let currNode = _this.$refs.send
               FormFun.sendCodeed(_this, currNode)
             } else if (res.status === 409) {

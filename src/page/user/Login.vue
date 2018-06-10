@@ -83,7 +83,7 @@ export default {
           result.pass = Tool.md5(_this.loginForm.password)
           api.accounts(result).then(function (res) {
             if (res.status === 200) {
-              Tool.setCookie('ngtoken', res.data.ngtoken)
+              // Tool.setCookie('ngtoken', res.data.ngtoken)
               _this.$store.dispatch('setUserInfo', res.data.userinfo)
               _this.$router.push('/')
             } else {

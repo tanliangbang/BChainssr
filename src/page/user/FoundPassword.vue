@@ -10,9 +10,6 @@
               <div class="nomalInput">
                 <input :placeholder="$t('lang.form.phonePrompt')"  v-model="form.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
                 <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
-                <div class="userExist" v-if="userExist">
-                  <i>{{$t('lang.form.userExsit')}}</i><router-link to="login">{{$t('lang.form.goLogin')}}</router-link>
-                </div>
               </div>
               <div class="code">
                 <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="form.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
@@ -71,8 +68,8 @@ export default {
       isShowpass: false,
       ispass: false,
       step: 1,
-      isSendCode: false,
-      sendEmailCode: false,
+      isSendPhoneCode: false,
+      isSendEmailCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
@@ -134,8 +131,8 @@ export default {
           result.gee_token = data.gee_token
           api.resetSendSMS(result).then(function (res) {
             if (res.status === 200) {
-              _this.tokenId = res.tokenId
-              _this.isSendCode = true
+              _this.tokenId = res.data.tokenId
+              _this.isSendPhoneCode = true
               let currNode = _this.$refs.send
               FormFun.sendCodeed(_this, currNode)
             } else {
@@ -176,13 +173,13 @@ export default {
     onPageDown () {
       this.errorMessage = ''
       if (this.foundWay === 'phone') {
-        if (this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
+        if (this.isSendPhoneCode && this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
           this.ispass = true
         } else {
           this.ispass = false
         }
       } else {
-        if (this.checkEmail(true) && this.checkEmailCode(true) && this.checkPass(true) && this.checkRePass(true)) {
+        if (this.isSendEmailCode && this.checkEmail(true) && this.checkEmailCode(true) && this.checkPass(true) && this.checkRePass(true)) {
           this.ispass = true
         } else {
           this.ispass = false
@@ -190,33 +187,41 @@ export default {
       }
     },
     submit () {
-      let params = {
-        mobile: this.phone,
-        tokenId: this.tokenId,
-        code: this.form.code,
-        pass: Tool.md5(this.form.password),
-        referee: this.form.recommed
-      }
+      let params = {}
       let _this = this
       this.ispass = false
-      api.regist(params).then(function (res) {
-        if (res.data.code === 10000 && res.ngtoken) {
-          Tool.setCookie('ngtoken', res.ngtoken)
-          _this.$store.dispatch('setUserInfo', res.userinfo)
-          _this.$router.push('/')
-          _this.step = 2
-        } else {
-          if (res.data.code === 10002) {
-            _this.error = true
-            _this.errorMessage = _this.$t('lang.form.codeError')
-          } else {
-            _this.error = true
-            _this.errorMessage = _this.$t('lang.form.registFail')
-          }
-
-          _this.ispass = true
+      if (this.foundWay === 'phone') {
+        params = {
+          mobile: this.phone,
+          tokenId: this.tokenId,
+          code: this.form.code,
+          password: Tool.md5(this.form.password)
         }
-      })
+        api.foundByPone(params).then(function (res) {
+          if (res.status === 200) {
+            _this.$prompt.success(_this.$t('lang.form.foundSuccess'))
+            _this.$router.push('/login')
+          } else {
+            _this.ispass = true
+            _this.$prompt.error(_this.$t('lang.form.foundfail'))
+          }
+        })
+      } else {
+        params = {
+          email: this.form.email,
+          code: this.form.emailCode,
+          pass: Tool.md5(this.form.password)
+        }
+        api.foundByEmail(params).then(function (res) {
+          if (res.status === 200) {
+            _this.$prompt.success(_this.$t('lang.form.foundSuccess'))
+            _this.$router.push('/login')
+          } else {
+            _this.ispass = true
+            _this.$prompt.error(_this.$t('lang.form.foundfail'))
+          }
+        })
+      }
     },
     getCode () {
       if (this.checkPhone() && this.$refs.send.innerHTML === this.$t('lang.form.getCode')) {
@@ -241,7 +246,8 @@ export default {
       FormFun.sendCodeed(_this, currNode)
       api.resetEmailSendSMS({email: this.form.email}).then(function (res) {
         if (res.status === 200) {
-          _this.codeSend = true
+          _this.isSendEmailCode = true
+          Tool.setCookie('email_reset_token', res.data.email_reset_token)
         } else {
           _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
         }
