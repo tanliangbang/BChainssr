@@ -200,7 +200,8 @@ export const lang = {
     addPrompt2: 'receipts two dimensional code pictures',
     accountBranch: 'OpenBranch',
     bankNum: 'BankAccount',
-    commit: 'Commit'
+    commit: 'Commit',
+    goBindEmail: 'GO Bind'
   },
   form: {
     loginTitle: 'Log in with Bilian account',
@@ -241,10 +242,11 @@ export const lang = {
     eCodePrompt4: 'ter',
     eCodePrompt5: 'co',
     eCodePrompt6: 'de',
-    bindSucess: 'Email bind Success',
+    bindSuccess: 'Email bind Success',
     bindFail: 'Email bind fail',
     foundSuccess: 'Password Change Success',
-    foundfail: 'Password Change fail'
+    foundfail: 'Password Change fail',
+    goLogin: 'GO LOGIN'
   },
   errorPrompt: {
     'MISSING_NGTOKEN': 'MISSING_NGTOKEN',
@@ -265,6 +267,8 @@ export const lang = {
     'EMAIL_NOT_MATCH': 'EMAIL_NOT_MATCH',
     'EMAIL_CODE_NOT_MATCH': 'EMAIL_CODE_NOT_MATCH',
     'EMAIL_NOT_BIND': 'EMAIL_NOT_BIND',
-    'INVALID_EMAIL_RESET_TOKEN': 'INVALID_EMAIL_RESET_TOKEN'
+    'INVALID_EMAIL_RESET_TOKEN': 'INVALID_EMAIL_RESET_TOKEN',
+    'MOBILE_NOT_EXIST': 'MOBILE_NOT_EXIST'
+
   }
 }

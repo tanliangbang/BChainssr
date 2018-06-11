@@ -1,7 +1,7 @@
 <template>
   <div class="financeRecord">
       <RechEnchDetail ref="rechEnchDetail"/>
-      <div class="fin-nav">
+      <div class="common-nav">
         <router-link to="assetManage">{{$t("lang.financeRecord.financeRecord")}}</router-link> >
         <i>{{$t("lang.financeRecord.exchangeRecord")}}</i>
       </div>
@@ -71,22 +71,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-@import "../../style/var";
+@import "../../style/common";
 .financeRecord{
   margin:0px 300px;
   position:relative;
-  .fin-nav{
-    margin:60px 54px;
-    font-size:18px;
-    >a{
-      cursor: pointer;
-      color:#fff;
-    }
-    i{
-      color: #0088ff;
-    }
-  }
-
   .select{
     width: 85px;
     height: 36px;

@@ -195,12 +195,13 @@ export default {
           mobile: this.phone,
           tokenId: this.tokenId,
           code: this.form.code,
-          password: Tool.md5(this.form.password)
+          pass: Tool.md5(this.form.password)
         }
         api.foundByPone(params).then(function (res) {
           if (res.status === 200) {
-            _this.$prompt.success(_this.$t('lang.form.foundSuccess'))
-            _this.$router.push('/login')
+            _this.$mask.showAlert(_this.$t('lang.form.foundSuccess'), 'success', function () {
+              _this.$router.push('/login')
+            }, _this.$t('lang.form.goLogin'))
           } else {
             _this.ispass = true
             _this.$prompt.error(_this.$t('lang.form.foundfail'))
@@ -214,8 +215,9 @@ export default {
         }
         api.foundByEmail(params).then(function (res) {
           if (res.status === 200) {
-            _this.$prompt.success(_this.$t('lang.form.foundSuccess'))
-            _this.$router.push('/login')
+            _this.$mask.showAlert(_this.$t('lang.form.foundSuccess'), 'success', function () {
+              _this.$router.push('/login')
+            }, _this.$t('lang.form.goLogin'))
           } else {
             _this.ispass = true
             _this.$prompt.error(_this.$t('lang.form.foundfail'))
@@ -243,9 +245,9 @@ export default {
         return
       }
       let currNode = _this.$refs.sendEmail
-      FormFun.sendCodeed(_this, currNode)
       api.resetEmailSendSMS({email: this.form.email}).then(function (res) {
         if (res.status === 200) {
+          FormFun.sendCodeed(_this, currNode)
           _this.isSendEmailCode = true
           Tool.setCookie('email_reset_token', res.data.email_reset_token)
         } else {

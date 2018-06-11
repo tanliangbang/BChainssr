@@ -1,7 +1,7 @@
 <template>
   <section class="regist">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
-          <form class="step1" v-if="step === 1" v-on:keyup="onPageDown">
+          <form  v-on:keyup="onPageDown" class="step1">
              <p>{{$t("lang.form.registTitle")}}</p>
              <div class="nomalInput">
                <input :placeholder="$t('lang.form.phonePrompt')"  v-model="form.phone" v-on:focus="showDel('phone')" v-on:blur="checkPhone()" type="text"/>
@@ -28,7 +28,7 @@
              <div class="nomalInput">
                <input :placeholder="$t('lang.form.referrer')" type="text"/>
              </div>
-            <p :class="error?'registFial':'visiable'">{{errorMessage}}</p>
+            <p class="errorPrompt">{{errorMessage}}</p>
              <div v-if="!ispass" class="rbutton">
                <a class="no_button">{{$t('lang.form.next')}}</a>
              </div>
@@ -36,9 +36,6 @@
               <a v-on:click="submit"  class="ok_button">{{$t('lang.form.next')}}</a>
             </div>
           </form>
-          <div class="step2" v-if="step === 2" >
-              <BindEmail/>
-          </div>
       </div>
   </section>
 </template>
@@ -60,13 +57,12 @@ export default {
     return {
       isShowpass: false,
       ispass: false,
-      step: 2,
       isSendPhoneCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
       error: false,
-      errorMessage: this.$t('lang.form.registFail'),
+      errorMessage: '',
       userExist: false,
       form: {
         phone: '',
@@ -151,7 +147,7 @@ export default {
       this.isShowpass = !this.isShowpass
     },
     onPageDown () {
-      this.error = false
+      this.errorMessage = ''
       if (this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
         this.ispass = true
       } else {
@@ -170,10 +166,8 @@ export default {
       this.ispass = false
       api.regist(params).then(function (res) {
         if (res.status === 200) {
-          Tool.setCookie('ngtoken', res.data.ngtoken)
-          _this.$store.dispatch('setUserInfo', res.userinfo)
-          _this.$router.push('/')
-          _this.step = 2
+          _this.$store.dispatch('setUserInfo', res.data.userinfo)
+          _this.$router.push('/bindEmail')
         } else {
           _this.error = true
           _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
@@ -239,5 +233,12 @@ export default {
   >a{
     color: #39f1ff;
   }
+}
+.errorPrompt{
+  margin-top:38px;
+  margin-bottom:5px;
+  text-align: center;
+  color:#00a7ff;
+  height:16px;
 }
 </style>

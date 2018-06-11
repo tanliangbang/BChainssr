@@ -1,11 +1,12 @@
 <template>
-  <div class="auther">
+  <div class="auther" v-if="userInfo">
     <div class="nomal">
-      <span>{{$t("lang.userCenter.email")}}:<i>648103576@qq.com</i></span>
-      <span>{{$t("lang.userCenter.setUp")}}</span>
+      <span>{{$t("lang.userCenter.email")}}:<i>{{userInfo['email']?userInfo['email']:'未绑定'}}</i></span>
+      <span  v-if="userInfo['email']"><router-link to="changeEmail">{{$t("lang.userCenter.setUp")}}</router-link></span>
+      <span  v-if="!userInfo['email']"><router-link to="bindEmail?from=userCenter">{{$t("lang.userCenter.goBindEmail")}}</router-link></span>
     </div>
     <div class="nomal">
-      <span>{{$t("lang.userCenter.phoneNumber")}}:<i>18721675880</i></span>
+      <span>{{$t("lang.userCenter.phoneNumber")}}:<i>{{userInfo['mobile']}}</i></span>
       <span><i class="grayColor">{{$t("lang.userCenter.unChange")}}</i></span>
     </div>
     <div class="nomal">
@@ -40,6 +41,7 @@
 <script>
 import * as api from './../../../service/getData'
 import Tool from './../../../utils/Tool'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Auther',
   components: {
@@ -48,14 +50,17 @@ export default {
     return {
     }
   },
-  created () {
+  computed: {
+    ...mapGetters({
+      userInfo: 'getUserInfo'
+    })
   },
   methods: {
     loginOut () {
       let _this = this
       this.$mask.showAlert('确定要退出？', 'doubt', async function () {
         let data = await api.loginOut()
-        if (data.data.code === 10000) {
+        if (data.status === 200) {
           Tool.delCookie('ngtoken')
           _this.$store.dispatch('setUserInfo', null)
           _this.$router.push('/')
@@ -73,11 +78,17 @@ export default {
     border-bottom: solid 1px #314b79;
     margin-top:15px;
     padding-left:30px;
+    a{
+      color: #39f1ff;
+    }
     >span:nth-child(1) {
       font-size: 17px;
       height: 56px;
       line-height: 56px;
       color: #a9c2fd;
+      i{
+        margin-left:10px;
+      }
     }
     >span:nth-child(2){
       color: #39f1ff;

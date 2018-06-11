@@ -136,6 +136,10 @@ Tool.delCookie = function (name) {
     document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
   }
 }
+
+Tool.getTarget = function (evt) {
+  return evt.target || evt.srcElement
+}
 Tool.isLogin = function () {
   if (Tool.getCookie('ngtoken')) {
     return true

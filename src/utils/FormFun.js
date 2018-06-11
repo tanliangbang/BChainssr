@@ -4,7 +4,12 @@ const FormFun = {}
 FormFun.sendCodeed = function (_this, currNode) {
   let number = 60
   currNode.innerHTML = _this.$t('lang.form.send') + '(' + number + 's)'
+  let path = _this.$route.path
   let cuntDown = setInterval(function () {
+    if (_this.$route.path !== path) {
+      clearInterval(cuntDown)
+      return
+    }
     if (number <= 0) {
       currNode.innerHTML = _this.$t('lang.form.getCode')
       clearInterval(cuntDown)
@@ -124,8 +129,8 @@ FormFun.checkEmail = function (_this, bool) {
     if (!bool) {
       _this.rules.email.class = 'del'
       _this.rules.email.message = _this.$t('lang.form.emailFormatError')
-      return false
     }
+    return false
   } else {
     _this.rules.email.class = 'pass'
     _this.rules.email.message = ''

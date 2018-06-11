@@ -199,7 +199,8 @@ export const lang = {
     bankName: '开户银行',
     accountBranch: '开卡支行',
     bankNum: '银行卡账号',
-    commit: '提交'
+    commit: '提交',
+    goBindEmail: '去绑定'
   },
   form: {
     loginTitle: '登入一账通',
@@ -240,10 +241,11 @@ export const lang = {
     eCodePrompt4: '验',
     eCodePrompt5: '证',
     eCodePrompt6: '码',
-    bindSucess: '邮箱绑定成功',
+    bindSuccess: '邮箱绑定成功',
     bindFail: '邮箱绑定失败',
     foundSuccess: '密码修改成功',
-    foundfail: '密码修改失败'
+    foundfail: '密码修改失败',
+    goLogin: '去登入',
   },
   errorPrompt: {
     'MISSING_NGTOKEN': '会话已过期，请重新登录',
@@ -264,7 +266,8 @@ export const lang = {
     'EMAIL_NOT_MATCH': '邮箱不匹配',
     'EMAIL_CODE_NOT_MATCH': '邮箱验证码错误',
     'EMAIL_NOT_BIND': '邮箱未绑定',
-    'INVALID_EMAIL_RESET_TOKEN': '邮箱重置密码已过期，请重新发送邮件'
+    'INVALID_EMAIL_RESET_TOKEN': '邮箱重置密码已过期，请重新发送邮件',
+    'MOBILE_NOT_EXIST': '手机号未注册'
   }
 }
 

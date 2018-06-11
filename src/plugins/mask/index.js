@@ -32,10 +32,10 @@ export default {
       showPrompt()
       temp.closeMask()
     }
-    $mask.showAlert = function (message, type, callback) {
+    $mask.showAlert = function (message, type, callback, btnContent) {
       showPrompt()
       temp.showMask()
-      temp.showAlert(message, type, callback)
+      temp.showAlert(message, type, callback, btnContent)
     }
     $mask.closeAlert = function () {
       showPrompt()

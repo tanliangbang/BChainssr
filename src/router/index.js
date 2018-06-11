@@ -61,6 +61,16 @@ var routers = [
     path: '/financeRecord',
     name: 'financeRecord',
     component: (resolve) => require(['src/page/user/FinanceRecord'], resolve)
+  },
+  {
+    path: '/bindEmail',
+    name: 'bindEmail',
+    component: (resolve) => require(['src/page/user/userCenter/BindEmail'], resolve)
+  },
+  {
+    path: '/changeEmail',
+    name: 'changeEmail',
+    component: (resolve) => require(['src/page/user/userCenter/ChangeEmail'], resolve)
   }
 ]
 

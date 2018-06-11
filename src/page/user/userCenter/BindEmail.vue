@@ -1,33 +1,35 @@
 <template>
-  <form class="bindEmail" v-on:keyup="emailPassDown">
-    <p>
-      {{$t('lang.form.successPrompt')}}<br/>
-      {{$t('lang.form.bindEmailPrompt')}}
-    </p>
-    <div class="code">
-      <input type="text" v-on:focus="showDel('email')" v-on:blur="checkEmail()" v-model="email" :placeholder="$t('lang.form.emailPrompt')"/>
-      <i :class="rules.email.class"  v-on:click="delEmail('email')">{{rules.email.message}}</i>
-      <span v-on:click="getEmailCode()" ref="sendEmail">{{$t('lang.form.getCode')}}</span>
-    </div>
-    <div class="codeInput">
-      <input v-on:keyup="codeKeyup($event)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt1')"  type="text"/>
-      <input v-on:keyup="codeKeyup($event)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt2')" type="text"/>
-      <input v-on:keyup="codeKeyup($event)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt3')" type="text"/>
-      <input v-on:keyup="codeKeyup($event)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt4')" type="text"/>
-      <input v-on:keyup="codeKeyup($event)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt5')" type="text"/>
-      <input v-on:keyup="codeKeyup($event)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt6')"  type="text"/>
-    </div>
+  <section>
+      <form class="bindEmail" v-on:keyup="emailPassDown" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
+        <p v-if="!from">
+          {{$t('lang.form.successPrompt')}}<br/>
+          {{$t('lang.form.bindEmailPrompt')}}
+        </p>
+        <p v-if="from">
+          {{$t('lang.form.bindEmailPrompt')}}
+        </p>
+        <div class="code">
+          <input type="text" v-on:focus="showDel('email')" v-on:blur="checkEmail()" v-model="form.email" :placeholder="$t('lang.form.emailPrompt')"/>
+          <i :class="rules.email.class"  v-on:click="delEmail('email')">{{rules.email.message}}</i>
+          <span v-on:click="getEmailCode()" ref="sendEmail">{{$t('lang.form.getCode')}}</span>
+        </div>
+        <div class="codeInput">
+          <input v-on:keyup="codeKeyup($event, 0)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt1')"  type="text"/>
+          <input v-on:keyup="codeKeyup($event, 1)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt2')" type="text"/>
+          <input v-on:keyup="codeKeyup($event, 2)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt3')" type="text"/>
+          <input v-on:keyup="codeKeyup($event, 3)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt4')" type="text"/>
+          <input v-on:keyup="codeKeyup($event, 4)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt5')" type="text"/>
+          <input v-on:keyup="codeKeyup($event, 5)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt6')"  type="text"/>
+        </div>
 
-    <div v-if="!verifyPass" class="sbutton">
-      <a class="no_button">{{$t('lang.form.submit')}}</a>
-    </div>
-    <div v-if="verifyPass" class="sbutton">
-      <a class="ok_button" v-on:click="bindEmail">{{$t('lang.form.submit')}}</a>
-    </div>
-    <div class="login_button">
-      <router-link class="border_button" to="login">{{$t('lang.form.returnHome')}}</router-link>
-    </div>
-  </form>
+        <div v-if="!verifyPass" class="sbutton">
+          <a class="no_button">{{$t('lang.form.submit')}}</a>
+        </div>
+        <div v-if="verifyPass" class="sbutton">
+          <a class="ok_button" v-on:click="bindEmail">{{$t('lang.form.submit')}}</a>
+        </div>
+      </form>
+  </section>
 </template>
 
 <script>
@@ -36,15 +38,18 @@ import FormFun from '../../../utils/FormFun'
 
 import * as api from '../../../service/getData'
 export default {
-  name: 'Detail',
+  name: 'BindEmail',
   components: {
   },
   data () {
     return {
-      email: '',
       isSendEmailCode: false,
       verifyPass: false,
-      codeValue: '',
+      codeValue: [],
+      form: {
+        email: ''
+      },
+      from: null,
       rules: {
         email: {
           message: '',
@@ -54,36 +59,21 @@ export default {
     }
   },
   created () {
+    this.from = this.$route.query.from
   },
   methods: {
     delEmail () {
-      this.email = ''
+      this.form.email = ''
     },
     showDel (field) {
       this.rules[field].class = 'del'
       this.rules[field].message = ''
     },
     checkEmail (bool) {
-      if (this.email === '') {
-        if (!bool) {
-          this.rules.email.class = 'del'
-          this.rules.email.message = this.$t('lang.form.emailPrompt')
-        }
-        return false
-      } else if (!Tool.isEmail(this.email)) {
-        if (!bool) {
-          this.rules.email.class = 'del'
-          this.rules.email.message = this.$t('lang.form.emailFormatError')
-          return false
-        }
-      } else {
-        this.rules.email.class = 'pass'
-        this.rules.email.message = ''
-        return true
-      }
+      return FormFun.checkEmail(this, bool)
     },
     emailPassDown () {
-      if (this.checkEmail(true) && this.codeSend && this.codeValue.length === 6) {
+      if (this.checkEmail(true) && this.isSendEmailCode && this.codeValue.length === 6) {
         this.verifyPass = true
       } else {
         this.verifyPass = false
@@ -91,28 +81,38 @@ export default {
     },
     bindEmail () {
       let params = {
-        email: this.email,
-        code: this.codeValue
+        email: this.form.email,
+        code: this.codeValue.join('')
       }
       let _this = this
       api.bindEmail(params).then(function (res) {
         if (res.status === 200) {
-          this.$store.dispatch('setUserInfo', res.data.userinfo)
-          _this.$prompt.success(_this.$t('lang.errorPrompt.bindSucess'))
+          _this.$store.dispatch('setUserInfo', res.data.userinfo)
+          _this.$mask.showAlert(_this.$t('lang.form.bindSuccess'), 'success', function () {
+            if (_this.from) {
+              _this.$router.push('/')
+            } else {
+              _this.$router.push('/userCenter')
+            }
+          }, _this.$t('lang.form.submit'))
         } else {
           _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
         }
       })
     },
-    codeKeyup (event) {
-      let val = event.target.value
+    codeKeyup (event, index) {
+      let currTarget = Tool.getTarget(event)
+      let val = currTarget.value
+      if (val.length > 1) {
+        currTarget.value = val = val.slice(0, 1)
+      }
       let regPos = /^\d+(\.\d+)?$/
       if (regPos.test(val)) {
-        this.codeValue = this.codeValue + val
-        if (event.target.nextElementSibling) {
-          event.target.nextElementSibling.focus()
+        this.codeValue[index] = val
+        if (currTarget.nextElementSibling && currTarget.nextElementSibling.value === '') {
+          currTarget.nextElementSibling.focus()
         } else {
-          event.target.blur()
+          currTarget.blur()
         }
       } else {
         event.target.value = ''
@@ -123,7 +123,7 @@ export default {
     },
     getEmailCode () {
       let _this = this
-      if (!this.checkEmail(true) && _this.isSendEmailCode) {
+      if (!this.checkEmail(true) || _this.isSendEmailCode) {
         return
       }
       if (this.$refs.sendEmail.innerHTML !== this.$t('lang.form.getCode')) {
@@ -131,7 +131,7 @@ export default {
       }
       let currNode = _this.$refs.sendEmail
       _this.isSendEmailCode = true
-      api.getEmailCode({email: this.email}).then(function (res) {
+      api.getEmailCode({email: this.form.email}).then(function (res) {
         if (res.status === 200) {
           FormFun.sendCodeed(_this, currNode)
           Tool.setCookie('email_token', res.data.email_token)
@@ -150,7 +150,11 @@ export default {
 @import '../../../style/common';
 @import './../index';
 @import './../../../style/form.less';
+section{
+  padding:20px;
+}
 .bindEmail {
+  background-color: @bg_color;
   padding-top: 100px;
   > p:nth-child(1) {
     text-align: center;
@@ -165,14 +169,6 @@ export default {
     font-size: 16px;
     color: #fff;
     letter-spacing: 0px;
-  }
-  .to_button {
-    margin-top: 15px;
-    text-align: center;
-  }
-  .sbutton{
-    margin-top:50px;
-    text-align: center;
   }
   .login_button{
     margin-top:18px;
