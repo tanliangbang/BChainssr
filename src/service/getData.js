@@ -85,3 +85,8 @@ export const changeEmail = (params) => http.post(base + '/emails/set/', params)
  * 获取登入历史
  */
 export const getLoginHistory = (params) => http.get(base + '/users/current/loginHistory', params)
+
+/**
+ * 获取上传参数
+ */
+export const getUploadParam = (params) => http.get(base + '/users/qiniutoken', params)

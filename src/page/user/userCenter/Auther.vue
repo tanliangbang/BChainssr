@@ -25,11 +25,18 @@
       <div class="upload-div">
         <div>{{$t("lang.userCenter.uploadId2")}}</div>
         <div>
-          <div  class="upload">
-            <div v-on:click="selectImg($event)">
+          <div class="upload">
+            <div class="preUpload" v-on:click="selectImg($event)">
               <span>上传</span>
             </div>
-            <input type="file" class="hide">
+            <input v-on:change="uploadImg($event)" type="file" class="hide">
+            <div class="uploading hiden">
+              <span>上传中......</span>
+            </div>
+            <div class="updated hide">
+               <img src="../../../../static/img/sfz.png">
+            </div>
+
           </div>
         </div>
         <div>
@@ -78,16 +85,21 @@
 
 <script>
 import Tool from '../../../utils/Tool'
+import * as api from '../../../service/getData'
+import * as qiniu from 'qiniu-js'
 export default {
   name: 'Auther',
   components: {
   },
   data () {
     return {
-      step: 1
+      step: 1,
+      upload_token: null
     }
   },
-  created () {
+  async mounted () {
+    let data = await api.getUploadParam()
+    this.upload_token = data.data.qiniu_upload_token
   },
   methods: {
     changeStep (num) {
@@ -103,7 +115,26 @@ export default {
       } else if (target.tagName === 'DIV') {
         input = target.nextElementSibling
       }
+      console.log(target)
       input.click()
+    },
+    uploadImg (event) {
+      let _this = event.currentTarget
+      let file = _this.files[0]
+      let config = {
+        useCdnDomain: true,
+        region: qiniu.region.z2
+      }
+      let putExtra = {
+        fname: file.name,
+        params: {},
+        mimeType: [] || null
+      }
+      let next = function (response) {
+        console.log(response)
+      }
+      let observable = qiniu.upload(_this.files[0], _this.files[0].name, this.upload_token, putExtra, config)
+      observable.subscribe(next) // 上传开始
     }
   }
 }
@@ -208,7 +239,7 @@ export default {
         margin-top:29px;
         position:relative;
         text-align: center;
-        >div{
+        .preUpload{
           width:100%;
           height:100%;
           >span{
@@ -226,6 +257,12 @@ export default {
             left:3px;
             top:-30px;
             background:url('../../../../static/img/upload.png')
+          }
+        }
+        .updated{
+          img {
+            width:100%;
+            height:100%;
           }
         }
     }
