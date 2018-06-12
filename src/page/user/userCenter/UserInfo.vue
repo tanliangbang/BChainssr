@@ -11,7 +11,7 @@
     </div>
     <div class="nomal">
       <span>{{$t("lang.userCenter.password")}}:<i>********</i></span>
-      <span>{{$t("lang.userCenter.change")}}</span>
+      <span><router-link to="changePass">{{$t("lang.userCenter.change")}}</router-link></span>
     </div>
 
     <div class="nomal">
@@ -24,12 +24,7 @@
       <table>
         <tr><td width="25%">{{$t("lang.userCenter.time")}}</td><td width="25%">{{$t("lang.userCenter.loginWay")}}</td>
           <td width="25%">{{$t("lang.userCenter.ip")}}</td><td width="25%">{{$t("lang.userCenter.state")}}</td></tr>
-        <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
-        <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
-        <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
-        <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
-        <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
-        <tr><td>2018-01-01 11:11:11</td><td>Web</td><td>IP:258.25.22.34</td><td>成功</td></tr>
+        <tr v-for="(item, index) in historyList" :key="index"><td>{{item.loginTime}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
       </table>
       <div class="page">
         <span>上一页</span> <span>返回</span> <span>下一页</span>
@@ -48,6 +43,7 @@ export default {
   },
   data () {
     return {
+      historyList: []
     }
   },
   computed: {
@@ -55,7 +51,16 @@ export default {
       userInfo: 'getUserInfo'
     })
   },
+  mounted () {
+    this.initDate()
+  },
   methods: {
+    async initDate () {
+      let data = await api.getLoginHistory()
+      if (data.status === 200) {
+        this.historyList = data.data
+      }
+    },
     loginOut () {
       let _this = this
       this.$mask.showAlert('确定要退出？', 'doubt', async function () {
@@ -118,11 +123,11 @@ export default {
     table {
       margin-top:25px;
       width:100%;
-      text-align: center;
       color:#fff;
       line-height:50px;
       background:#284585;
       td{
+        text-align: center;
         border-bottom:1px solid @bg_color;
       }
       tr:last-child{

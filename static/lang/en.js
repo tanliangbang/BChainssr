@@ -244,8 +244,8 @@ export const lang = {
     eCodePrompt6: 'de',
     bindSuccess: 'Email bind Success',
     bindFail: 'Email bind fail',
-    foundSuccess: 'Password Change Success',
-    foundfail: 'Password Change fail',
+    changeSuccess: 'Change Success',
+    changeFail: 'Change Fail',
     goLogin: 'GO LOGIN'
   },
   errorPrompt: {

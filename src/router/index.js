@@ -71,6 +71,11 @@ var routers = [
     path: '/changeEmail',
     name: 'changeEmail',
     component: (resolve) => require(['src/page/user/userCenter/ChangeEmail'], resolve)
+  },
+  {
+    path: '/changePass',
+    name: 'changePass',
+    component: (resolve) => require(['src/page/user/userCenter/ChangePass'], resolve)
   }
 ]
 

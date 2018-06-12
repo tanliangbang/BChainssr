@@ -44,14 +44,12 @@
 import Tool from '../../utils/Tool'
 import FormFun from '../../utils/FormFun'
 import * as api from '../../service/getData'
-import BindEmail from './userCenter/BindEmail'
 if (typeof window !== 'undefined') {
   require('../../../static/greetest/gt')
 }
 export default {
   name: 'Regist',
   components: {
-    BindEmail
   },
   data () {
     return {
@@ -91,11 +89,9 @@ export default {
       }
     }
   },
-  created () {
-    this.initDate()
-  },
   mounted () {
     window.scrollTo(0, 0)
+    this.initDate()
   },
   methods: {
     async initDate () {

@@ -172,4 +172,23 @@ FormFun.initGreetest = function (_this, data, callback) {
   })
 }
 
+FormFun.codeKeyup = function(_this, event, index) {
+  let currTarget = Tool.getTarget(event)
+  let val = currTarget.value
+  if (val.length > 1) {
+    currTarget.value = val = val.slice(0, 1)
+  }
+  let regPos = /^\d+(\.\d+)?$/
+  if (regPos.test(val)) {
+    _this.codeValue[index] = val
+    if (currTarget.nextElementSibling && currTarget.nextElementSibling.value === '') {
+      currTarget.nextElementSibling.focus()
+    } else {
+      currTarget.blur()
+    }
+  } else {
+    event.target.value = ''
+  }
+}
+
 export default FormFun

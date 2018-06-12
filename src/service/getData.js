@@ -71,3 +71,17 @@ export const foundByPone = (params) => http.post(base + '/tokens/mobile/password
  */
 export const foundByEmail = (params) => http.post(base + '/emails/reset/verify', params)
 
+/**
+ * 通过类型获取邮箱验证码
+ */
+export const getEmailCodeByType = (params) => http.post(base + '/emails/code', params)
+
+/**
+ * 修改邮箱
+ */
+export const changeEmail = (params) => http.post(base + '/emails/set/', params)
+
+/**
+ * 获取登入历史
+ */
+export const getLoginHistory = (params) => http.get(base + '/users/current/loginHistory', params)

@@ -101,22 +101,7 @@ export default {
       })
     },
     codeKeyup (event, index) {
-      let currTarget = Tool.getTarget(event)
-      let val = currTarget.value
-      if (val.length > 1) {
-        currTarget.value = val = val.slice(0, 1)
-      }
-      let regPos = /^\d+(\.\d+)?$/
-      if (regPos.test(val)) {
-        this.codeValue[index] = val
-        if (currTarget.nextElementSibling && currTarget.nextElementSibling.value === '') {
-          currTarget.nextElementSibling.focus()
-        } else {
-          currTarget.blur()
-        }
-      } else {
-        event.target.value = ''
-      }
+      FormFun.codeKeyup(this, event, index)
     },
     clearVal (event) {
       event.target.value = ''
@@ -131,7 +116,7 @@ export default {
       }
       let currNode = _this.$refs.sendEmail
       _this.isSendEmailCode = true
-      api.getEmailCode({email: this.form.email}).then(function (res) {
+      api.getEmailCodeByType({email: this.form.email, options: 'bind'}).then(function (res) {
         if (res.status === 200) {
           FormFun.sendCodeed(_this, currNode)
           Tool.setCookie('email_token', res.data.email_token)

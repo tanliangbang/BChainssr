@@ -160,6 +160,7 @@ export default {
 <style lang="less" scoped>
   @import '../../style/common';
   @import './index';
+  @import '../../style/form';
   .login_form{
         padding-top:106px;
         p:nth-child(1){

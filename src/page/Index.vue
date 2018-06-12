@@ -100,20 +100,22 @@ export default {
     },
     async initDate () {
       let data = await api.getCoinList()
-      data = data.data
-      var coinList = []
-      let recommend = []
-      let num = 0
-      for (let item in data) {
-        num++
-        if (num <= 5) {
-          recommend.push(data[item])
-        } else {
-          coinList.push(data[item])
+      if (data.status === 200) {
+        data = data.data.data
+        var coinList = []
+        let recommend = []
+        let num = 0
+        for (let item in data) {
+          num++
+          if (num <= 5) {
+            recommend.push(data[item])
+          } else {
+            coinList.push(data[item])
+          }
         }
+        this.coinList = coinList
+        this.recommend = recommend
       }
-      this.coinList = coinList
-      this.recommend = recommend
     },
     toChange (str) {
       this.currBaseCoin = str

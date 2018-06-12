@@ -140,6 +140,15 @@ Tool.delCookie = function (name) {
 Tool.getTarget = function (evt) {
   return evt.target || evt.srcElement
 }
+
+Tool.stopProp = function (event) {
+  if (event.stopPropagation) {
+    event.stopPropagation()
+  } else {
+    event.cancelBubble = true
+  }
+}
+
 Tool.isLogin = function () {
   if (Tool.getCookie('ngtoken')) {
     return true

@@ -1,20 +1,19 @@
 <template>
   <section>
     <div class="changeEmail">
-      <form   v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
+      <form   v-bind:style="{minHeight: this.$store.getters.getMinHeight}" v-on:keyup="emailPassDown">
         <div class="common-nav">
           <router-link to="userCenter">账户安全</router-link> >
           <i>修改邮箱</i>
         </div>
         <div>
-          <div class="code">
-            <p>18721675880</p>
-            <span >{{$t('lang.form.getCode')}}</span>
+          <div class="nomalInput">
+            <input   v-model="form.phone" disabled="true" type="text"/>
           </div>
-          <div class="nomalInput password">
-            <input />
-            <i ></i>
-            <i></i>
+          <div class="code">
+            <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="form.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
+            <i :class="rules.code.class"  v-on:click="delContent('code')">{{rules.code.message}}</i>
+            <span v-on:click="getCode()" ref="send">{{$t('lang.form.getCode')}}</span>
           </div>
 
           <div class="code">
@@ -36,7 +35,7 @@
             <a class="no_button">{{$t('lang.form.submit')}}</a>
           </div>
           <div v-if="verifyPass" class="sbutton">
-            <a class="ok_button" v-on:click="bindEmail">{{$t('lang.form.submit')}}</a>
+            <a class="ok_button" v-on:click="changeEmail">{{$t('lang.form.submit')}}</a>
           </div>
         </div>
       </form>
@@ -45,6 +44,12 @@
 </template>
 
 <script>
+import FormFun from '../../../utils/FormFun'
+import * as api from '../../../service/getData'
+import Tool from '../../../utils/Tool'
+if (typeof window !== 'undefined') {
+  require('../../../../static/greetest/gt')
+}
 export default {
   name: 'ChangeEmail',
   components: {
@@ -52,10 +57,21 @@ export default {
   data () {
     return {
       verifyPass: false,
+      isSendPhoneCode: false,
+      captchaObj: null,
+      isSendEmailCode: false,
+      codeValue: [],
+      tokenId: null,
       form: {
+        phone: '',
+        code: '',
         email: ''
       },
       rules: {
+        code: {
+          message: '',
+          class: ''
+        },
         email: {
           message: '',
           class: ''
@@ -63,10 +79,107 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
+    this.initDate()
   },
   methods: {
-
+    async initDate () {
+      let data = await api.getGreetest()
+      let _this = this
+      data = data.data
+      this.form.phone = this.$store.state.user.userInfo.mobile
+      FormFun.initGreetest(_this, data, function (captchaObj) {
+        _this.captchaObj = captchaObj
+        _this.captchaObj = captchaObj
+        captchaObj.onSuccess(function () {
+          let result = captchaObj.getValidate()
+          result.mobile = _this.form.phone
+          _this.phone = _this.form.phone
+          result.gee_token = data.gee_token
+          api.resetSendSMS(result).then(function (res) {
+            if (res.status === 200) {
+              _this.tokenId = res.data.tokenId
+              _this.isSendPhoneCode = true
+              let currNode = _this.$refs.send
+              FormFun.sendCodeed(_this, currNode)
+            } else {
+              _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
+            }
+          })
+        })
+      })
+    },
+    showDel (field) {
+      FormFun.showDel(this, field)
+    },
+    delContent (field) {
+      this.form[field] = ''
+    },
+    checkCode (bool) {
+      return FormFun.checkPhoneCode(this, bool)
+    },
+    clearVal (event) {
+      event.target.value = ''
+    },
+    getCode () {
+      if (this.$refs.send.innerHTML === this.$t('lang.form.getCode')) {
+        this.captchaObj.verify()
+      }
+    },
+    checkEmail (bool) {
+      return FormFun.checkEmail(this, bool)
+    },
+    codeKeyup (event, index) {
+      FormFun.codeKeyup(this, event, index)
+    },
+    emailPassDown () {
+      if (this.checkCode(true) && this.checkEmail(true) && this.isSendEmailCode && this.isSendPhoneCode && this.codeValue.length === 6) {
+        this.verifyPass = true
+      } else {
+        this.verifyPass = false
+      }
+    },
+    getEmailCode () {
+      let _this = this
+      if (!this.checkEmail(true) || _this.isSendEmailCode) {
+        return
+      }
+      if (this.$refs.sendEmail.innerHTML !== this.$t('lang.form.getCode')) {
+        return
+      }
+      let currNode = _this.$refs.sendEmail
+      _this.isSendEmailCode = true
+      api.getEmailCodeByType({email: this.form.email, options: 'set'}).then(function (res) {
+        if (res.status === 200) {
+          FormFun.sendCodeed(_this, currNode)
+          Tool.setCookie('email_token', res.data.email_token)
+        } else {
+          _this.isSendEmailCode = false
+          _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
+        }
+      })
+    },
+    changeEmail () {
+      let params = {
+        mobile: this.form.phone,
+        mobile_code: this.form.code,
+        email: this.form.email,
+        email_code: this.codeValue.join(''),
+        tokenId: this.tokenId
+      }
+      let _this = this
+      api.changeEmail(params).then(function (res) {
+        if (res.status === 200) {
+          _this.$store.dispatch('setUserInfo', res.data.userinfo)
+          _this.$mask.showAlert(_this.$t('lang.form.changeSuccess'), 'success', function () {
+            _this.$router.push('/userCenter')
+          }, _this.$t('lang.form.submit'))
+        } else {
+          _this.ispass = true
+          _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
+        }
+      })
+    }
   }
 }
 </script>
