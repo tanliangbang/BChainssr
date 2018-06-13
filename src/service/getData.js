@@ -90,3 +90,18 @@ export const getLoginHistory = (params) => http.get(base + '/users/current/login
  * 获取上传参数
  */
 export const getUploadParam = (params) => http.get(base + '/users/qiniutoken', params)
+
+/**
+ * 上传图片
+ */
+export const uploadImg = (param, config) => http.upload('http://up.qiniu.com', param, config)
+
+/**
+ * 上传图片
+ */
+export const auther = (param, config) => http.post(base + '/users/cloud/auth', param, config)
+
+/**
+ * 获取收款方式列表
+ */
+export const getReceipts = (param) => http.get(base + '/users/payment/receipts', param)

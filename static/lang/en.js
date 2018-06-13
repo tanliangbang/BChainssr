@@ -183,7 +183,7 @@ export const lang = {
     idNumber: 'ID Number',
     uploadId1: 'Upload the front of ID card',
     uploadId2: 'Upload identity card',
-    uploadId3: 'Upload handheld identity card',
+    uploadId3: 'Upload Head culpture',
     forExample: 'For Example',
     prompt: 'Support jpg,png format files no more than 3M',
     next: 'Next',
@@ -201,7 +201,10 @@ export const lang = {
     accountBranch: 'OpenBranch',
     bankNum: 'BankAccount',
     commit: 'Commit',
-    goBindEmail: 'GO Bind'
+    goBindEmail: 'GO Bind',
+    placeholdName: 'Please Enter Name',
+    placeholdIdCard: 'Please Enter ID Card',
+    idCardPrompt: 'ID ID number is incorrect'
   },
   form: {
     loginTitle: 'Log in with Bilian account',

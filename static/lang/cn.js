@@ -182,7 +182,7 @@ export const lang = {
     idNumber: '身份证号码',
     uploadId1: '上传身份证正面',
     uploadId2: '上传身份证反面',
-    uploadId3: '上传手持身份证',
+    uploadId3: '上传头像照片',
     forExample: '示例',
     prompt: '支持jpg,png格式,单位文件不超过3M',
     next: '下一步',
@@ -200,7 +200,10 @@ export const lang = {
     accountBranch: '开卡支行',
     bankNum: '银行卡账号',
     commit: '提交',
-    goBindEmail: '去绑定'
+    goBindEmail: '去绑定',
+    placeholdName: '请输入姓名',
+    placeholdIdCard: '请输入身份证号码',
+    idCardPrompt: '身份证号码不正确'
   },
   form: {
     loginTitle: '登入一账通',

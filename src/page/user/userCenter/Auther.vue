@@ -4,7 +4,7 @@
       <span v-on:click="changeStep(1)" :class="step===1?'selected':''">{{$t("lang.userCenter.level1")}}</span>
       <span v-on:click="changeStep(2)" :class="step===2?'selected':''">{{$t("lang.userCenter.level2")}}</span>
     </div>
-    <div v-if="step===1" class="nomal-auther">
+    <div v-if="step===1" class="nomal-auther" v-on:keyup="check()">
       <!--<div>
         <span>{{$t("lang.userCenter.nationality")}}</span>
         <span>中国</span>
@@ -12,13 +12,39 @@
       <div class="inputNomal">
         <span>{{$t("lang.userCenter.name")}}</span>
         <div>
-          <input type="text">
+          <input v-model="form.name" v-on:blur="checkName()" v-on:focus="showDel('name')"
+                 type="text" :placeholder="$t('lang.userCenter.placeholdName')">
+          <span>{{error.name}}</span>
         </div>
       </div>
       <div class="inputNomal">
         <span>{{$t("lang.userCenter.idNumber")}}</span>
         <div>
-          <input type="text">
+          <input v-model="form.idCard" v-on:focus="showDel('idCard')"  v-on:blur="checkIdCard()" type="text" :placeholder="$t('lang.userCenter.placeholdIdCard')">
+          <span>{{error.idCard}}</span>
+        </div>
+      </div>
+
+      <div class="upload-div">
+        <div>{{$t("lang.userCenter.uploadId1")}}</div>
+        <div>
+          <div class="upload">
+            <div class="preUpload" v-on:click="selectImg($event)">
+              <span>上传</span>
+              <input type="file" class="hide" v-on:change="uploadImg($event, 'positiveCard')">
+            </div>
+            <div class="uploading hide">
+              <span>上传中......</span>
+            </div>
+            <div class="updated hide">
+               <img :src="img.positiveCard">
+            </div>
+          </div>
+        </div>
+        <div>
+          <img src="../../../../static/img/sfz.png">
+          <p>{{$t("lang.userCenter.forExample")}}</p>
+          <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
       </div>
 
@@ -28,15 +54,14 @@
           <div class="upload">
             <div class="preUpload" v-on:click="selectImg($event)">
               <span>上传</span>
+              <input type="file" class="hide" v-on:change="uploadImg($event, 'backCard')">
             </div>
-            <input v-on:change="uploadImg($event)" type="file" class="hide">
-            <div class="uploading hiden">
+            <div class="uploading hide">
               <span>上传中......</span>
             </div>
             <div class="updated hide">
-               <img src="../../../../static/img/sfz.png">
+              <img :src="img.backCard">
             </div>
-
           </div>
         </div>
         <div>
@@ -47,10 +72,19 @@
       </div>
 
       <div class="upload-div">
-        <div>{{$t("lang.userCenter.uploadId2")}}</div>
+        <div>{{$t("lang.userCenter.uploadId3")}}</div>
         <div>
           <div class="upload">
-            <span>上传</span>
+            <div class="preUpload" v-on:click="selectImg($event)">
+              <span>上传</span>
+              <input type="file" class="hide" v-on:change="uploadImg($event, 'headImg')">
+            </div>
+            <div class="uploading hide">
+              <span>上传中......</span>
+            </div>
+            <div class="updated hide">
+              <img :src="img.headImg">
+            </div>
           </div>
         </div>
         <div>
@@ -60,21 +94,8 @@
         </div>
       </div>
 
-      <div class="upload-div">
-        <div>{{$t("lang.userCenter.uploadId2")}}</div>
-        <div>
-          <div class="upload">
-            <span>上传</span>
-          </div>
-        </div>
-        <div>
-          <img src="../../../../static/img/sfz.png">
-          <p>{{$t("lang.userCenter.forExample")}}</p>
-          <p>{{$t("lang.userCenter.prompt")}}</p>
-        </div>
-      </div>
-
-      <a class="button">{{$t("lang.userCenter.next")}}</a>
+      <a v-if= 'verifyPass' v-on:click="submit" class="ok_button button">{{$t("lang.userCenter.next")}}</a>
+      <a v-if= '!verifyPass' class="no_button button">{{$t("lang.userCenter.next")}}</a>
     </div>
 
     <div v-if="step===2" class="second-auther">
@@ -86,7 +107,6 @@
 <script>
 import Tool from '../../../utils/Tool'
 import * as api from '../../../service/getData'
-import * as qiniu from 'qiniu-js'
 export default {
   name: 'Auther',
   components: {
@@ -94,7 +114,21 @@ export default {
   data () {
     return {
       step: 1,
-      upload_token: null
+      upload_token: null,
+      verifyPass: false,
+      form: {
+        name: '',
+        idCard: ''
+      },
+      error: {
+        name: '',
+        idCard: ''
+      },
+      img: {
+        positiveCard: null,
+        backCard: null,
+        headImg: null
+      }
     }
   },
   async mounted () {
@@ -105,36 +139,90 @@ export default {
     changeStep (num) {
       this.step = num
     },
+    checkName (bool) {
+      let name = Tool.trim(this.form.name)
+      if (name === '') {
+        if (bool) {
+          return false
+        }
+        this.error.name = this.$t('lang.userCenter.placeholdName')
+      } else {
+        this.error.name = ''
+        return true
+      }
+    },
+    checkIdCard (bool) {
+      let idCard = Tool.trim(this.form.idCard)
+      if (idCard === '') {
+        if (bool) {
+          return false
+        }
+        this.error.idCard = this.$t('lang.userCenter.placeholdIdCard')
+      } else if (!(/(^\d{15}$)|(^\d{17}([0-9]|X)$)/.test(idCard))) {
+        if (bool) {
+          return false
+        }
+        this.error.idCard = this.$t('lang.userCenter.idCardPrompt')
+      } else {
+        this.error.idCard = ''
+        return true
+      }
+    },
+    showDel(str) {
+      this.error[str] = ''
+    },
+    check() {
+      if (this.checkName(true) && this.checkIdCard(true) && this.img['positiveCard'] !== null && this.img['backCard'] !== null && this.img['headImg'] !== null) {
+        this.verifyPass = true
+      } else {
+        this.verifyPass = false
+      }
+    },
     selectImg (event) {
       event.stopPropagation()
       let target = Tool.getTarget(event)
       Tool.stopProp(event)
       let input = null
       if (target.tagName === 'SPAN') {
-        input = target.parentNode.nextElementSibling
-      } else if (target.tagName === 'DIV') {
         input = target.nextElementSibling
+      } else if (target.tagName === 'DIV') {
+        input = target.firstChild.nextElementSibling
+      } else {
+        return
       }
-      console.log(target)
       input.click()
     },
-    uploadImg (event) {
-      let _this = event.currentTarget
-      let file = _this.files[0]
+    uploadImg(e, name) {
+      let curr = Tool.getTarget(e)
+      let file = curr.files[0]
+      let param = new window.FormData() // 创建form对象
+      let _this = this
+      param.append('file', file, file.name) // 通过append向form对象添加数据
+      param.append('token', this.upload_token)
       let config = {
-        useCdnDomain: true,
-        region: qiniu.region.z2
+        headers: {'Content-Type': 'multipart/form-data'}
+      } // 添加请求头
+      curr.parentNode.style.display = 'none'
+      curr.parentNode.nextElementSibling.style.display = 'block'
+      api.uploadImg(param, config).then(response => {
+        curr.parentNode.nextElementSibling.style.display = 'none'
+        curr.parentNode.nextElementSibling.nextElementSibling.style.display = 'block'
+        _this.img[name] = 'https://file.niustock.com/' + response.data.key
+        _this.check()
+      })
+    },
+    async submit() {
+      let param = {
+        identificationNumber: this.form.idCard,
+        name: this.form.name,
+        idCardFrontPic: this.img.positiveCard,
+        idCardBackPic: this.img.backCard,
+        facePic: this.img.headImg
       }
-      let putExtra = {
-        fname: file.name,
-        params: {},
-        mimeType: [] || null
+      let data = await api.auther(param)
+      if (data.status === 200) {
+        console.log(data)
       }
-      let next = function (response) {
-        console.log(response)
-      }
-      let observable = qiniu.upload(_this.files[0], _this.files[0].name, this.upload_token, putExtra, config)
-      observable.subscribe(next) // 上传开始
     }
   }
 }
@@ -191,8 +279,12 @@ export default {
           border: solid 2px #304a87;
           color: #fff;
           height:40px;
-          font-size: 17px;
+          font-size: 14px;
           padding-left:20px;
+        }
+        >span {
+          color:#4177fc;
+          margin-left:15px;
         }
       }
     }
@@ -208,11 +300,16 @@ export default {
       display:block;
       text-align: center;
       cursor: pointer;
-      background-color: #4177fc;
       border-radius: 8px;
       color:#fff;
       font-size: 17px;
       line-height:56px;
+    }
+    .no_button {
+      background-color: #304a88;
+    }
+    .ok_button {
+      background-color: #4177fc;
     }
   }
   .upload-div{
@@ -259,7 +356,30 @@ export default {
             background:url('../../../../static/img/upload.png')
           }
         }
+        .uploading{
+          width:100%;
+          height:100%;
+          >span{
+            font-size:16px;
+            color:#fff;
+            position:relative;
+            margin-top:97px;
+            display:inline-block;
+          }
+          >span:after{
+            content: ' ';
+            width:30px;
+            height:32px;
+            position:absolute;
+            left:10px;
+            top:-35px;
+            animation: spin 1s linear infinite;
+            background:url('../../../../static/img/loading.png')
+          }
+        }
         .updated{
+          width:100%;
+          height:100%;
           img {
             width:100%;
             height:100%;
@@ -294,5 +414,18 @@ export default {
   }
   .upload-div:last-child{
     border-bottom:none;
+  }
+
+  @keyframes spin {
+    0%   {
+      -webkit-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
   }
 </style>

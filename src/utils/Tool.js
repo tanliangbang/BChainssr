@@ -149,6 +149,10 @@ Tool.stopProp = function (event) {
   }
 }
 
+Tool.trim = function(str) {
+  return str.replace(/(^\s*)|(\s*$)/g, '')
+}
+
 Tool.isLogin = function () {
   if (Tool.getCookie('ngtoken')) {
     return true

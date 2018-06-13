@@ -67,9 +67,9 @@ export function createAPI({ client }) {
           timeout: 30000,
           headers: headers
         }).then(res => {
-          resolve(res.data)
+          resolve(res)
         }).catch(error => {
-          resolve(error.response.data)
+          resolve(error.response)
         })
       })
     }

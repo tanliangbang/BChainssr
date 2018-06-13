@@ -13,15 +13,17 @@
            </div>
           <div class="nomalInput">
             <span>{{$t("lang.userCenter.paymentMethod")}}:</span>
-            <select v-model="payForm.payWay" v-on:change="changePayWay">
+            <select v-model="payWay" v-on:change="changePayWay">
               <option value="bankCard">{{$t("lang.userCenter.pay3")}}</option>
               <option value="alipay">{{$t("lang.userCenter.pay2")}}</option>
               <option value="weChat">{{$t("lang.userCenter.pay1")}}</option></select>
           </div>
 
-         <div v-if="payForm.payWay==='bankCard'">
+         <div v-if="payWay==='bankCard'">
            <div class="nomalInput">
-             <span>{{$t("lang.userCenter.bankName")}}:</span><input type="text" :placeholder="$t('lang.userCenter.bankName')">
+             <span>{{$t("lang.userCenter.bankName")}}:</span>
+             <input v-model="form.bankDeposit"  :placeholder="$t('lang.userCenter.bankName')" />
+             <i :class="rules.phone.class" v-on:click="delContent('phone')" >{{rules.phone.message}}</i>
            </div>
            <div class="nomalInput">
              <span>{{$t("lang.userCenter.accountBranch")}}:</span><input type="text" :placeholder="$t('lang.userCenter.accountBranch')">
@@ -31,7 +33,7 @@
            </div>
          </div>
 
-          <div v-if="payForm.payWay==='alipay'">
+          <div v-if="payWay==='alipay'">
             <div class="nomalInput">
               <span>{{$t("lang.userCenter.pay2")}}:</span><input type="text" :placeholder="$t('lang.userCenter.pay2')">
             </div>
@@ -46,7 +48,7 @@
             </div>
           </div>
 
-          <div v-if="payForm.payWay==='weChat'">
+          <div v-if="payWay==='weChat'">
             <div class="nomalInput">
               <span>{{$t("lang.userCenter.pay1")}}:</span><input type="text" :placeholder="$t('lang.userCenter.pay1')">
             </div>
@@ -70,14 +72,22 @@
 </template>
 
 <script>
+import Tool from './../../../utils/Tool'
 export default {
   name: 'AddPayWay',
   components: {
   },
   data () {
     return {
-      payForm: {
-        payWay: 'weChat'
+      payWay: 'weChat',
+      form: {
+        alipayAccount: '',
+        wechatAccount: '',
+        bankAccount: '',
+        bankDeposit: '',
+        bankBranch: '',
+        alipayQRcode: '',
+        wechatQRcode: ''
       }
     }
   },
@@ -85,7 +95,19 @@ export default {
   },
   methods: {
     changePayWay () {
-      console.log(this.payForm.payWay)
+      console.log(this.payWay)
+    },
+    checkBankDeposit (bool) {
+      let bankDeposit = Tool.trim(this.form.bankDeposit)
+      if (bankDeposit === '') {
+        if (bool) {
+          return false
+        }
+        this.error.bankDeposit = this.$t('lang.userCenter.placeholdName')
+      } else {
+        this.error.bankDeposit = ''
+        return true
+      }
     }
   }
 }

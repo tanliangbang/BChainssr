@@ -1,21 +1,19 @@
 <template>
   <div class="payWay">
-     <div>
-        <div class="open">
-           <img src="../../../../static/img/zfb.jpg">
-           <p>tan@alipay.com</p>
+    <div >
+        <div :class="item.enable === '1'?'open':'close'" v-for="item in receipts">
+          <img v-if="item.receiptsWay === 'alipay'" src="../../../../static/img/zfb.jpg">
+          <img v-if="item.receiptsWay === 'bankCard'" src="../../../../static/img/yhk.png">
+          <img v-if="item.receiptsWay === 'wechat'" src="../../../../static/img/wx.jpg">
+          <p v-if="item.receiptsWay === 'bankCard'" >
+            <span>{{item.receiptsInfo.bankDeposit}}</span><br/>
+            <span>{{item.receiptsInfo.bankAccount}}</span>
+          </p>
+          <p v-if="item.receiptsWay !== 'bankCard'" >{{item.receiptsInfo.account}}</p>
            <div>
              <i></i>
            </div>
         </div>
-       <div class="close">
-         <img src="../../../../static/img/wx.jpg">
-         <p>tan@alipay.com</p>
-         <div>
-           <i></i>
-         </div>
-       </div>
-
        <div class="add" v-on:click="toAdd">
          <img src="../../../../static/img/add.png">
          <p>{{$t("lang.userCenter.addPayWay")}}</p>
@@ -25,19 +23,28 @@
 </template>
 
 <script>
+import * as api from '../../../service/getData'
 export default {
   name: 'PayWay',
   components: {
   },
   data () {
     return {
+      receipts: []
     }
   },
-  created () {
+  mounted () {
+    this.init()
   },
   methods: {
     toAdd () {
       this.$router.push('addPayWay')
+    },
+    async init() {
+      let data = await api.getReceipts()
+      if (data.status === 200) {
+        this.receipts = data.data
+      }
     }
   }
 }
