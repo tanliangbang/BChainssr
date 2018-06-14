@@ -203,7 +203,14 @@ export const lang = {
     goBindEmail: '去绑定',
     placeholdName: '请输入姓名',
     placeholdIdCard: '请输入身份证号码',
-    idCardPrompt: '身份证号码不正确'
+    idCardPrompt: '身份证号码不正确',
+    please: '请输入',
+    alipayAccount: '支付宝账号',
+    wechatAccount: '微信账号',
+    bankAccount: '银行卡账号',
+    bankDeposit: '银行名称',
+    bankBranch: '开户支行',
+    addSuccess: '添加成功'
   },
   form: {
     loginTitle: '登入一账通',

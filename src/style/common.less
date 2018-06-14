@@ -5,7 +5,7 @@ body,button,input,select,textarea{
   font-size:14px;
 }
 h1,h2,h3,h4,h5,h6{font-size:100%}
-em{font-style:normal}
+em,i{font-style:normal}
 small{font-size:14px}
 ul,ol{list-style:none}
 a{text-decoration:none}
@@ -20,6 +20,7 @@ textarea{resize:vertical}
 .hide{display:none}
 .block{display:block}
 .inline{display:inline}
+.textCenter{text-align: center}
 label,button{cursor:pointer}
 .clearfix:after{content:'\20';display:block;height:0;clear:both}
 .clearfix{zoom:1}.clear{clear:both;height:0;line-height:0;font-size:0;visibility:hidden;overflow:hidden}
@@ -28,7 +29,21 @@ pre.wordwrap{white-space:pre-wrap}
 body,form{position:relative}
 td{text-align:left}
 img{border:0}
-
+.button-loading {
+  position:relative;
+}
+.button-loading:after{
+  content:'';
+  width:30px;
+  height:32px;
+  position:absolute;
+  background:url('../../static/img/loading.png');
+  animation: spin 1s linear infinite;
+  left:50%;
+  top:50%;
+  margin-left:-15px;
+  margin-top:-16px;
+}
 *{
   box-sizing:border-box;
 }
@@ -73,5 +88,18 @@ input:-webkit-autofill {
   }
   i{
     color: #0088ff;
+  }
+}
+
+@keyframes spin {
+  0%   {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }

@@ -105,3 +105,14 @@ export const auther = (param, config) => http.post(base + '/users/cloud/auth', p
  * 获取收款方式列表
  */
 export const getReceipts = (param) => http.get(base + '/users/payment/receipts', param)
+
+/**
+ * 添加收款方式
+ */
+export const getAddReceipts = (param) => http.post(base + '/users/payment/receipts', param)
+
+/**
+ * 添加收款方式
+ */
+export const changeReceipts = (param) => http.post(base + '/users/payment/receipts/status', param)
+

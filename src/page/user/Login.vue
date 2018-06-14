@@ -12,12 +12,11 @@
                <i :class="rules.password.class"  v-on:click="delContent('password')">{{rules.password.message}}</i>
                <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
              </div>
-             <p :class="error?'error':'visiable'">{{errorMessage}}</p>
-             <div v-if="!ispass" class="login_button">
-               <a class="no_button" v-on:click="showError">{{$t("lang.form.loginSubmit")}}</a>
-             </div>
-             <div v-if="ispass" class="login_button">
-               <a class="ok_button" v-on:click="login">{{$t("lang.form.loginSubmit")}}</a>
+             <div class="to_button click_loading">
+               <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="login">
+                 <span v-if="button_status===0||button_status===2">{{$t("lang.form.loginSubmit")}}</span>
+                 <img v-if="button_status===1" src="../../../static/img/loading.png" />
+               </a>
              </div>
              <div class="forgetPassword">
                <router-link to="foundPassword">{{$t("lang.form.forgot")}}</router-link>
@@ -44,7 +43,7 @@ export default {
   data () {
     return {
       isShowpass: false,
-      ispass: false,
+      button_status: 0,
       error: false,
       errorMessage: this.$t('lang.form.pleaseLoginInfo'),
       loginForm: {
@@ -81,15 +80,15 @@ export default {
           result.gee_token = data.gee_token
           result.account = _this.loginForm.phone
           result.pass = Tool.md5(_this.loginForm.password)
+          _this.button_status = 1
           api.accounts(result).then(function (res) {
             if (res.status === 200) {
-              // Tool.setCookie('ngtoken', res.data.ngtoken)
               _this.$store.dispatch('setUserInfo', res.data.userinfo)
               _this.$router.push('/')
             } else {
-              _this.error = true
-              _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
+              _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
               _this.ispass = true
+              _this.button_status = 2
             }
           })
         })
@@ -132,19 +131,19 @@ export default {
     },
     onPageDown ($event) {
       if (this.checkPhone(true) && this.checkPassword(true)) {
-        this.ispass = true
+        this.button_status = 2
         if ($event.keyCode === 13) {
           this.captchaObj.verify()
         }
       } else {
-        this.ispass = false
+        this.button_status = 0
       }
     },
     login () {
       /* this.$store.dispatch('setUserInfo', {mobile: '18721675880'})
       this.$router.push('/') */
-      if (this.checkPhone(true) && this.checkPassword(true)) {
-        this.ispass = false
+      if (this.button_status === 2 && this.checkPhone(true) && this.checkPassword(true)) {
+        this.button_status = 0
         this.captchaObj.verify()
       }
     },

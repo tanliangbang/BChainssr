@@ -129,13 +129,17 @@ export default {
           result.mobile = _this.form.phone
           _this.phone = _this.form.phone
           result.gee_token = data.gee_token
+          let currNode = _this.$refs.send
+          currNode.className = 'button-loading'
+          currNode.innerHTML = ''
           api.resetSendSMS(result).then(function (res) {
+            currNode.className = ''
             if (res.status === 200) {
               _this.tokenId = res.data.tokenId
               _this.isSendPhoneCode = true
-              let currNode = _this.$refs.send
               FormFun.sendCodeed(_this, currNode)
             } else {
+              currNode.innerHTML = _this.$t('lang.form.getCode')
               _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
             }
           })
@@ -245,12 +249,16 @@ export default {
         return
       }
       let currNode = _this.$refs.sendEmail
+      currNode.className = 'button-loading'
+      currNode.innerHTML = ''
       api.resetEmailSendSMS({email: this.form.email}).then(function (res) {
+        currNode.className = ''
         if (res.status === 200) {
           FormFun.sendCodeed(_this, currNode)
           _this.isSendEmailCode = true
           Tool.setCookie('email_reset_token', res.data.email_reset_token)
         } else {
+          currNode.innerHTML = _this.$t('lang.form.getCode')
           _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
         }
       })
@@ -263,6 +271,7 @@ export default {
 <style lang="less" scoped>
   @import '../../style/common';
   @import './index';
+  @import '../../style/form';
   .email_form{
     .toEmail{
       text-align: center;

@@ -116,11 +116,15 @@ export default {
       }
       let currNode = _this.$refs.sendEmail
       _this.isSendEmailCode = true
+      currNode.className = 'button-loading'
+      currNode.innerHTML = ''
       api.getEmailCodeByType({email: this.form.email, options: 'bind'}).then(function (res) {
+        currNode.className = ''
         if (res.status === 200) {
           FormFun.sendCodeed(_this, currNode)
           Tool.setCookie('email_token', res.data.email_token)
         } else {
+          currNode.innerHTML = _this.$t('lang.form.getCode')
           _this.isSendEmailCode = false
           _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
         }

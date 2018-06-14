@@ -6,11 +6,10 @@
           <img v-if="item.receiptsWay === 'bankCard'" src="../../../../static/img/yhk.png">
           <img v-if="item.receiptsWay === 'wechat'" src="../../../../static/img/wx.jpg">
           <p v-if="item.receiptsWay === 'bankCard'" >
-            <span>{{item.receiptsInfo.bankDeposit}}</span><br/>
             <span>{{item.receiptsInfo.bankAccount}}</span>
           </p>
           <p v-if="item.receiptsWay !== 'bankCard'" >{{item.receiptsInfo.account}}</p>
-           <div>
+           <div v-on:click="changeStatus(item.receiptsWay, item.enable)">
              <i></i>
            </div>
         </div>
@@ -30,6 +29,7 @@ export default {
   },
   data () {
     return {
+      sending: false,
       receipts: []
     }
   },
@@ -45,6 +45,30 @@ export default {
       if (data.status === 200) {
         this.receipts = data.data
       }
+    },
+    async changeStatus(str, num) {
+      if (this.sending) {
+        return
+      }
+      if (num === '1') {
+        num = '0'
+      } else {
+        num = '1'
+      }
+      let data = await api.changeReceipts({receiptsWay: str, enable: num})
+      this.sending = false
+      if (data.status === 200) {
+        let len = this.receipts.length
+        for (let i = 0; i < len; i++) {
+          if (this.receipts[i]['receiptsWay'] === str) {
+            this.receipts[i].enable = num
+          }
+        }
+      } else {
+        this.$prompt.error(this.$t('lang.errorPrompt.' + data.message))
+      }
+
+      console.log(data)
     }
   }
 }

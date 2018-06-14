@@ -13,7 +13,7 @@
              <div class="code">
                <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="form.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
                <i :class="rules.code.class"  v-on:click="delContent('code')">{{rules.code.message}}</i>
-               <span v-on:click="getCode()" ref="send">{{$t('lang.form.getCode')}}</span>
+               <span v-on:click="getCode()"  ref="send">{{$t('lang.form.getCode')}}</span>
              </div>
              <div class="nomalInput password">
                <input :placeholder="$t('lang.form.passPrompt')" v-model="form.password" v-on:blur="checkPass()" :type="isShowpass?'text':'password'"/>
@@ -105,15 +105,20 @@ export default {
           result.mobile = _this.form.phone
           _this.phone = _this.form.phone
           result.gee_token = data.gee_token
+          _this.isSendPhoneCode = true
+          let currNode = _this.$refs.send
+          currNode.className = 'button-loading'
+          currNode.innerHTML = ''
           api.sendSMS(result).then(function (res) {
+            currNode.className = ''
             if (res.status === 200) {
               _this.tokenId = res.data.tokenId
-              _this.isSendPhoneCode = true
-              let currNode = _this.$refs.send
               FormFun.sendCodeed(_this, currNode)
             } else if (res.status === 409) {
+              currNode.innerHTML = _this.$t('lang.form.getCode')
               _this.userExist = true
             } else {
+              currNode.innerHTML = _this.$t('lang.form.getCode')
               _this.$prompt.error(_this.$t('lang.form.sendFail'))
             }
           })

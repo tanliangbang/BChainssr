@@ -204,7 +204,14 @@ export const lang = {
     goBindEmail: 'GO Bind',
     placeholdName: 'Please Enter Name',
     placeholdIdCard: 'Please Enter ID Card',
-    idCardPrompt: 'ID ID number is incorrect'
+    idCardPrompt: 'ID ID number is incorrect',
+    please: 'Please',
+    alipayAccount: 'Alipay Account',
+    wechatAccount: 'Wechat Account',
+    bankAccount: 'Bank Account',
+    bankDeposit: 'Bank Name',
+    bankBranch: 'Bank Branch',
+    addSuccess: 'Add Success'
   },
   form: {
     loginTitle: 'Log in with Bilian account',
