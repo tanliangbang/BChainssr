@@ -254,6 +254,7 @@ export const lang = {
     eCodePrompt6: 'de',
     bindSuccess: 'Email bind Success',
     bindFail: 'Email bind fail',
+    foundSuccess: 'Passwrod Found Success',
     changeSuccess: 'Change Success',
     changeFail: 'Change Fail',
     goLogin: 'GO LOGIN'

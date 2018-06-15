@@ -22,11 +22,11 @@
           <input v-on:keyup="codeKeyup($event, 5)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt6')"  type="text"/>
         </div>
 
-        <div v-if="!verifyPass" class="sbutton">
-          <a class="no_button">{{$t('lang.form.submit')}}</a>
-        </div>
-        <div v-if="verifyPass" class="sbutton">
-          <a class="ok_button" v-on:click="bindEmail">{{$t('lang.form.submit')}}</a>
+        <div class="to_button click_loading">
+          <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="bindEmail">
+            <span v-if="button_status===0||button_status===2">{{$t("lang.form.submit")}}</span>
+            <img v-if="button_status===1" src="../../../../static/img/loading.png" />
+          </a>
         </div>
       </form>
   </section>
@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       isSendEmailCode: false,
-      verifyPass: false,
+      button_status: 0,
       codeValue: [],
       form: {
         email: ''
@@ -74,9 +74,9 @@ export default {
     },
     emailPassDown () {
       if (this.checkEmail(true) && this.isSendEmailCode && this.codeValue.length === 6) {
-        this.verifyPass = true
+        this.button_status = 2
       } else {
-        this.verifyPass = false
+        this.button_status = 0
       }
     },
     bindEmail () {
@@ -85,10 +85,12 @@ export default {
         code: this.codeValue.join('')
       }
       let _this = this
+      this.button_status = 1
       api.bindEmail(params).then(function (res) {
         if (res.status === 200) {
           _this.$store.dispatch('setUserInfo', res.data.userinfo)
           _this.$mask.showAlert(_this.$t('lang.form.bindSuccess'), 'success', function () {
+            this.button_status = 0
             if (_this.from) {
               _this.$router.push('/')
             } else {
@@ -96,6 +98,7 @@ export default {
             }
           }, _this.$t('lang.form.submit'))
         } else {
+          this.button_status = 2
           _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
         }
       })

@@ -28,12 +28,11 @@
              <div class="nomalInput">
                <input :placeholder="$t('lang.form.referrer')" type="text"/>
              </div>
-            <p class="errorPrompt">{{errorMessage}}</p>
-             <div v-if="!ispass" class="rbutton">
-               <a class="no_button">{{$t('lang.form.next')}}</a>
-             </div>
-            <div v-if="ispass" class="rbutton">
-              <a v-on:click="submit"  class="ok_button">{{$t('lang.form.next')}}</a>
+            <div class="to_button click_loading">
+              <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="regist">
+                <span v-if="button_status===0||button_status===2">{{$t("lang.form.next")}}</span>
+                <img v-if="button_status===1" src="../../../static/img/loading.png" />
+              </a>
             </div>
           </form>
       </div>
@@ -54,13 +53,11 @@ export default {
   data () {
     return {
       isShowpass: false,
-      ispass: false,
+      button_status: 0,
       isSendPhoneCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
-      error: false,
-      errorMessage: '',
       userExist: false,
       form: {
         phone: '',
@@ -148,14 +145,13 @@ export default {
       this.isShowpass = !this.isShowpass
     },
     onPageDown () {
-      this.errorMessage = ''
-      if (this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
-        this.ispass = true
+      if (this.isSendPhoneCode && this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
+        this.button_status = 2
       } else {
-        this.ispass = false
+        this.button_status = 0
       }
     },
-    submit () {
+    regist() {
       let params = {
         mobile: this.phone,
         tokenId: this.tokenId,
@@ -164,15 +160,17 @@ export default {
         referee: this.form.recommed
       }
       let _this = this
-      this.ispass = false
+      this.button_status = 1
       api.regist(params).then(function (res) {
         if (res.status === 200) {
           _this.$store.dispatch('setUserInfo', res.data.userinfo)
           _this.$router.push('/bindEmail')
+          _this.button_status = 0
         } else {
           _this.error = true
           _this.errorMessage = _this.$t('lang.errorPrompt.' + res.message)
           _this.ispass = true
+          _this.button_status = 2
         }
       })
     },

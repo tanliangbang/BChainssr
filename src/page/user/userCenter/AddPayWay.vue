@@ -89,9 +89,11 @@
             </div>
           </div>
 
-          <div class="textCenter sub">
-            <a v-if= 'verifyPass' v-on:click="submit" class="ok_button button">{{$t("lang.userCenter.next")}}</a>
-            <a v-if= '!verifyPass' class="no_button button">{{$t("lang.userCenter.next")}}</a>
+          <div class="to_button click_loading">
+            <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="submit">
+              <span v-if="button_status===0||button_status===2">{{$t("lang.form.loginSubmit")}}</span>
+              <img v-if="button_status===1" src="../../../../static/img/loading.png" />
+            </a>
           </div>
         </form>
      </div>
@@ -109,7 +111,7 @@ export default {
     return {
       payWay: 'wechat',
       upload_token: null,
-      verifyPass: false,
+      button_status: 0,
       form: {
         alipayAccount: '',
         wechatAccount: '',
@@ -200,15 +202,15 @@ export default {
     check () {
       if (this.payWay === 'alipay') {
         if (this.checkEmpty(true, 'alipayAccount')) {
-          this.verifyPass = true
+          this.button_status = 2
         }
       } else if (this.payWay === 'wechat') {
         if (this.checkEmpty(true, 'wechatAccount')) {
-          this.verifyPass = true
+          this.button_status = 2
         }
       } else {
         if (this.checkEmpty(true, 'bankAccount') && this.checkEmpty(true, 'bankDeposit') && this.checkEmpty(true, 'bankBranch')) {
-          this.verifyPass = true
+          this.button_status = 2
         }
       }
     },
@@ -252,6 +254,7 @@ export default {
           bankBranch: this.form.bankBranch
         }
       }
+      this.button_status = 1
       param.receiptsInfo = JSON.stringify(receiptsInfo)
       let data = await api.getAddReceipts(param)
       let _this = this
@@ -259,8 +262,10 @@ export default {
         this.$mask.showAlert(this.$t('lang.userCenter.addSuccess'), 'success', function () {
           _this.$router.push('/userCenter?type=payWay')
         }, this.$t('lang.form.submit'))
+        this.button_status = 0
       } else {
         this.$prompt.error(this.$t('lang.errorPrompt.' + data.message))
+        this.button_status = 2
       }
     }
   }

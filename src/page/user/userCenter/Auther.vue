@@ -93,9 +93,12 @@
           <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
       </div>
-
-      <a v-if= 'verifyPass' v-on:click="submit" class="ok_button button">{{$t("lang.userCenter.next")}}</a>
-      <a v-if= '!verifyPass' class="no_button button">{{$t("lang.userCenter.next")}}</a>
+      <div class="to_button click_loading">
+        <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="login">
+          <span v-if="button_status===0||button_status===2">{{$t("lang.userCenter.next")}}</span>
+          <img v-if="button_status===1" src="../../../../static/img/loading.png" />
+        </a>
+      </div>
     </div>
 
     <div v-if="step===2" class="second-auther">
@@ -115,7 +118,7 @@ export default {
     return {
       step: 1,
       upload_token: null,
-      verifyPass: false,
+      button_status: 0,
       form: {
         name: '',
         idCard: ''
@@ -173,9 +176,9 @@ export default {
     },
     check() {
       if (this.checkName(true) && this.checkIdCard(true) && this.img['positiveCard'] !== null && this.img['backCard'] !== null && this.img['headImg'] !== null) {
-        this.verifyPass = true
+        this.button_status = 2
       } else {
-        this.verifyPass = false
+        this.button_status = 0
       }
     },
     selectImg (event) {
@@ -219,8 +222,10 @@ export default {
         idCardBackPic: this.img.backCard,
         facePic: this.img.headImg
       }
+      this.button_status = 1
       let data = await api.auther(param)
       if (data.status === 200) {
+        this.button_status = 0
         console.log(data)
       }
     }
@@ -231,6 +236,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
   @import "../../../style/common";
+  @import "../../../style/form";
   .auther-nav{
     width: 100%;
     background-color: #273c6e;

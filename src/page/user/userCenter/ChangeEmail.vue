@@ -31,11 +31,11 @@
             <input v-on:keyup="codeKeyup($event, 5)" v-on:focus="clearVal" :placeholder="$t('lang.form.eCodePrompt6')"  type="text"/>
           </div>
 
-          <div v-if="!verifyPass" class="sbutton">
-            <a class="no_button">{{$t('lang.form.submit')}}</a>
-          </div>
-          <div v-if="verifyPass" class="sbutton">
-            <a class="ok_button" v-on:click="changeEmail">{{$t('lang.form.submit')}}</a>
+          <div class="to_button click_loading">
+            <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="changeEmail">
+              <span v-if="button_status===0||button_status===2">{{$t("lang.form.submit")}}</span>
+              <img v-if="button_status===1" src="../../../../static/img/loading.png" />
+            </a>
           </div>
         </div>
       </form>
@@ -56,7 +56,7 @@ export default {
   },
   data () {
     return {
-      verifyPass: false,
+      button_status: 0,
       isSendPhoneCode: false,
       captchaObj: null,
       isSendEmailCode: false,
@@ -138,9 +138,9 @@ export default {
     },
     emailPassDown () {
       if (this.checkCode(true) && this.checkEmail(true) && this.isSendEmailCode && this.isSendPhoneCode && this.codeValue.length === 6) {
-        this.verifyPass = true
+        this.button_status = 2
       } else {
-        this.verifyPass = false
+        this.button_status = 0
       }
     },
     getEmailCode () {

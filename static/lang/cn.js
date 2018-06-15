@@ -253,6 +253,7 @@ export const lang = {
     eCodePrompt6: '码',
     bindSuccess: '邮箱绑定成功',
     bindFail: '邮箱绑定失败',
+    foundSuccess: '密码找回成功',
     changeSuccess: '修改成功',
     changeFail: '修改失败',
     goLogin: '去登入',

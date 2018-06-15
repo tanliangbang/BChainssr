@@ -24,14 +24,12 @@
           <i :class="rules.repassword.class"  v-on:click="delContent('repassword')">{{rules.repassword.message}}</i>
           <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
         </div>
-        <p class="errorPrompt">{{errorMessage}}</p>
-        <div v-if="!ispass" class="sbutton">
-          <a class="no_button">{{$t('lang.form.next')}}</a>
+        <div class="to_button click_loading">
+          <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="submit">
+            <span v-if="button_status===0||button_status===2">{{$t("lang.form.submit")}}</span>
+            <img v-if="button_status===1" src="../../../../static/img/loading.png" />
+          </a>
         </div>
-        <div v-if="ispass" class="sbutton">
-          <a v-on:click="submit"  class="ok_button">{{$t('lang.form.next')}}</a>
-        </div>
-
       </form>
     </div>
   </section>
@@ -52,13 +50,11 @@ export default {
   data () {
     return {
       isShowpass: false,
-      ispass: false,
+      button_status: 0,
       isSendPhoneCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
-      error: false,
-      errorMessage: '',
       form: {
         phone: '',
         code: '',
@@ -140,11 +136,10 @@ export default {
       this.isShowpass = !this.isShowpass
     },
     onPageDown () {
-      this.errorMessage = ''
       if (this.isSendPhoneCode && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
-        this.ispass = true
+        this.button_status = 2
       } else {
-        this.ispass = false
+        this.button_status = 0
       }
     },
     submit () {
@@ -155,15 +150,16 @@ export default {
         pass: Tool.md5(this.form.password)
       }
       let _this = this
-      this.ispass = false
+      this.button_status = 1
       api.foundByPone(params).then(function (res) {
         if (res.status === 200) {
           _this.$mask.showAlert(_this.$t('lang.form.changeSuccess'), 'success', function () {
             _this.$router.push('/userCenter')
           }, _this.$t('lang.form.submit'))
+          _this.button_status = 0
         } else {
-          _this.ispass = true
-          _this.$prompt.error(_this.$t('lang.form.changeFail'))
+          _this.button_status = 2
+          _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
         }
       })
     },

@@ -40,12 +40,11 @@
               <i :class="rules.repassword.class"  v-on:click="delContent('repassword')">{{rules.repassword.message}}</i>
               <i v-on:click="showpass()" :class="isShowpass?'showpass':'hidepass'"></i>
             </div>
-            <p class="errorPrompt">{{errorMessage}}</p>
-            <div v-if="!ispass" class="rbutton">
-              <a class="no_button">{{$t('lang.form.next')}}</a>
-            </div>
-            <div v-if="ispass" class="rbutton">
-              <a v-on:click="submit"  class="ok_button">{{$t('lang.form.next')}}</a>
+            <div class="to_button click_loading">
+              <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="submit">
+                <span v-if="button_status===0||button_status===2">{{$t("lang.form.loginSubmit")}}</span>
+                <img v-if="button_status===1" src="../../../static/img/loading.png" />
+              </a>
             </div>
           </form>
       </div>
@@ -66,15 +65,13 @@ export default {
   data () {
     return {
       isShowpass: false,
-      ispass: false,
+      button_status: 0,
       step: 1,
       isSendPhoneCode: false,
       isSendEmailCode: false,
       captchaObj: null,
       tokenId: null,
       phone: null,
-      error: false,
-      errorMessage: '',
       foundWay: 'phone',
       form: {
         phone: '',
@@ -175,25 +172,24 @@ export default {
       return FormFun.checkEmailCode(this, bool)
     },
     onPageDown () {
-      this.errorMessage = ''
       if (this.foundWay === 'phone') {
         if (this.isSendPhoneCode && this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
-          this.ispass = true
+          this.button_status = 2
         } else {
-          this.ispass = false
+          this.button_status = 2
         }
       } else {
         if (this.isSendEmailCode && this.checkEmail(true) && this.checkEmailCode(true) && this.checkPass(true) && this.checkRePass(true)) {
-          this.ispass = true
+          this.button_status = 2
         } else {
-          this.ispass = false
+          this.button_status = 2
         }
       }
     },
-    submit () {
+    submit() {
       let params = {}
       let _this = this
-      this.ispass = false
+      this.button_status = 1
       if (this.foundWay === 'phone') {
         params = {
           mobile: this.phone,
@@ -206,9 +202,11 @@ export default {
             _this.$mask.showAlert(_this.$t('lang.form.foundSuccess'), 'success', function () {
               _this.$router.push('/login')
             }, _this.$t('lang.form.goLogin'))
+            _this.button_status = 0
           } else {
             _this.ispass = true
-            _this.$prompt.error(_this.$t('lang.form.foundfail'))
+            _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
+            _this.button_status = 2
           }
         })
       } else {
@@ -222,9 +220,10 @@ export default {
             _this.$mask.showAlert(_this.$t('lang.form.foundSuccess'), 'success', function () {
               _this.$router.push('/login')
             }, _this.$t('lang.form.goLogin'))
+            _this.button_status = 0
           } else {
-            _this.ispass = true
-            _this.$prompt.error(_this.$t('lang.form.foundfail'))
+            _this.button_status = 2
+            _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
           }
         })
       }
