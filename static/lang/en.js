@@ -176,6 +176,7 @@ export const lang = {
     loginWay: 'Login Way',
     ip: 'IP',
     state: 'State',
+    city: 'City',
     level1: 'Level one Certification',
     level2: 'Level two Certification',
     nationality: 'Nationality',

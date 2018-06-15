@@ -94,7 +94,7 @@
         </div>
       </div>
       <div class="to_button click_loading">
-        <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="login">
+        <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="submit">
           <span v-if="button_status===0||button_status===2">{{$t("lang.userCenter.next")}}</span>
           <img v-if="button_status===1" src="../../../../static/img/loading.png" />
         </a>

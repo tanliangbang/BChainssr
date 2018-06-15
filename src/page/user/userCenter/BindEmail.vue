@@ -90,7 +90,7 @@ export default {
         if (res.status === 200) {
           _this.$store.dispatch('setUserInfo', res.data.userinfo)
           _this.$mask.showAlert(_this.$t('lang.form.bindSuccess'), 'success', function () {
-            this.button_status = 0
+            _this.button_status = 0
             if (_this.from) {
               _this.$router.push('/')
             } else {
@@ -98,7 +98,7 @@ export default {
             }
           }, _this.$t('lang.form.submit'))
         } else {
-          this.button_status = 2
+          _this.button_status = 2
           _this.$prompt.error(_this.$t('lang.errorPrompt.' + res.message))
         }
       })

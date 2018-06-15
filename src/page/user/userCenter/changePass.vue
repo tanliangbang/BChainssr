@@ -7,7 +7,7 @@
           <i>找回密码</i>
         </div>
         <div class="nomalInput">
-          <input   v-model="form.phone" disabled="true" type="text"/>
+          <input   :value="this.$store.state.user.userInfo?this.$store.state.user.userInfo.mobile:''" disabled="true" type="text"/>
         </div>
         <div class="code">
           <input type="text" v-on:focus="showDel('code')" v-on:blur="checkCode()" v-model="form.code" :placeholder="$t('lang.form.pleaseEnterCode')"/>
@@ -56,7 +56,6 @@ export default {
       tokenId: null,
       phone: null,
       form: {
-        phone: '',
         code: '',
         password: '',
         repassword: ''
@@ -91,13 +90,10 @@ export default {
       let data = await api.getGreetest()
       let _this = this
       data = data.data
-      this.form.phone = this.userInfo.mobile
       FormFun.initGreetest(_this, data, function (captchaObj) {
         _this.captchaObj = captchaObj
         captchaObj.onSuccess(function () {
           let result = captchaObj.getValidate()
-          result.mobile = _this.form.phone
-          _this.phone = _this.form.phone
           result.gee_token = data.gee_token
           let currNode = _this.$refs.send
           currNode.className = 'button-loading'
@@ -144,7 +140,6 @@ export default {
     },
     submit () {
       let params = {
-        mobile: this.form.phone,
         tokenId: this.tokenId,
         code: this.form.code,
         pass: Tool.md5(this.form.password)

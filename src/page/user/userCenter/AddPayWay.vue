@@ -91,7 +91,7 @@
 
           <div class="to_button click_loading">
             <a :class="button_status===2?'ok_button form_button':'no_button form_button'" v-on:click="submit">
-              <span v-if="button_status===0||button_status===2">{{$t("lang.form.loginSubmit")}}</span>
+              <span v-if="button_status===0||button_status===2">{{$t("lang.form.submit")}}</span>
               <img v-if="button_status===1" src="../../../../static/img/loading.png" />
             </a>
           </div>
@@ -167,7 +167,7 @@ export default {
         alipayQRcode: '',
         wechatQRcode: ''
       }
-      this.verifyPass = false
+      this.button_status = 0
     },
     selectImg (event) {
       event.stopPropagation()
@@ -203,14 +203,20 @@ export default {
       if (this.payWay === 'alipay') {
         if (this.checkEmpty(true, 'alipayAccount')) {
           this.button_status = 2
+        } else {
+          this.button_status = 0
         }
       } else if (this.payWay === 'wechat') {
         if (this.checkEmpty(true, 'wechatAccount')) {
           this.button_status = 2
+        } else {
+          this.button_status = 0
         }
       } else {
         if (this.checkEmpty(true, 'bankAccount') && this.checkEmpty(true, 'bankDeposit') && this.checkEmpty(true, 'bankBranch')) {
           this.button_status = 2
+        } else {
+          this.button_status = 0
         }
       }
     },

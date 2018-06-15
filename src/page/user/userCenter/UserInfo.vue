@@ -22,9 +22,9 @@
     <div class="login-history">
       <div class="title">{{$t("lang.userCenter.loginHistory")}}</div>
       <table>
-        <tr><td width="25%">{{$t("lang.userCenter.time")}}</td><td width="25%">{{$t("lang.userCenter.loginWay")}}</td>
-          <td width="25%">{{$t("lang.userCenter.ip")}}</td><td width="25%">{{$t("lang.userCenter.state")}}</td></tr>
-        <tr v-for="(item, index) in historyList" :key="index"><td>{{item.loginTime}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
+        <tr><td width="20%">{{$t("lang.userCenter.time")}}</td><td width="20%">{{$t("lang.userCenter.city")}}</td><td width="20%">{{$t("lang.userCenter.loginWay")}}</td>
+          <td width="20%">{{$t("lang.userCenter.ip")}}</td><td width="20%">{{$t("lang.userCenter.state")}}</td></tr>
+        <tr v-for="(item, index) in historyList" :key="index"><td>{{item.loginTime}}</td><td>{{item.city}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
       </table>
       <div class="page">
         <span>上一页</span> <span>返回</span> <span>下一页</span>
