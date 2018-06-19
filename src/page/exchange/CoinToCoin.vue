@@ -1,5 +1,5 @@
 <template>
-  <div class="coinToCoin" v-on:click="containerClick">
+  <div class="coinToCoin mainMg" v-on:click="containerClick">
     <section>
 
        <div class="coin-nav">
@@ -192,7 +192,6 @@ export default {
 <style lang="less" scoped>
 @import "./index";
 .coinToCoin{
-  margin:20px;
   .coin-nav{
     height:70px;
     background:@bg_color;

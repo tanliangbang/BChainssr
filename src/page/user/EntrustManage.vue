@@ -1,5 +1,5 @@
 <template>
-  <div class="entrustManage" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
+  <div class="entrustManage mainMg" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
       <div class="header">
          <div>
              <a v-on:click="changeStatus(1)" :class="status===1?'selected':''">{{$t("lang.entrustManage.processContracts")}}</a>
@@ -165,7 +165,6 @@ export default {
 <style lang="less" scoped>
   @import "../../style/var";
   .entrustManage{
-    margin:20px;
     padding:100px;
     background:@bg_color;
     font-size: 14px;

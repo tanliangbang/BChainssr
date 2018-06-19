@@ -1,5 +1,5 @@
 <template>
-  <section class="regist">
+  <section class="regist mainMg">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
           <form  v-on:keyup="onPageDown" class="step1">
              <p>{{$t("lang.form.registTitle")}}</p>

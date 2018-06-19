@@ -1,5 +1,5 @@
 <template>
-  <section class="foundPassword">
+  <section class="foundPassword mainMg">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
         <div class="nav_found">
           <a v-on:click="toChange('phone')" :class="foundWay === 'phone'?'select':''">手机找回密码</a>

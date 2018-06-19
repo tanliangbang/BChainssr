@@ -1,5 +1,5 @@
 <template>
-  <section class="login">
+  <section class="login mainMg">
       <div v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
            <form class="login_form" v-on:keyup="onPageDown">
              <p>{{$t("lang.form.loginTitle")}}</p>

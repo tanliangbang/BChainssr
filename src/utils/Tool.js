@@ -160,4 +160,13 @@ Tool.isLogin = function () {
   return false
 }
 
+Tool.isContains = function(arr, item) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === item) {
+      return true
+    }
+  }
+  return false
+}
+
 export default Tool

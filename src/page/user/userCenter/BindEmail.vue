@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="mainMg">
       <form class="bindEmail" v-on:keyup="emailPassDown" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
         <p v-if="!from">
           {{$t('lang.form.successPrompt')}}<br/>
@@ -142,9 +142,6 @@ export default {
 @import '../../../style/common';
 @import './../index';
 @import './../../../style/form.less';
-section{
-  padding:20px;
-}
 .bindEmail {
   background-color: @bg_color;
   padding-top: 100px;

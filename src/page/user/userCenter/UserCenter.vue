@@ -1,5 +1,5 @@
 <template>
-  <div class="userCenter" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
+  <div class="userCenter mainMg" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
       <section>
         <div class="nav">
           <a v-on:click="change('userInfo')" :class="nav==='userInfo'?'selected':'unselect'">{{$t("lang.userCenter.accountSecurity")}}</a>
@@ -56,7 +56,6 @@ export default {
 <style lang="less" scoped>
 @import "../../../style/common";
 .userCenter{
-  margin:20px;
   background:@bg_color;
   section{
     overflow:hidden;

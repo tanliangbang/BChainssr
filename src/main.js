@@ -28,8 +28,9 @@ const i18n = new VueI18n({
   }
 })
 
-/* router.beforeEach((to, from, next) => {
-   if (to.name === 'login') {
+/* let arr = ['login', 'regist']
+router.beforeEach((to, from, next) => {
+  if (Tool.isContains(arr, to.name)) {
     if (Tool.isLogin()) {
       next({path: '/'})
       return true
@@ -50,13 +51,3 @@ export function createApp () {
   // 暴露 app, router 和 store。
   return {app, router, store}
 }
-
-/* Vue.prototype.$lang = {
-  changeLang: function (str) {
-    let lang = {
-      en: require('./../static/lang/en'),
-      cn: require('./../static/lang/cn')
-    }
-    return lang[str]
-  }
-} */

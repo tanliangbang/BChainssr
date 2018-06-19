@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="changeEmail">
+    <div class="changeEmail mainMg">
       <form   v-bind:style="{minHeight: this.$store.getters.getMinHeight}" v-on:keyup="emailPassDown">
         <div class="common-nav">
           <router-link to="userCenter">账户安全</router-link> >
@@ -191,10 +191,6 @@ export default {
 <style lang="less" scoped>
 @import "../../../style/common";
 @import "../../../style/form";
-
-section{
-  padding:20px;
-}
 .changeEmail{
    background-color: @bg_color;
    form{

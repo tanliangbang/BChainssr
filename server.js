@@ -5,7 +5,7 @@ const favicon = require('serve-favicon')
 const compression = require('compression')
 const resolve = file => path.resolve(__dirname, file)
 const proxyMiddleware = require('http-proxy-middleware')
-
+const Tool = require('./src/utils/Tool')
 const config = require('./config')
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -81,7 +81,8 @@ app.get('*', (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Content-Type', 'text/html')
-
+  // let arr = ['login', 'regist']
+  // console.log(req.cookies.ngtoken)
   const errorHandler = err => {
     if (err && err.code === 404) {
       // 未找到页面

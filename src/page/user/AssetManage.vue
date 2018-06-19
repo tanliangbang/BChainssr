@@ -1,5 +1,5 @@
 <template>
-  <div class="assetManage" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
+  <div class="assetManage mainMg" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
     <RechargeAndEnchashment ref="reEn"/>
     <div class="asset-header">
       <div>
@@ -81,6 +81,7 @@ export default {
  @import "../../style/var";
 .assetManage{
   margin:30px 200px;
+  background:@index_bg;
   .asset-header{
     height: 128px;
     border:1px solid  #274ca1;

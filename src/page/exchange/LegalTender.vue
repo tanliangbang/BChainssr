@@ -1,5 +1,5 @@
 <template>
-  <div class="legalTender">
+  <div class="legalTender mainMg">
      <MakeOrder ref="makeOrder"/>
      <OrderInfo ref="orderInfo"/>
      <section>
