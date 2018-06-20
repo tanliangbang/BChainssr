@@ -176,13 +176,13 @@ export default {
         if (this.isSendPhoneCode && this.checkPhone(true) && this.checkCode(true) && this.checkPass(true) && this.checkRePass(true)) {
           this.button_status = 2
         } else {
-          this.button_status = 2
+          this.button_status = 0
         }
       } else {
         if (this.isSendEmailCode && this.checkEmail(true) && this.checkEmailCode(true) && this.checkPass(true) && this.checkRePass(true)) {
           this.button_status = 2
         } else {
-          this.button_status = 2
+          this.button_status = 0
         }
       }
     },

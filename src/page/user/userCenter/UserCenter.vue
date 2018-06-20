@@ -7,13 +7,13 @@
           <a v-on:click="change('payWay')" :class="nav==='payWay'?'selected':'unselect'">{{$t("lang.userCenter.paymentMethod")}}</a>
         </div>
         <div v-if="nav==='userInfo'">
-           <UserInfo/>
+           <UserInfo :historyList = "historyList" :userInfo = "userInfo"/>
         </div>
         <div v-if="nav==='auther'" >
-          <Auther/>
+          <Auther v-if="userInfo!==null" :userInfo = "userInfo" />
         </div>
-        <div v-if="nav==='payWay'">
-          <PayWay/>
+        <div v-if="nav==='payWay'" >
+          <PayWay v-if="userInfo!==null" :userInfo = "userInfo"/>
         </div>
       </section>
   </div>
@@ -23,6 +23,8 @@
 import Auther from './Auther'
 import UserInfo from './UserInfo'
 import PayWay from './PayWay'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'UserCenter',
   components: {
@@ -41,12 +43,22 @@ export default {
       this.nav = type
     }
   },
+  computed: {
+    ...mapGetters({
+      historyList: 'getLoginHistory',
+      userInfo: 'getUserInfo'
+    })
+  },
   mounted () {
+    this.init()
   },
   methods: {
     change (str) {
       this.nav = str
       this.$router.push('userCenter?type=' + str)
+    },
+    init () {
+      this.$store.dispatch('getLoginHistory', {offset: 0, limit: 5})
     }
   }
 }

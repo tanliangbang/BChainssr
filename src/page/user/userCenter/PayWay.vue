@@ -13,7 +13,7 @@
              <i></i>
            </div>
         </div>
-       <div class="add" v-on:click="toAdd">
+       <div v-if="receipts.length < 3" class="add" v-on:click="toAdd">
          <img src="../../../../static/img/add.png">
          <p>{{$t("lang.userCenter.addPayWay")}}</p>
        </div>
@@ -27,6 +27,7 @@ export default {
   name: 'PayWay',
   components: {
   },
+  props: ['userInfo'],
   data () {
     return {
       sending: false,
@@ -38,7 +39,13 @@ export default {
   },
   methods: {
     toAdd () {
-      this.$router.push('addPayWay')
+      let len = this.receipts.length
+      let str = ''
+      for (let i = 0; i < len; i++) {
+        str = str + this.receipts[i].receiptsWay + ','
+      }
+      str = str.substr(0, str.length - 1)
+      this.$router.push('addPayWay?finish=' + str)
     },
     async init() {
       let data = await api.getReceipts()

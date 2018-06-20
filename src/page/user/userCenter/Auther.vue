@@ -4,11 +4,7 @@
       <span v-on:click="changeStep(1)" :class="step===1?'selected':''">{{$t("lang.userCenter.level1")}}</span>
       <span v-on:click="changeStep(2)" :class="step===2?'selected':''">{{$t("lang.userCenter.level2")}}</span>
     </div>
-    <div v-if="step===1" class="nomal-auther" v-on:keyup="check()">
-      <!--<div>
-        <span>{{$t("lang.userCenter.nationality")}}</span>
-        <span>中国</span>
-      </div>-->
+    <div v-if="step===1 && userInfo.levelOneAuthStatus === '-1'" class="nomal-auther" v-on:keyup="check()">
       <div class="inputNomal">
         <span>{{$t("lang.userCenter.name")}}</span>
         <div>
@@ -100,6 +96,61 @@
         </a>
       </div>
     </div>
+    <div v-if="step===1 && (userInfo.levelOneAuthStatus === '0' || userInfo.levelOneAuthStatus === '1')" class="nomal-auther">
+      <div class="inputNomal">
+        <span>{{$t("lang.userCenter.name")}}</span>
+        <div class="autherIng">
+          {{userInfo.realname}}
+        </div>
+      </div>
+
+      <div class="inputNomal">
+        <span>{{$t("lang.userCenter.name")}}</span>
+        <div class="autherIng">
+          {{userInfo.idCardNo}}
+        </div>
+      </div>
+
+      <div class="upload-div">
+        <div>{{$t("lang.userCenter.uploadId3")}}</div>
+        <div>
+          <div class="upload">
+            <div class="updated">
+              <img :src="userInfo.idCardFrontPic">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="upload-div">
+        <div>{{$t("lang.userCenter.uploadId3")}}</div>
+        <div>
+          <div class="upload">
+            <div class="updated">
+              <img :src="userInfo.idCardBackPic">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="upload-div">
+        <div>{{$t("lang.userCenter.uploadId3")}}</div>
+        <div>
+          <div class="upload">
+            <div class="updated">
+              <img :src="userInfo.facePic">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="to_button" v-if="userInfo.levelOneAuthStatus === '0'">
+        <a class="no_button form_button" >
+          {{$t("lang.userCenter.examine")}}
+        </a>
+      </div>
+      <div class="to_button" v-if="userInfo.levelOneAuthStatus === '1'">
+        <span class="authered">{{$t("lang.userCenter.authered")}}</span>
+      </div>
+    </div>
 
     <div v-if="step===2" class="second-auther">
 
@@ -114,6 +165,7 @@ export default {
   name: 'Auther',
   components: {
   },
+  props: ['userInfo'],
   data () {
     return {
       step: 1,
@@ -135,6 +187,18 @@ export default {
     }
   },
   async mounted () {
+    if (this.userInfo.levelOneAuthStatus === '0') {
+      let _this = this
+      let interval = setInterval(async function() {
+        let info = await api.getIsAuthered({ticketId: _this.userInfo.ticketId})
+        console.log(info)
+        if (info.data.userInfo.levelOneAuthStatus !== '0') {
+          clearInterval(interval)
+          _this.userInfo.levelOneAuthStatus = info.data.userInfo.levelOneAuthStatus + ''
+          _this.$store.dispatch('SET_USERINFO', info.data.userInfo)
+        }
+      }, 1000)
+    }
     let data = await api.getUploadParam()
     this.upload_token = data.data.qiniu_upload_token
   },
@@ -225,8 +289,10 @@ export default {
       this.button_status = 1
       let data = await api.auther(param)
       if (data.status === 200) {
+        let info = data.data.userinfo
+        this.$store.dispatch('SET_USERINFO', info)
         this.button_status = 0
-        console.log(data)
+        this.$mask.showAlert(this.$t('lang.userCenter.autherSubmited'), 'success')
       }
     }
   }
@@ -276,6 +342,9 @@ export default {
         padding-left:30px;
         line-height:56px;
         color: #a9c2fd;
+      }
+      .autherIng{
+        line-height:50px;
       }
       >div{
         flex:1;
@@ -420,6 +489,15 @@ export default {
   }
   .upload-div:last-child{
     border-bottom:none;
+  }
+  .authered:before{
+    content:'';
+    display:inline-block;
+    width:16px;
+    height:16px;
+    vertical-align: -4px;
+    margin-right:5px;
+    background:url("../../../../static/img/icon_good.png")
   }
 
   @keyframes spin {

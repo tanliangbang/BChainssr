@@ -27,7 +27,7 @@
         <tr v-for="(item, index) in historyList" :key="index"><td>{{item.loginTime}}</td><td>{{item.city}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
       </table>
       <div class="page">
-        <span>上一页</span> <span>返回</span> <span>下一页</span>
+        <a>上一页</a> <a>返回</a> <a>下一页</a>
       </div>
     </div>
   </div>
@@ -36,31 +36,19 @@
 <script>
 import * as api from './../../../service/getData'
 import Tool from './../../../utils/Tool'
-import { mapGetters } from 'vuex'
 export default {
   name: 'Auther',
   components: {
   },
+  props: ['historyList', 'userInfo'],
   data () {
     return {
-      historyList: []
+      currpage: 1
     }
   },
-  computed: {
-    ...mapGetters({
-      userInfo: 'getUserInfo'
-    })
-  },
   mounted () {
-    this.initDate()
   },
   methods: {
-    async initDate () {
-      let data = await api.getLoginHistory()
-      if (data.status === 200) {
-        this.historyList = data.data
-      }
-    },
     loginOut () {
       let _this = this
       this.$mask.showAlert('确定要退出？', 'doubt', async function () {

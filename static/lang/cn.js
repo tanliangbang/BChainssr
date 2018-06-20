@@ -211,7 +211,10 @@ export const lang = {
     bankAccount: '银行卡账号',
     bankDeposit: '银行名称',
     bankBranch: '开户支行',
-    addSuccess: '添加成功'
+    addSuccess: '添加成功',
+    examine: '审核中',
+    autherSubmited: '资料已提交,审核需要3分钟左右',
+    authered: '您的身份认证已完成'
   },
   form: {
     loginTitle: '登入一账通',

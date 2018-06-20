@@ -212,7 +212,10 @@ export const lang = {
     bankAccount: 'Bank Account',
     bankDeposit: 'Bank Name',
     bankBranch: 'Bank Branch',
-    addSuccess: 'Add Success'
+    addSuccess: 'Add Success',
+    examine: 'Examine',
+    autherSubmited: 'The data has been submitted and the audit will take about 3 minutes',
+    authered: 'Your identity authentication has been completed'
   },
   form: {
     loginTitle: 'Log in with Bilian account',

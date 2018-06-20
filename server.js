@@ -5,10 +5,8 @@ const favicon = require('serve-favicon')
 const compression = require('compression')
 const resolve = file => path.resolve(__dirname, file)
 const proxyMiddleware = require('http-proxy-middleware')
-const Tool = require('./src/utils/Tool')
 const config = require('./config')
 const isProd = process.env.NODE_ENV === 'production'
-
 const app = express()
 
 let renderer
@@ -48,7 +46,7 @@ const proxyTable = {
     }
   },
   '/market': {
-    target: 'http://154.48.249.4',
+    target: 'http://154.48.249.19:8000/',
     changeOrigin: true,
     pathRewrite: {
       '^/market': '/market'
@@ -64,6 +62,20 @@ Object.keys(proxyTable).forEach(function(context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
+function checkLogin(req, res) {
+  let arr = ['/userCenter', '/assetManage']
+  let ngtoken = req.cookies.ngtoken
+  console.log(req.cookies.ngtoken)
+  let len = arr.length
+  if (!ngtoken) {
+    for (let i = 0; i < len; i++) {
+      if (req.url === arr[i]) {
+        res.redirect('/login')
+      }
+    }
+  }
+}
+
 const v = Date.now()
 app.use(compression({ threshold: 0 }))
 app.use(require('cookie-parser')())
@@ -73,16 +85,15 @@ app.use('/service-worker.js', serve('./output/service-worker.js'))
 // app.use(favicon(path.resolve(__dirname, 'static/img/bangbang.ico')))
 
 app.get('*', (req, res) => {
+  checkLogin(req, res)
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')
   }
-
+  console.log(req)
   const s = Date.now()
 
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Content-Type', 'text/html')
-  // let arr = ['login', 'regist']
-  // console.log(req.cookies.ngtoken)
   const errorHandler = err => {
     if (err && err.code === 404) {
       // 未找到页面

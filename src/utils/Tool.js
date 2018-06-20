@@ -113,7 +113,7 @@ Tool.isPoneAvailable = function (phone) {
   }
 }
 Tool.isEmail = function (email) {
-  var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+  var reg = new RegExp('^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$')
   return reg.test(email)
 }
 

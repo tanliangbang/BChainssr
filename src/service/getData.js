@@ -54,7 +54,7 @@ export const loginOut = (params) => http.post(base + '/tokens/current', params, 
 /**
  * 找回密码发送短信验证码
  */
-export const resetSendSMS = (params) => http.post(base + '/tokens/sms/reset', params)
+export const resetSendSMS = (params) => http.post(base + '/tokens/sms/retrieve', params)
 
 /**
  * 找回密码发送邮箱验证码
@@ -64,7 +64,7 @@ export const resetEmailSendSMS = (params) => http.post(base + '/emails/reset/cod
 /**
  * 通过手机号码找回密码
  */
-export const foundByPone = (params) => http.post(base + '/tokens/mobile/password/reset', params)
+export const foundByPone = (params) => http.post(base + '/tokens/mobile/password/retrieve', params)
 
 /**
  * 通过邮箱找回密码
@@ -116,3 +116,7 @@ export const getAddReceipts = (param) => http.post(base + '/users/payment/receip
  */
 export const changeReceipts = (param) => http.post(base + '/users/payment/receipts/status', param)
 
+/**
+ * 获取是否认证完
+ */
+export const getIsAuthered = (param) => http.get(base + '/users/cloud/status', param)

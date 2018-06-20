@@ -188,7 +188,7 @@ function copyDir(from, to, cb) {
 }
 
 // 给bangbangwebssr添加依package.json文件
-const file = resolve(`../bangbangwebssr/package.json`)
+const file = resolve(`../BChain/package.json`)
 const packageJson = `{
   "name": "vue-ssr-template",
   "version": "1.0.0",
@@ -215,15 +215,16 @@ const packageJson = `{
     "vue-server-renderer": "^2.3.4",
     "vuex": "^2.3.0",
     "vuex-router-sync": "^4.1.2",
-    "http-proxy-middleware": "^0.17.3"
+    "http-proxy-middleware": "^0.17.3",
+    "vue-i18n": "^7.8.0"
   }
 }`
 
-// 把打包后的文件放在dibangbangwebssrst目录文件夹
+// 把打包后的文件放在BChain目录文件夹
 const dirArr = ['output/', 'config/', 'static/', 'processes.json', 'server.js']
 dirArr.forEach(function (item) {
   let src = resolve(`../${item}`)
-  let dst = resolve(`../bangbangwebssr/${item}`)
+  let dst = resolve(`../BChain/${item}`)
   copyDir(src, dst, (err) => {
     if (err) return console.error(err)
     if (item === dirArr[dirArr.length - 1]) {

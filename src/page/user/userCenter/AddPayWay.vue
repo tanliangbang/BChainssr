@@ -1,22 +1,23 @@
 <template>
-  <div class="addPayWay" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
+  <div v-if="userInfo!==null" class="addPayWay" v-bind:style="{minHeight: this.$store.getters.getMinHeight}">
      <div>
         <div class="nav"><router-link to="userCenter?type=payWay">{{$t("lang.userCenter.paymentMethod")}}</router-link> >
           <span>{{$t("lang.userCenter.addCollection")}}</span></div>
         <form v-on:keyup="check()">
            <p>{{$t("lang.userCenter.addPayWay")}}</p>
            <div class="payInput">
-             <span>{{$t("lang.userCenter.realName")}}:</span><span>胡恒</span>
+             <span>{{$t("lang.userCenter.realName")}}:</span><span>{{userInfo.realname}}</span>
            </div>
            <div class="payInput">
-             <span>{{$t("lang.userCenter.idNumber")}}:</span><span>43055455667****2212</span>
+             <span>{{$t("lang.userCenter.idNumber")}}:</span><span>{{userInfo.idCardNo}}</span>
            </div>
           <div class="payInput">
             <span>{{$t("lang.userCenter.paymentMethod")}}:</span>
             <select v-model="payWay" v-on:change="changePayWay">
-              <option value="bankCard">{{$t("lang.userCenter.pay3")}}</option>
-              <option value="alipay">{{$t("lang.userCenter.pay2")}}</option>
-              <option value="wechat">{{$t("lang.userCenter.pay1")}}</option></select>
+              <option v-if="!isContains(this.finish, 'bankCard')" value="bankCard">{{$t("lang.userCenter.pay3")}}</option>
+              <option v-if="!isContains(this.finish, 'alipay')" value="alipay">{{$t("lang.userCenter.pay2")}}</option>
+              <option v-if="!isContains(this.finish, 'wechat')" value="wechat">{{$t("lang.userCenter.pay1")}}</option>
+            </select>
           </div>
 
          <div v-if="payWay==='bankCard'">
@@ -103,15 +104,23 @@
 <script>
 import Tool from './../../../utils/Tool'
 import * as api from '../../../service/getData'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AddPayWay',
   components: {
   },
+  computed: {
+    ...mapGetters({
+      userInfo: 'getUserInfo'
+    })
+  },
   data () {
     return {
-      payWay: 'wechat',
+      payWay: '',
       upload_token: null,
       button_status: 0,
+      finish: [],
       form: {
         alipayAccount: '',
         wechatAccount: '',
@@ -146,6 +155,15 @@ export default {
     }
   },
   async mounted () {
+    let finish = this.$route.query.finish
+    this.finish = finish.split(',')
+    if (!this.isContains(this.finish, 'bankCard')) {
+      this.payWay = 'bankCard'
+    } else if (!this.isContains(this.finish, 'alipay')) {
+      this.payWay = 'alipay'
+    } else {
+      this.payWay = 'wechat'
+    }
     let data = await api.getUploadParam()
     this.upload_token = data.data.qiniu_upload_token
   },
@@ -237,6 +255,14 @@ export default {
         curr.parentNode.nextElementSibling.nextElementSibling.style.display = 'block'
         _this.form[name] = 'https://file.niustock.com/' + response.data.key
       })
+    },
+    isContains (arr, item) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === item) {
+          return true
+        }
+      }
+      return false
     },
     async submit() {
       let param = {
