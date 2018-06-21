@@ -1,6 +1,6 @@
 <template>
   <div class="payWay">
-    <div >
+     <div v-if="userInfo.levelOneAuthStatus === '1'">
         <div :class="item.enable === '1'?'open':'close'" v-for="item in receipts">
           <img v-if="item.receiptsWay === 'alipay'" src="../../../../static/img/zfb.jpg">
           <img v-if="item.receiptsWay === 'bankCard'" src="../../../../static/img/yhk.png">
@@ -17,6 +17,9 @@
          <img src="../../../../static/img/add.png">
          <p>{{$t("lang.userCenter.addPayWay")}}</p>
        </div>
+     </div>
+     <div class="auther-promit" v-if="userInfo.levelOneAuthStatus !== '1'">
+         <span>没有实名认证 !</span><a v-on:click="goAther" >去认证</a>
      </div>
   </div>
 </template>
@@ -53,6 +56,9 @@ export default {
         this.receipts = data.data
       }
     },
+    goAther () {
+      this.$parent.change('auther')
+    },
     async changeStatus(str, num) {
       if (this.sending) {
         return
@@ -74,8 +80,6 @@ export default {
       } else {
         this.$prompt.error(this.$t('lang.errorPrompt.' + data.message))
       }
-
-      console.log(data)
     }
   }
 }
@@ -157,7 +161,23 @@ export default {
         color: #a9c2fd;
         cursor: pointer;
       }
-
+    }
+    .auther-promit{
+      text-align: center;
+      span:before{
+        content:'';
+        display:inline-block;
+        width:16px;
+        height:16px;
+        vertical-align: -3px;
+        margin-right:5px;
+        background:url("../../../../static/img/icon_something.png")
+      }
+      a{
+        color: #0088ff;
+        margin-left:10px;
+        cursor: pointer;
+      }
     }
   }
 </style>

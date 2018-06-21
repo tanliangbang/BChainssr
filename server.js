@@ -63,7 +63,8 @@ Object.keys(proxyTable).forEach(function(context) {
 })
 
 function checkLogin(req, res) {
-  let arr = ['/userCenter', '/assetManage']
+  let arr = ['/userCenter', '/assetManage', '/entrustManage', '/financeRecord', '/addPayWay', '/changeEmail',
+    '/changePass', '/bindEmail']
   let ngtoken = req.cookies.ngtoken
   console.log(req.cookies.ngtoken)
   let len = arr.length

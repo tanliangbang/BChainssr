@@ -117,22 +117,22 @@ Tool.isEmail = function (email) {
   return reg.test(email)
 }
 
-Tool.getCookie = function (name) {
-  let strcookie = document.cookie
-  let arrcookie = strcookie.split('; ')
-  for (let i = 0; i < arrcookie.length; i++) {
-    var arr = arrcookie[i].split('=')
-    if (arr[0] === name) {
-      return arr[1]
-    }
+Tool.getCookie = function (cname) {
+  let name = cname + '='
+  var ca = document.cookie.split(';')
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i]
+    while (c.charAt(0) === ' ') c = c.substring(1)
+    if (c.indexOf(name) !== -1) return c.substring(name.length, c.length)
   }
-  return false
+  return null
 }
 Tool.delCookie = function (name) {
-  var exp = new Date()
+  let exp = new Date()
   exp.setTime(exp.getTime() - 1)
-  var cval = Tool.getCookie(name)
-  if (cval !== null) {
+  let cval = Tool.getCookie(name)
+  console.log(cval)
+  if (cval != null) {
     document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
   }
 }

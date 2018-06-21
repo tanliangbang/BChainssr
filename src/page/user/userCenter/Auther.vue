@@ -33,12 +33,12 @@
               <span>上传中......</span>
             </div>
             <div class="updated hide">
-               <img :src="img.positiveCard">
+               <img v-on:click="changeImg($event)" :src="img.positiveCard">
             </div>
           </div>
         </div>
         <div>
-          <img src="../../../../static/img/sfz.png">
+          <img src="../../../../static/img/frontidcard.png">
           <p>{{$t("lang.userCenter.forExample")}}</p>
           <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
@@ -56,12 +56,12 @@
               <span>上传中......</span>
             </div>
             <div class="updated hide">
-              <img :src="img.backCard">
+              <img v-on:click="changeImg($event)" :src="img.backCard">
             </div>
           </div>
         </div>
         <div>
-          <img src="../../../../static/img/sfz.png">
+          <img src="../../../../static/img/backidcard.png">
           <p>{{$t("lang.userCenter.forExample")}}</p>
           <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
@@ -79,12 +79,12 @@
               <span>上传中......</span>
             </div>
             <div class="updated hide">
-              <img :src="img.headImg">
+              <img v-on:click="changeImg($event)" :src="img.headImg">
             </div>
           </div>
         </div>
         <div>
-          <img src="../../../../static/img/sfz.png">
+          <img src="../../../../static/img/holdidcard.png">
           <p>{{$t("lang.userCenter.forExample")}}</p>
           <p>{{$t("lang.userCenter.prompt")}}</p>
         </div>
@@ -96,7 +96,7 @@
         </a>
       </div>
     </div>
-    <div v-if="step===1 && (userInfo.levelOneAuthStatus === '0' || userInfo.levelOneAuthStatus === '1')" class="nomal-auther">
+    <div v-if="step===1 && userInfo.levelOneAuthStatus !== '-1'" class="nomal-auther">
       <div class="inputNomal">
         <span>{{$t("lang.userCenter.name")}}</span>
         <div class="autherIng">
@@ -113,32 +113,20 @@
 
       <div class="upload-div">
         <div>{{$t("lang.userCenter.uploadId3")}}</div>
-        <div>
-          <div class="upload">
-            <div class="updated">
-              <img :src="userInfo.idCardFrontPic">
-            </div>
-          </div>
+        <div class="head-img">
+          <img :src="userInfo.idCardFrontPic">
         </div>
       </div>
       <div class="upload-div">
         <div>{{$t("lang.userCenter.uploadId3")}}</div>
-        <div>
-          <div class="upload">
-            <div class="updated">
-              <img :src="userInfo.idCardBackPic">
-            </div>
-          </div>
+        <div class="head-img">
+          <img :src="userInfo.idCardBackPic">
         </div>
       </div>
       <div class="upload-div">
         <div>{{$t("lang.userCenter.uploadId3")}}</div>
-        <div>
-          <div class="upload">
-            <div class="updated">
-              <img :src="userInfo.facePic">
-            </div>
-          </div>
+        <div class="head-img">
+          <img :src="userInfo.facePic">
         </div>
       </div>
 
@@ -149,6 +137,10 @@
       </div>
       <div class="to_button" v-if="userInfo.levelOneAuthStatus === '1'">
         <span class="authered">{{$t("lang.userCenter.authered")}}</span>
+      </div>
+
+      <div class="to_button" v-if="userInfo.levelOneAuthStatus === '2'">
+        <span class="autherfail">{{userInfo.auditConclusions}}</span>
       </div>
     </div>
 
@@ -187,18 +179,7 @@ export default {
     }
   },
   async mounted () {
-    if (this.userInfo.levelOneAuthStatus === '0') {
-      let _this = this
-      let interval = setInterval(async function() {
-        let info = await api.getIsAuthered({ticketId: _this.userInfo.ticketId})
-        console.log(info)
-        if (info.data.userInfo.levelOneAuthStatus !== '0') {
-          clearInterval(interval)
-          _this.userInfo.levelOneAuthStatus = info.data.userInfo.levelOneAuthStatus + ''
-          _this.$store.dispatch('SET_USERINFO', info.data.userInfo)
-        }
-      }, 1000)
-    }
+    this.getAuter()
     let data = await api.getUploadParam()
     this.upload_token = data.data.qiniu_upload_token
   },
@@ -238,6 +219,19 @@ export default {
     showDel(str) {
       this.error[str] = ''
     },
+    getAuter () {
+      if (this.userInfo.levelOneAuthStatus === '0') {
+        let _this = this
+        let interval = setInterval(async function() {
+          let data = await api.getIsAuthered({ticketId: _this.userInfo.ticketId})
+          if (data.levelOneAuthStatus !== '0') {
+            clearInterval(interval)
+            _this.userInfo.levelOneAuthStatus = data.levelOneAuthStatus + ''
+            _this.$store.dispatch('setUserInfo', _this.userInfo)
+          }
+        }, 1000)
+      }
+    },
     check() {
       if (this.checkName(true) && this.checkIdCard(true) && this.img['positiveCard'] !== null && this.img['backCard'] !== null && this.img['headImg'] !== null) {
         this.button_status = 2
@@ -259,6 +253,12 @@ export default {
       }
       input.click()
     },
+    changeImg(event) {
+      event.stopPropagation()
+      let target = Tool.getTarget(event)
+      Tool.stopProp(event)
+      target.parentNode.previousElementSibling.previousElementSibling.click()
+    },
     uploadImg(e, name) {
       let curr = Tool.getTarget(e)
       let file = curr.files[0]
@@ -271,6 +271,7 @@ export default {
       } // 添加请求头
       curr.parentNode.style.display = 'none'
       curr.parentNode.nextElementSibling.style.display = 'block'
+      curr.parentNode.nextElementSibling.nextElementSibling.style.display = 'none'
       api.uploadImg(param, config).then(response => {
         curr.parentNode.nextElementSibling.style.display = 'none'
         curr.parentNode.nextElementSibling.nextElementSibling.style.display = 'block'
@@ -289,8 +290,8 @@ export default {
       this.button_status = 1
       let data = await api.auther(param)
       if (data.status === 200) {
-        let info = data.data.userinfo
-        this.$store.dispatch('SET_USERINFO', info)
+        let info = data.data
+        this.$store.dispatch('setUserInfo', info)
         this.button_status = 0
         this.$mask.showAlert(this.$t('lang.userCenter.autherSubmited'), 'success')
       }
@@ -446,7 +447,7 @@ export default {
             width:30px;
             height:32px;
             position:absolute;
-            left:10px;
+            left:20px;
             top:-35px;
             animation: spin 1s linear infinite;
             background:url('../../../../static/img/loading.png')
@@ -468,6 +469,7 @@ export default {
       width:30%;
       >img{
         margin-top:49px;
+        height:109px;
       }
       >p:nth-child(2) {
         font-size: 14px;
@@ -478,6 +480,13 @@ export default {
         margin-top:5px;
         text-align: center;
       }
+    }
+  }
+  .head-img{
+    img{
+      width: 320px;
+      height: 196px;
+      margin-top:33px;
     }
   }
   .upload-div::after{
@@ -499,7 +508,15 @@ export default {
     margin-right:5px;
     background:url("../../../../static/img/icon_good.png")
   }
-
+  .autherfail:before{
+    content:'';
+    display:inline-block;
+    width:20px;
+    height:20px;
+    vertical-align: -4px;
+    margin-right:5px;
+    background:url("../../../../static/img/pfail.png")
+  }
   @keyframes spin {
     0%   {
       -webkit-transform: rotate(0deg);

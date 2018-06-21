@@ -27,7 +27,7 @@
         <tr v-for="(item, index) in historyList" :key="index"><td>{{item.loginTime}}</td><td>{{item.city}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
       </table>
       <div class="page">
-        <a>上一页</a> <a>返回</a> <a>下一页</a>
+        <a v-on:click="prePage()">上一页</a>  <a v-on:click="nextPage()">下一页</a>
       </div>
     </div>
   </div>
@@ -59,6 +59,15 @@ export default {
           _this.$router.push('/')
         }
       })
+    },
+    prePage () {
+
+    },
+    nextPage () {
+      this.currpage = this.currpage + 1
+      let offset = (this.currpage - 1) * 5
+      let limit = 5
+      this.$store.dispatch('getLoginHistory', {offset: offset, limit: limit})
     }
   }
 }
@@ -129,8 +138,10 @@ export default {
     margin:30px 0px;
     text-align: center;
     color:#fff;
-    >span{
+    >a{
+      cursor: pointer;
       margin-right:30px;
+      color:@click_color;
     }
   }
 </style>
