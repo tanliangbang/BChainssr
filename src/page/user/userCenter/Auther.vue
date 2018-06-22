@@ -105,7 +105,7 @@
       </div>
 
       <div class="inputNomal">
-        <span>{{$t("lang.userCenter.name")}}</span>
+        <span>{{$t("lang.userCenter.idNumber")}}</span>
         <div class="autherIng">
           {{userInfo.idCardNo}}
         </div>
@@ -141,6 +141,11 @@
 
       <div class="to_button" v-if="userInfo.levelOneAuthStatus === '2'">
         <span class="autherfail">{{userInfo.auditConclusions}}</span>
+      </div>
+      <div class="to_button" v-if="userInfo.levelOneAuthStatus === '2'">
+        <a class="ok_button form_button" v-on:click="showChange()">
+          {{$t("lang.userCenter.change")}}
+        </a>
       </div>
     </div>
 
@@ -219,17 +224,19 @@ export default {
     showDel(str) {
       this.error[str] = ''
     },
-    getAuter () {
+    getAuter() {
       if (this.userInfo.levelOneAuthStatus === '0') {
         let _this = this
+        let info = Object.assign({}, _this.userInfo)
         let interval = setInterval(async function() {
           let data = await api.getIsAuthered({ticketId: _this.userInfo.ticketId})
-          if (data.levelOneAuthStatus !== '0') {
+          if (data.data.levelOneAuthStatus !== '0') {
             clearInterval(interval)
-            _this.userInfo.levelOneAuthStatus = data.levelOneAuthStatus + ''
-            _this.$store.dispatch('setUserInfo', _this.userInfo)
+            info.levelOneAuthStatus = data.data.levelOneAuthStatus + ''
+            info.auditConclusions = data.data.auditConclusions
+            _this.$store.dispatch('setUserInfo', info)
           }
-        }, 1000)
+        }, 5000)
       }
     },
     check() {
@@ -279,6 +286,11 @@ export default {
         _this.check()
       })
     },
+    showChange() {
+      let info = Object.assign({}, this.userInfo)
+      info.levelOneAuthStatus = '-1'
+      this.$store.dispatch('setUserInfo', info)
+    },
     async submit() {
       let param = {
         identificationNumber: this.form.idCard,
@@ -291,9 +303,10 @@ export default {
       let data = await api.auther(param)
       if (data.status === 200) {
         let info = data.data
-        this.$store.dispatch('setUserInfo', info)
+        await this.$store.dispatch('setUserInfo', info)
         this.button_status = 0
         this.$mask.showAlert(this.$t('lang.userCenter.autherSubmited'), 'success')
+        this.getAuter()
       }
     }
   }

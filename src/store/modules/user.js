@@ -27,7 +27,7 @@ const actions = {
   getLoginHistory: ({ state, commit }, param) => {
     return api.getLoginHistory(param).then(function (res) {
       if (res.status === 200) {
-        commit('SET_LOGIN_HISTORY', res.data)
+        commit('SET_LOGIN_HISTORY', res)
       }
     })
   }

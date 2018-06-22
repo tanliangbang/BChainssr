@@ -19,15 +19,19 @@
       <span v-on:click="loginOut">{{$t("lang.userCenter.logout")}}</span>
     </div>
 
-    <div class="login-history">
+    <div class="login-history" v-if="historyList">
       <div class="title">{{$t("lang.userCenter.loginHistory")}}</div>
       <table>
         <tr><td width="20%">{{$t("lang.userCenter.time")}}</td><td width="20%">{{$t("lang.userCenter.city")}}</td><td width="20%">{{$t("lang.userCenter.loginWay")}}</td>
           <td width="20%">{{$t("lang.userCenter.ip")}}</td><td width="20%">{{$t("lang.userCenter.state")}}</td></tr>
-        <tr v-for="(item, index) in historyList" :key="index"><td>{{item.loginTime}}</td><td>{{item.city}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
+        <tr v-for="(item, index) in historyList.data" :key="index"><td>{{item.loginTime}}</td><td>{{item.city}}</td><td>{{item.loginMode}}</td><td>IP:{{item.ip}}</td><td>{{item.loginStatus}}</td></tr>
       </table>
       <div class="page">
-        <a v-on:click="prePage()">上一页</a>  <a v-on:click="nextPage()">下一页</a>
+        <a v-if="currpage>1 && !loading" v-on:click="prePage()">{{$t("lang.common.prePage")}}</a>
+        <span v-if="currpage<=1 || loading">{{$t("lang.common.prePage")}}</span>
+        <span>{{currpage +"/"+ totalpage}}</span>
+        <a v-if="currpage<totalpage && !loading" v-on:click="nextPage()">{{$t("lang.common.nextPage")}}</a>
+        <span v-if="currpage>=totalpage || loading">{{$t("lang.common.nextPage")}}</span>
       </div>
     </div>
   </div>
@@ -36,17 +40,27 @@
 <script>
 import * as api from './../../../service/getData'
 import Tool from './../../../utils/Tool'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Auther',
   components: {
   },
-  props: ['historyList', 'userInfo'],
+  props: ['userInfo'],
   data () {
     return {
-      currpage: 1
+      currpage: 1,
+      totalpage: 0,
+      loading: false
     }
   },
-  mounted () {
+  async mounted () {
+    await this.$store.dispatch('getLoginHistory', {offset: 0, limit: 5})
+    this.totalpage = Math.ceil(parseInt(this.historyList.total) / 5)
+  },
+  computed: {
+    ...mapGetters({
+      historyList: 'getLoginHistory'
+    })
   },
   methods: {
     loginOut () {
@@ -60,14 +74,27 @@ export default {
         }
       })
     },
-    prePage () {
-
+    async prePage () {
+      if ((this.currpage + 1) <= 1) {
+        return
+      }
+      this.currpage = this.currpage - 1
+      let offset = (this.currpage - 1) * 5
+      let limit = 5
+      this.loading = true
+      await this.$store.dispatch('getLoginHistory', {offset: offset, limit: limit})
+      this.loading = false
     },
-    nextPage () {
+    async nextPage () {
+      if ((this.currpage + 1) > this.totalpage) {
+        return
+      }
       this.currpage = this.currpage + 1
       let offset = (this.currpage - 1) * 5
       let limit = 5
-      this.$store.dispatch('getLoginHistory', {offset: offset, limit: limit})
+      this.loading = true
+      await this.$store.dispatch('getLoginHistory', {offset: offset, limit: limit})
+      this.loading = false
     }
   }
 }
@@ -105,7 +132,7 @@ export default {
     }
   }
   .login-history{
-    margin-top:272px;
+    margin-top:100px;
     .title{
       width: 185px;
       height: 50px;
@@ -138,6 +165,9 @@ export default {
     margin:30px 0px;
     text-align: center;
     color:#fff;
+    span{
+      margin-right:30px;
+    }
     >a{
       cursor: pointer;
       margin-right:30px;

@@ -109,7 +109,7 @@ export default {
       if (this.loginForm.phone === '') {
         if (!bool) {
           this.rules.phone.class = 'del'
-          this.rules.phone.message = this.$t('lang.from.phonePrompt')
+          this.rules.phone.message = this.$t('lang.form.phonePrompt')
         }
         return false
       } else {

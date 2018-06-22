@@ -1,4 +1,8 @@
 export const lang = {
+  common: {
+    prePage: 'Previous Page',
+    nextPage: 'Next Page',
+  },
   header: {
     market: 'MARKET',
     exchange: 'EXCHANGE',
@@ -66,8 +70,6 @@ export const lang = {
     exchange: 'Exchange',
     control: 'Control',
     goTrade: 'Trade',
-    prePage: 'Previous Page',
-    nextPage: 'Next Page',
     myOrder: 'My Order',
     search: 'Search',
     orderNum: 'Order Number',

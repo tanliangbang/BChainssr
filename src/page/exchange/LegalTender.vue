@@ -61,9 +61,9 @@
            </tr>
          </table>
          <div>
-            <span>{{$t("lang.otc.prePage")}}</span>
+            <span>{{$t("lang.common.prePage")}}</span>
             <span>06/10</span>
-            <span>{{$t("lang.otc.nextPage")}}</span>
+            <span>{{$t("lang.common.nextPage")}}</span>
          </div>
        </div>
 
@@ -196,7 +196,6 @@ export default {
           temp[i].tradeCount = temp[i].tradeCount + '.000000'
         }
         num = (temp[i].price + '').split('.')[1]
-        console.log(temp[i].price)
         if (num) {
           temp[i].price = num.length === 1 ? temp[i].price + '0' : temp[i].price
         } else {

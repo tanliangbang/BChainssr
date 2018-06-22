@@ -108,9 +108,9 @@ app.get('*', (req, res) => {
   }
 
   const context = {
-    title: 'bangbang',
-    keywords: '码农集聚地',
-    description: 'web前端资讯',
+    title: 'lian1xia',
+    keywords: 'lian1xia',
+    description: 'lian1xia',
     version: v,
     url: req.url,
     cookies: req.cookies

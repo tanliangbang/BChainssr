@@ -7,7 +7,7 @@
           <a v-on:click="change('payWay')" :class="nav==='payWay'?'selected':'unselect'">{{$t("lang.userCenter.paymentMethod")}}</a>
         </div>
         <div v-if="nav==='userInfo'">
-           <UserInfo :historyList = "historyList" :userInfo = "userInfo"/>
+           <UserInfo :userInfo = "userInfo"/>
         </div>
         <div v-if="nav==='auther'" >
           <Auther v-if="userInfo!==null" :userInfo = "userInfo" />
@@ -50,15 +50,11 @@ export default {
     })
   },
   mounted () {
-    this.init()
   },
   methods: {
     change (str) {
       this.nav = str
       this.$router.push('userCenter?type=' + str)
-    },
-    init () {
-      this.$store.dispatch('getLoginHistory', {offset: 0, limit: 5})
     }
   }
 }
